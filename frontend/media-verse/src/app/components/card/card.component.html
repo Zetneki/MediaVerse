@@ -1,0 +1,10 @@
+<div class="card">
+  <img [src]="movie().poster_path" alt="poster" class="card__img" />
+  <div class="card__info">
+    <h3 class="title" title="{{ movie().title }}">
+      {{ movie().title | truncate : 20 }}
+    </h3>
+    <p class="date">{{ movie().release_date }}</p>
+    <p class="rating">{{ movie().vote_average }}</p>
+  </div>
+</div>

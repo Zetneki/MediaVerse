@@ -1,0 +1,55 @@
+@use "../../../styles/mixins/header-footer-mixin" as *;
+
+footer {
+  @include header-footer-mixin(bottom, none, center, auto);
+  flex-direction: column;
+
+  .description {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 1rem;
+    gap: 1rem;
+
+    .about {
+      display: inherit;
+      padding: 1rem;
+      flex-direction: column;
+      width: 25%;
+      align-items: flex-start;
+      justify-content: space-evenly;
+      background: var(--p-surface-950);
+      border-radius: 1rem;
+
+      &__title {
+        font-size: 2.5ch;
+        margin: 0;
+        font-weight: bold;
+      }
+      &__link {
+        color: var(--p-text-color);
+        font-size: 3ch;
+        font-weight: bold;
+      }
+    }
+
+    .credit {
+      padding: 1rem;
+      border-radius: 1rem;
+      display: inherit;
+      width: 75%;
+      flex-direction: column;
+
+      align-items: flex-start;
+      background: var(--p-surface-950);
+      gap: 1rem;
+      font-size: 1.5ch;
+
+      &__logo {
+        margin-top: 0.3rem;
+        height: 1rem;
+        width: auto;
+      }
+    }
+  }
+}

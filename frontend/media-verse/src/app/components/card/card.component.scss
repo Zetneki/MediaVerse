@@ -1,0 +1,32 @@
+:host {
+  display: contents;
+}
+
+.card {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  background: var(--p-surface-900);
+
+  &__img {
+    display: inline-block;
+    width: 90%;
+    height: 90%;
+    object-fit: cover;
+    margin: auto;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0 1rem 1rem 1rem;
+
+    .title,
+    .date,
+    .rating {
+      margin: 0;
+    }
+  }
+}

@@ -1,0 +1,78 @@
+@use "../../../styles/mixins/header-footer-mixin" as *;
+
+header {
+  @include header-footer-mixin();
+
+  transition: transform 0.5s ease;
+
+  &.hidden {
+    transform: translateY(-100%);
+    transition: transform 0.5s ease;
+  }
+
+  .title {
+    display: inherit;
+    padding-left: 1rem;
+
+    &__img {
+      display: inherit;
+      align-self: center;
+      height: 3rem;
+      width: auto;
+    }
+
+    &__link {
+      display: inherit;
+      gap: 1rem;
+      justify-content: flex-start;
+      text-decoration: none;
+    }
+
+    &__text {
+      color: var(--p-text-color);
+    }
+  }
+
+  .nav {
+    display: inherit;
+    justify-content: space-around;
+    align-items: inherit;
+    height: 100%;
+    width: 40%;
+
+    &__link {
+      display: inherit;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      color: var(--p-text-color);
+      height: 100%;
+      width: 100%;
+      font-size: 2ch;
+    }
+
+    &__link:hover {
+      background-color: var(--p-surface-700);
+    }
+    &__link:active {
+      background-color: var(--p-surface-800);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .nav {
+      display: none;
+    }
+  }
+
+  .sidebar-button {
+    display: none;
+    background-color: transparent;
+    border: none;
+    padding-inline: 2rem;
+
+    @media (max-width: 1024px) {
+      display: inline-block;
+    }
+  }
+}

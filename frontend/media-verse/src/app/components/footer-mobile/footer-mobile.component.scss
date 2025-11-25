@@ -1,0 +1,31 @@
+@use "../../../styles/mixins/header-footer-mixin" as *;
+
+footer {
+  @include header-footer-mixin(bottom);
+
+  .nav {
+    display: inherit;
+    justify-content: space-around;
+    align-items: inherit;
+    height: 100%;
+    width: 100%;
+
+    &__link {
+      display: inherit;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      color: var(--p-text-color);
+      height: 100%;
+      width: 100%;
+      font-size: 2ch;
+    }
+
+    &__link:hover {
+      background-color: var(--p-surface-700);
+    }
+    &__link:active {
+      background-color: var(--p-surface-800);
+    }
+  }
+}

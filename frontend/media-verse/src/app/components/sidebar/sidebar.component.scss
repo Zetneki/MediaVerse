@@ -1,0 +1,49 @@
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+
+  .about {
+    display: inherit;
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+
+    background: var(--p-surface-950);
+    border-radius: 1rem;
+    height: 35%;
+    gap: 1rem;
+
+    &__title {
+      font-size: 2.5ch;
+      margin: 0;
+      font-weight: bold;
+    }
+
+    &__link {
+      color: var(--p-text-color);
+      font-size: 3ch;
+      font-weight: bold;
+    }
+  }
+
+  .credit {
+    border-radius: 1rem;
+    display: inherit;
+    flex-direction: column;
+    padding: 1rem;
+    height: 65%;
+    align-items: flex-start;
+    background: var(--p-surface-950);
+    gap: 1rem;
+    font-size: 1.5ch;
+
+    &__logo {
+      margin-top: 0.3rem;
+      height: 1rem;
+      width: auto;
+    }
+  }
+}

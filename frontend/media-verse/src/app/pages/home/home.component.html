@@ -1,0 +1,25 @@
+<div class="home">
+  <p>fgjihodfgij</p>
+  <p-button label="Submit" (onClick)="changeTheme()" />
+  <p-toggleswitch (onChange)="toggleDarkMode()" />
+  <p-toggleswitch [(ngModel)]="checked" />
+  <p>{{ checked ? "checked" : "unchecked" }}</p>
+  <!--<p>{{ this.popularMovies$ | json }}</p>-->
+
+  <div class="movie-list">
+    @for (movie of popularMovies$; track movie.id) {
+    <app-card [movie]="movie"></app-card>
+    }
+  </div>
+
+  <p>asd</p>
+  <p>asd</p>
+  <p>asd</p>
+  <p>asd</p>
+  <p>asd</p>
+  <p>asd</p>
+  <p>asd</p>
+  <p>asd</p>
+  <p>asd</p>
+  <p>asd</p>
+</div>

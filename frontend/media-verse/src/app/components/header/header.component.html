@@ -1,0 +1,22 @@
+<header [class.hidden]="hidden()">
+  <div class="title">
+    <a routerLink="/home" class="title__link">
+      <img
+        src="/assets/development.png"
+        alt="MediaVerse Logo"
+        class="title__img"
+      />
+      <h1 class="title__text">MediaVerse</h1>
+    </a>
+  </div>
+  <nav class="nav">
+    <a routerLink="/discover" class="nav__link">Discover </a>
+    <a routerLink="/quests" class="nav__link">Quests</a>
+    <a routerLink="/library" class="nav__link">Library</a>
+    <a routerLink="/profile" class="nav__link"><i class="pi pi-user"></i></a>
+  </nav>
+  <button (click)="toggleSidebar()" class="sidebar-button">
+    <i class="pi pi-info-circle"></i>
+  </button>
+</header>
+<app-sidebar [visible]="visible"></app-sidebar>
