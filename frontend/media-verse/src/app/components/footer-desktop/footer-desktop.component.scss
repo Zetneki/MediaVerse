@@ -1,3 +1,4 @@
+@use "../../../styles/variables" as *;
 @use "../../../styles/mixins/header-footer-mixin" as *;
 
 footer {
@@ -8,45 +9,45 @@ footer {
     display: flex;
     justify-content: flex-start;
     width: 100%;
-    padding: 1rem;
-    gap: 1rem;
+    padding: $spacing-md;
+    gap: $spacing-md;
 
     .about {
       display: inherit;
-      padding: 1rem;
+      padding: $spacing-md;
       flex-direction: column;
       width: 25%;
       align-items: flex-start;
       justify-content: space-evenly;
       background: var(--p-surface-950);
-      border-radius: 1rem;
+      border-radius: $spacing-md;
 
       &__title {
-        font-size: 2.5ch;
+        font-size: $font-size-lg;
         margin: 0;
         font-weight: bold;
       }
       &__link {
         color: var(--p-text-color);
-        font-size: 3ch;
+        font-size: $font-size-xl;
         font-weight: bold;
       }
     }
 
     .credit {
-      padding: 1rem;
-      border-radius: 1rem;
+      padding: $spacing-md;
+      border-radius: $spacing-md;
       display: inherit;
       width: 75%;
       flex-direction: column;
 
       align-items: flex-start;
       background: var(--p-surface-950);
-      gap: 1rem;
-      font-size: 1.5ch;
+      gap: $spacing-md;
+      font-size: $font-size-sm;
 
       &__logo {
-        margin-top: 0.3rem;
+        margin-top: $spacing-xs;
         height: 1rem;
         width: auto;
       }

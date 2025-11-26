@@ -1,0 +1,7 @@
+@use "../variables" as *;
+
+@mixin desktop-mobile-media-mixin {
+  @media (max-width: $breakpoint-lg) {
+    @content;
+  }
+}

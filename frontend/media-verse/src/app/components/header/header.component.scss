@@ -1,4 +1,6 @@
+@use "../../../styles/variables" as *;
 @use "../../../styles/mixins/header-footer-mixin" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
 
 header {
   @include header-footer-mixin();
@@ -12,7 +14,7 @@ header {
 
   .title {
     display: inherit;
-    padding-left: 1rem;
+    padding-left: $spacing-md;
 
     &__img {
       display: inherit;
@@ -23,13 +25,13 @@ header {
 
     &__link {
       display: inherit;
-      gap: 1rem;
+      gap: $spacing-md;
       justify-content: flex-start;
       text-decoration: none;
     }
 
     &__text {
-      color: var(--p-text-color);
+      color: var(--app-text-color);
     }
   }
 
@@ -45,21 +47,21 @@ header {
       justify-content: center;
       align-items: center;
       text-decoration: none;
-      color: var(--p-text-color);
+      color: var(--app-text-color);
       height: 100%;
       width: 100%;
-      font-size: 2ch;
+      font-size: $font-size-md;
     }
 
     &__link:hover {
-      background-color: var(--p-surface-700);
+      background-color: var(--app-background-color-lighter);
     }
     &__link:active {
-      background-color: var(--p-surface-800);
+      background-color: var(--app-background-color-light);
     }
   }
 
-  @media (max-width: 1024px) {
+  @include desktop-mobile-media-mixin {
     .nav {
       display: none;
     }
@@ -69,9 +71,9 @@ header {
     display: none;
     background-color: transparent;
     border: none;
-    padding-inline: 2rem;
+    padding-inline: $spacing-xl;
 
-    @media (max-width: 1024px) {
+    @include desktop-mobile-media-mixin {
       display: inline-block;
     }
   }

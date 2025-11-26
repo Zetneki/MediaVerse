@@ -1,0 +1,35 @@
+$spacing-xs: 0.3rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-xxl: 3rem;
+
+$font-size-xs: 1ch;
+$font-size-sm: 1.5ch;
+$font-size-md: 2ch;
+$font-size-lg: 2.5ch;
+$font-size-xl: 3ch;
+
+$radius-sm: 0.5rem;
+$radius-md: 1rem;
+$radius-lg: 1.5rem;
+$radius-xl: 2rem;
+
+$breakpoint-lg: 1024px;
+
+:root {
+  --app-background-color: var(--p-surface-900);
+  --app-background-color-lighter: var(--p-surface-700);
+  --app-background-color-light: var(--p-surface-800);
+  --app-background-color-dark: var(--p-surface-950);
+
+  --app-primary-color: var(--p-primary-500);
+  --app-primary-color-lighter: var(--p-primary-300);
+  --app-primary-color-light: var(--p-primary-400);
+  --app-primary-color-dark: var(--p-primary-600);
+
+  --app-text-color: var(--p-text-color);
+  --app-text-color-dark: var(--p-text-hover-muted-color);
+  --app-text-color-darker: var(--p-text-muted-color);
+}

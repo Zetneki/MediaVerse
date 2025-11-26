@@ -1,3 +1,5 @@
+@use "../variables" as *;
+
 @mixin header-footer-mixin(
   $position: top,
   $position-value: fixed,
@@ -18,6 +20,6 @@
   justify-content: $justify-content-value;
   z-index: 1000;
 
-  border: 1px solid var(--p-surface-700);
-  background: var(--p-surface-900);
+  border: 1px solid var(--app-background-color-lighter);
+  background: var(--app-background-color);
 }

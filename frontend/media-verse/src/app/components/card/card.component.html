@@ -4,7 +4,7 @@
     <h3 class="title" title="{{ movie().title }}">
       {{ movie().title | truncate : 20 }}
     </h3>
-    <p class="date">{{ movie().release_date }}</p>
+    <p class="date">{{ movie().release_date | date : "dd MMM yyyy" }}</p>
     <p-knob
       [(ngModel)]="value"
       [min]="0"

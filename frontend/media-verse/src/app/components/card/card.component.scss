@@ -1,3 +1,5 @@
+@use "../../../styles/variables" as *;
+
 :host {
   display: contents;
 }
@@ -6,8 +8,8 @@
   display: grid;
   grid-template-rows: subgrid;
   grid-row: span 3;
-  background: var(--p-surface-900);
-  border-radius: 0.5rem;
+  background: var(--app-background-color);
+  border-radius: $radius-sm;
 
   &__img {
     display: inline-block;
@@ -15,7 +17,7 @@
     height: 90%;
     object-fit: cover;
     margin: auto;
-    border-radius: 0.5rem;
+    border-radius: $radius-sm;
   }
 
   &__info {
@@ -23,12 +25,17 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
-    padding: 0 1rem 1rem 1rem;
+    padding: 0 $spacing-md $spacing-sm $spacing-md;
 
     .title,
     .date,
     .rating {
       margin: 0;
+    }
+
+    .date {
+      font-size: $font-size-sm;
+      color: var(--app-text-color-dark);
     }
 
     .rating {

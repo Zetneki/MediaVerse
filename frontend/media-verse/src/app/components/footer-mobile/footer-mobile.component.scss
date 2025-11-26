@@ -1,3 +1,4 @@
+@use "../../../styles/variables" as *;
 @use "../../../styles/mixins/header-footer-mixin" as *;
 
 footer {
@@ -15,17 +16,17 @@ footer {
       justify-content: center;
       align-items: center;
       text-decoration: none;
-      color: var(--p-text-color);
+      color: var(--app-text-color);
       height: 100%;
       width: 100%;
-      font-size: 2ch;
+      font-size: $font-size-md;
     }
 
     &__link:hover {
-      background-color: var(--p-surface-700);
+      background-color: var(--app-background-color-lighter);
     }
     &__link:active {
-      background-color: var(--p-surface-800);
+      background-color: var(--app-background-color-light);
     }
   }
 }
