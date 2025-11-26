@@ -7,6 +7,7 @@
   grid-template-rows: subgrid;
   grid-row: span 3;
   background: var(--p-surface-900);
+  border-radius: 0.5rem;
 
   &__img {
     display: inline-block;
@@ -14,6 +15,7 @@
     height: 90%;
     object-fit: cover;
     margin: auto;
+    border-radius: 0.5rem;
   }
 
   &__info {
@@ -27,6 +29,10 @@
     .date,
     .rating {
       margin: 0;
+    }
+
+    .rating {
+      align-self: flex-end;
     }
   }
 }
