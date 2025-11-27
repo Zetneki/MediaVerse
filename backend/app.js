@@ -7,10 +7,11 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var popularMoviesRouter = require("./routes/popularmovies");
-var searchMoviesRouter = require("./routes/searchmovies");
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+const moviesRouter = require("./routes/movies.routes");
+const seriesRouter = require("./routes/series.routes");
+const genresRouter = require("./routes/genre.routes");
 
 var app = express();
 
@@ -28,8 +29,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-app.use("/popularmovies", popularMoviesRouter);
-app.use("/searchmovies", searchMoviesRouter);
+app.use("/api/movies", moviesRouter);
+app.use("/api/series", seriesRouter);
+app.use("/api/genres", genresRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

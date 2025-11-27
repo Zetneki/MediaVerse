@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PopularMoviesResponse } from '../models/popularmoviesrepsonse';
+import { MoviesResponse } from '../models/moviesrepsonse';
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +11,10 @@ export class MovieService {
 
   constructor(private http: HttpClient) {}
 
-  getPopularMovies(): Observable<PopularMoviesResponse> {
+  getPopularMovies(): Observable<MoviesResponse> {
     try {
-      return this.http.get<PopularMoviesResponse>(
-        `${this.baseUrl}/popularmovies`
+      return this.http.get<MoviesResponse>(
+        `${this.baseUrl}/api/movies/popular`
       );
     } catch (error) {
       throw 'Could not connect to server';
