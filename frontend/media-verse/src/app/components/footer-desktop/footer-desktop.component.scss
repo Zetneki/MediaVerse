@@ -27,10 +27,19 @@ footer {
         margin: 0;
         font-weight: bold;
       }
+
       &__link {
-        color: var(--p-text-color);
+        color: var(--app-text-color);
         font-size: $font-size-xl;
         font-weight: bold;
+      }
+
+      &__link:hover {
+        color: var(--app-text-color-dark);
+      }
+
+      &__link:active {
+        color: var(--app-text-color);
       }
     }
 

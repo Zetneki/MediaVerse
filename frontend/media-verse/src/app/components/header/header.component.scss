@@ -31,6 +31,17 @@ header {
     }
 
     &__text {
+      display: inherit;
+      align-self: center;
+      margin: 0;
+      color: var(--app-text-color);
+    }
+
+    &:hover .title__text {
+      color: var(--app-text-color-dark);
+    }
+
+    &:active .title__text {
       color: var(--app-text-color);
     }
   }

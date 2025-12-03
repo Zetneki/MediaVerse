@@ -10,6 +10,7 @@
   grid-row: span 3;
   background: var(--app-background-color);
   border-radius: $radius-sm;
+  cursor: pointer;
 
   &__img {
     display: inline-block;

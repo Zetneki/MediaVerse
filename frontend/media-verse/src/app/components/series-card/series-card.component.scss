@@ -1,0 +1,46 @@
+@use "../../../styles/variables" as *;
+
+:host {
+  display: contents;
+}
+
+.card {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  background: var(--app-background-color);
+  border-radius: $radius-sm;
+  cursor: pointer;
+
+  &__img {
+    display: inline-block;
+    width: 90%;
+    height: 90%;
+    object-fit: cover;
+    margin: auto;
+    border-radius: $radius-sm;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0 $spacing-md $spacing-sm $spacing-md;
+
+    .title,
+    .date,
+    .rating {
+      margin: 0;
+    }
+
+    .date {
+      font-size: $font-size-sm;
+      color: var(--app-text-color-dark);
+    }
+
+    .rating {
+      align-self: flex-end;
+    }
+  }
+}

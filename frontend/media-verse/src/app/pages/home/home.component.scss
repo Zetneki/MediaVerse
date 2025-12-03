@@ -8,7 +8,50 @@
     margin-inline: $spacing-lg;
   }
 
-  .movie-list {
+  #intro {
+    margin: $spacing-xxl 0;
+    padding: $spacing-xl;
+    text-align: center;
+    border-radius: $radius-lg;
+
+    background: rgba(255, 255, 255, 0.05);
+
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+    h1 {
+      font-size: $font-size-xxl;
+      margin-bottom: $spacing-md;
+    }
+
+    p {
+      font-size: $font-size-lg;
+    }
+
+    @include desktop-mobile-media-mixin {
+      padding: $spacing-sm;
+      margin-inline: calc(#{$spacing-lg} * -1);
+      border-radius: 0;
+
+      h1 {
+        font-size: $font-size-xl;
+      }
+
+      p {
+        font-size: $font-size-md;
+      }
+    }
+  }
+
+  .title {
+    margin: $spacing-xxl 0 $spacing-sm 0;
+    font-size: $font-size-xl;
+
+    @include desktop-mobile-media-mixin {
+      font-size: $font-size-lg;
+    }
+  }
+
+  .list {
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 15rem;
@@ -24,8 +67,33 @@
     scrollbar-width: thin;
     scrollbar-color: #888 rgba(0, 0, 0, 0);
 
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeSlideIn 0.6s ease forwards;
+
+    @keyframes fadeSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     @include desktop-mobile-media-mixin {
       grid-auto-columns: 12rem;
+    }
+  }
+
+  .section-divider {
+    height: 10rem;
+    margin: $spacing-xxl 0;
+    border-radius: $radius-lg;
+    background: var(--app-background-color);
+
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+    @include desktop-mobile-media-mixin {
+      border-radius: 0;
+      margin-inline: calc(#{$spacing-lg} * -1);
     }
   }
 
