@@ -1,0 +1,90 @@
+-- Movie cache
+CREATE TABLE movie_cache (
+    id BIGINT PRIMARY KEY,
+    title TEXT NOT NULL,
+    overview TEXT,
+    release_date DATE,
+    poster_path TEXT,
+    backdrops TEXT[],           -- JSON/Array of strings
+    trailer TEXT,
+    vote_average NUMERIC,
+    genres JSONB,               -- [ {id, name} ]
+    popularity NUMERIC,
+    runtime INT,
+    homepage TEXT,
+    similar movies JSONB,       -- [ {id, title, poster_path, vote_average} ]
+    last_updated TIMESTAMP DEFAULT now()
+);
+
+-- Series cache
+CREATE TABLE series_cache (
+    id BIGINT PRIMARY KEY,
+    name TEXT NOT NULL,
+    overview TEXT,
+    first_air_date DATE,
+    poster_path TEXT,
+    backdrops TEXT[],
+    trailer TEXT,
+    vote_average NUMERIC,
+    genres JSONB,
+    popularity NUMERIC,
+    total_seasons INT,
+    total_episodes INT,
+    seasons JSONB,              -- [ {season_number, episode_count, poster_path} ]
+    homepage TEXT,
+    similar_series JSONB,
+    last_updated TIMESTAMP DEFAULT now()
+);
+
+-- User profile
+CREATE TABLE user_profile (
+    id SERIAL PRIMARY KEY,
+    username TEXT UNIQUE NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT now()
+);
+
+-- Movie progress
+CREATE TABLE user_movie_progress (
+    user_id INT REFERENCES user_profile(id) ON DELETE CASCADE,
+    movie_id BIGINT REFERENCES movie_cache(id),
+    watched BOOLEAN DEFAULT FALSE,
+    last_watched TIMESTAMP,
+    PRIMARY KEY (user_id, movie_id)
+);
+
+-- Series progress
+CREATE TABLE user_series_progress (
+    user_id INT REFERENCES user_profile(id) ON DELETE CASCADE,
+    series_id BIGINT REFERENCES series_cache(id),
+    current_season INT DEFAULT 1,
+    current_episode INT DEFAULT 1,
+    last_watched TIMESTAMP,
+    PRIMARY KEY (user_id, series_id)
+);
+
+-- Movie page cache (popular / top_rated)
+CREATE TABLE movie_page_cache (
+    page INT NOT NULL,
+    category TEXT NOT NULL,         -- 'popular' or 'top_rated'
+    movie_ids BIGINT[] NOT NULL,    -- movie_cache ids
+    last_updated TIMESTAMP DEFAULT now(),
+    PRIMARY KEY(page, category)
+);
+
+-- Series page cache (popular / top_rated)
+CREATE TABLE series_page_cache (
+    page INT NOT NULL,
+    category TEXT NOT NULL,         -- 'popular' or 'top_rated'
+    series_ids BIGINT[] NOT NULL,   -- series_cache ids
+    last_updated TIMESTAMP DEFAULT now(),
+    PRIMARY KEY(page, category)
+);
+
+-- Genre page cache
+CREATE TABLE genre_cache (
+    source TEXT NOT NULL,  -- 'movie', 'game', 'book'
+    id TEXT NOT NULL,      -- RAWG, TMDB int, OpenLibrary string
+    name TEXT NOT NULL,
+    PRIMARY KEY (source, id)
+);

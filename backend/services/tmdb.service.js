@@ -12,6 +12,7 @@ class TmdbService {
 
   // MOVIES
   async getTopRatedMovies(page = 1) {
+    console.log("top rated movies api called");
     const res = await this.api.get("/movie/top_rated", {
       params: { page },
     });
@@ -20,6 +21,7 @@ class TmdbService {
   }
 
   async getPopularMovies(page = 1) {
+    console.log("popular movies api called");
     const res = await this.api.get("/movie/popular", {
       params: { page },
     });
@@ -105,6 +107,7 @@ class TmdbService {
 
   // SERIES
   async getTopRatedSeries(page = 1) {
+    console.log("top rated series api called");
     const res = await this.api.get("/tv/top_rated", {
       params: { page },
     });
@@ -113,6 +116,7 @@ class TmdbService {
   }
 
   async getPopularSeries(page = 1) {
+    console.log("popular series api called");
     const res = await this.api.get("/tv/popular", {
       params: { page },
     });
