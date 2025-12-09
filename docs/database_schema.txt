@@ -86,5 +86,6 @@ CREATE TABLE genre_cache (
     source TEXT NOT NULL,  -- 'movie', 'game', 'book'
     id TEXT NOT NULL,      -- RAWG, TMDB int, OpenLibrary string
     name TEXT NOT NULL,
+    last_updated TIMESTAMP DEFAULT now(),
     PRIMARY KEY (source, id)
 );
