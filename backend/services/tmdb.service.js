@@ -54,6 +54,7 @@ class TmdbService {
   }
 
   async searchMovieDetails(movieId) {
+    console.log("movie details api called");
     if (!movieId) throw new Error("Missing movie ID");
 
     const res = await this.api.get(`/movie/${movieId}`, {
@@ -101,6 +102,7 @@ class TmdbService {
   }
 
   async getMovieGenres() {
+    console.log("movies genres api called");
     const res = await this.api.get("/genre/movie/list");
     return res.data.genres;
   }
@@ -148,10 +150,11 @@ class TmdbService {
     return res.data;
   }
 
-  async searchSeriesDetails(tvId) {
-    if (!tvId) throw new Error("Missing TV ID");
+  async searchSeriesDetails(seriesId) {
+    console.log("series details api called");
+    if (!seriesId) throw new Error("Missing Series ID");
 
-    const res = await this.api.get(`/tv/${tvId}`, {
+    const res = await this.api.get(`/tv/${seriesId}`, {
       params: { append_to_response: "images,videos,credits,similar" },
     });
 
@@ -203,6 +206,7 @@ class TmdbService {
   }
 
   async getSeriesGenres() {
+    console.log("series genres api called");
     const res = await this.api.get("/genre/tv/list");
     return res.data.genres;
   }

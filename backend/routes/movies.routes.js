@@ -6,7 +6,6 @@ router.get("/toprated", moviesController.getTopRatedMovies);
 router.get("/popular", moviesController.getPopularMovies);
 router.get("/search", moviesController.searchMovies);
 router.get("/filter", moviesController.filterMovies);
-router.get("/genres", moviesController.getMovieGenres);
 router.get("/details/:id", moviesController.searchMovieDetails);
 //router.get("/create", moviesController.createMovie);
 

@@ -46,17 +46,18 @@ async function getMovieById(id) {
 }
 
 // --- Page cache ---
-async function upsertMoviePageCache(page, category, movieIds) {
+async function upsertMoviePageCache(page, category, movieIds, totalPages) {
   const res = await pool.query(
     `
-    INSERT INTO movie_page_cache (page, category, movie_ids, last_updated)
-    VALUES ($1,$2,$3,NOW())
+    INSERT INTO movie_page_cache (page, category, movie_ids, total_pages, last_updated)
+    VALUES ($1,$2,$3,$4,NOW())
     ON CONFLICT (page, category) DO UPDATE
       SET movie_ids = EXCLUDED.movie_ids,
+          total_pages = EXCLUDED.total_pages,
           last_updated = NOW()
     RETURNING *;
   `,
-    [page, category, movieIds]
+    [page, category, movieIds, totalPages]
   );
   return res.rows[0];
 }
@@ -76,29 +77,6 @@ async function getMoviesByCategory(page, category) {
   const res = await pool.query(
     "SELECT * FROM movie_cache WHERE id = ANY($1) ORDER BY array_position($1::bigint[], id)",
     [pageCache.movie_ids]
-  );
-  return res.rows;
-}
-
-// --- Genre cache ---
-async function upsertGenreCache(genre) {
-  const query = `
-    INSERT INTO genre_cache (source, id, name, last_updated)
-    VALUES ($1,$2,$3,NOW())
-    ON CONFLICT (source, id) DO UPDATE SET
-      name = EXCLUDED.name,
-      last_updated = NOW()
-    RETURNING *;
-  `;
-  const values = ["movie", genre.id, genre.name];
-  const res = await pool.query(query, values);
-  return res.rows[0];
-}
-
-async function getGenresBySource(source) {
-  const res = await pool.query(
-    "SELECT * FROM genre_cache WHERE source = $1 ORDER BY name",
-    [source]
   );
   return res.rows;
 }
@@ -164,8 +142,6 @@ module.exports = {
   upsertMoviePageCache,
   getMoviePageCache,
   getMoviesByCategory,
-  upsertGenreCache,
-  getGenresBySource,
   //getGenreById,
   //searchMovies,
   //filterMovies,
