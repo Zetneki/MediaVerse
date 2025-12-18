@@ -38,7 +38,7 @@ exports.getTopRatedSeries = async (req, res) => {
         page,
         category,
         dataFromApi.results.map((s) => s.id),
-        dataFromApi.total_pages
+        dataFromApi.total_results
       );
     }
 
@@ -46,7 +46,7 @@ exports.getTopRatedSeries = async (req, res) => {
 
     res.json({
       page: page,
-      total_pages: pageCache.total_pages,
+      total_results: pageCache.total_results,
       results: data,
     });
   } catch (err) {
@@ -90,7 +90,7 @@ exports.getPopularSeries = async (req, res) => {
         page,
         category,
         dataFromApi.results.map((s) => s.id),
-        dataFromApi.total_pages
+        dataFromApi.total_results
       );
     }
 
@@ -98,7 +98,7 @@ exports.getPopularSeries = async (req, res) => {
 
     res.json({
       page: page,
-      total_pages: pageCache.total_pages,
+      total_results: pageCache.total_results,
       results: data,
     });
   } catch (err) {

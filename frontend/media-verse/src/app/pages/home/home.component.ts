@@ -9,6 +9,7 @@ import { MovieCardComponent } from '../../components/movie-card/movie-card.compo
 import { Series } from '../../models/series';
 import { SeriesService } from '../../services/series.service';
 import { SeriesCardComponent } from '../../components/series-card/series-card.component';
+import { DragscrollDirective } from '../../directives/dragscroll.directive';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +19,7 @@ import { SeriesCardComponent } from '../../components/series-card/series-card.co
     FormsModule,
     MovieCardComponent,
     SeriesCardComponent,
+    DragscrollDirective,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -73,12 +75,11 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  changeTheme() {
+  toggleTheme() {
     this.themeService.toggleTheme();
   }
 
   toggleDarkMode() {
-    const html = document.documentElement;
-    html.classList.toggle('my-app-dark');
+    this.themeService.toggleDarkMode();
   }
 }

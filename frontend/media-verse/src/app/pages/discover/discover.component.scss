@@ -1,0 +1,122 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
+@use "../../../styles/mixins/discover-page-list-media-mixin" as *;
+
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: $spacing-md;
+  font-size: $font-size-lg;
+
+  p {
+    margin: 0;
+    text-align: center;
+    width: 10rem;
+    border-bottom: 5px solid var(--app-background-color);
+    padding-bottom: $spacing-sm;
+    cursor: pointer;
+    transition: color 0.3s, border-color 0.3s;
+    text-wrap: nowrap;
+    user-select: none;
+
+    &:hover {
+      transform: border-bottom 0.3s ease;
+      border-bottom: 5px solid var(--tabs-hover-color);
+    }
+
+    &.active {
+      color: var(--app-primary-color);
+      border-bottom: 5px solid var(--app-primary-color);
+    }
+  }
+
+  @include desktop-mobile-media-mixin {
+    font-size: $font-size-md;
+
+    margin-inline: 0;
+
+    p {
+      width: max-content;
+      flex-grow: 1;
+    }
+  }
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: $spacing-md;
+  padding: $spacing-sm;
+
+  input {
+    width: 50%;
+    height: 3rem;
+    padding: $spacing-sm;
+    border: none;
+    border-radius: $radius-sm;
+    background: var(--app-background-color);
+    font-size: $font-size-lg;
+    color: var(--app-text-color);
+    border: 1px solid var(--border-color);
+
+    &:focus {
+      outline: none;
+      border-color: var(--app-primary-color);
+    }
+
+    @include desktop-mobile-media-mixin {
+      width: 80%;
+      height: 2rem;
+      font-size: $font-size-md;
+    }
+  }
+}
+
+.discover-page {
+  .list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, clamp(12rem, 100%, 15rem));
+    grid-template-rows: auto auto;
+    gap: $spacing-md;
+    padding: $spacing-md;
+
+    justify-content: center;
+
+    background: var(--discover-page-list-background);
+
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeSlideIn 0.6s ease forwards;
+
+    @keyframes fadeSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @include discover-page-list-media-mixin {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .desktop {
+    display: block;
+  }
+
+  .mobile {
+    display: none;
+  }
+
+  @media (max-width: 500px) {
+    .desktop {
+      display: none;
+    }
+    .mobile {
+      display: block;
+    }
+  }
+}

@@ -15,4 +15,8 @@ export class SidebarComponent {
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  closeDrawer() {
+    this.visible.set(false);
+  }
 }

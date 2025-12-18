@@ -18,19 +18,66 @@ $radius-lg: 1.5rem;
 $radius-xl: 2rem;
 
 $breakpoint-lg: 1024px;
+$breakpoint-discover-page-list: 783px;
 
 :root {
-  --app-background-color: var(--p-surface-900);
-  --app-background-color-lighter: var(--p-surface-700);
-  --app-background-color-light: var(--p-surface-800);
-  --app-background-color-dark: var(--p-surface-950);
+  //system tokens
+  --app-page-background: var(--p-surface-50);
 
-  --app-primary-color: var(--p-primary-500);
+  --app-background-color: var(--p-surface-300);
+  --app-background-color-lighter: var(--p-surface-100);
+  --app-background-color-light: var(--p-surface-200);
+  --app-background-color-dark: var(--p-surface-400);
+
+  --app-primary-color: var(--p-primary-600);
+  --app-primary-color-lighter: var(--p-primary-400);
+  --app-primary-color-light: var(--p-primary-500);
+  --app-primary-color-dark: var(--p-primary-700);
+
+  --app-text-color: var(--p-surface-700);
+  --app-text-color-dark: var(--p-surface-800);
+  --app-text-color-darker: var(--p-surface-900);
+
+  --border-color: var(--app-background-color-lighter);
+
+  //component tokens
+  --home-page-list-background: rgba(0, 0, 0, 0.05);
+  --discover-page-list-background: rgba(0, 0, 0, 0.05);
+  --discover-page-genres-background: rgba(0, 0, 0, 0.05);
+  --dropdown-background: var(--app-background-color-dark);
+  --dropdown-border: var(--app-background-color-dark);
+  --tabs-hover-color: var(--app-background-color-dark);
+}
+
+.p-dark {
+  //system tokens
+  --app-page-background: var(--p-surface-950);
+
+  --app-background-color: var(--p-surface-800);
+  --app-background-color-lighter: var(--p-surface-600);
+  --app-background-color-light: var(--p-surface-700);
+  --app-background-color-dark: var(--p-surface-900);
+
+  --app-primary-color: var(--p-primary-400);
   --app-primary-color-lighter: var(--p-primary-300);
-  --app-primary-color-light: var(--p-primary-400);
+  --app-primary-color-light: var(--p-primary-500);
   --app-primary-color-dark: var(--p-primary-600);
 
-  --app-text-color: var(--p-text-color);
-  --app-text-color-dark: var(--p-text-hover-muted-color);
-  --app-text-color-darker: var(--p-text-muted-color);
+  --app-text-color: var(--p-surface-0);
+  --app-text-color-dark: var(--p-surface-200);
+  --app-text-color-darker: var(--p-surface-400);
+
+  --border-color: var(--app-background-color-lighter);
+
+  //component tokens
+  --home-page-list-background: rgba(255, 255, 255, 0.05);
+  --discover-page-list-background: rgba(255, 255, 255, 0.05);
+  --discover-page-genres-background: rgba(0, 0, 0, 0.1);
+  --dropdown-background: var(--app-background-color-lighter);
+  --dropdown-border: var(--app-background-color-lighter);
+  --tabs-hover-color: var(--app-background-color-lighter);
+}
+
+.p-drawer {
+  --p-drawer-background: var(--app-background-color);
 }

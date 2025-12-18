@@ -1,0 +1,12 @@
+<div class="dropdown" (click)="toggle()">
+  <span>{{ this.selected().label || "Select type" }}</span>
+  <i class="pi pi-chevron-down"></i>
+
+  <div class="panel" [class.open]="open">
+    @for (t of this.types; track t) {
+    <div class="option" (click)="select(t, $event)">
+      {{ t.label }}
+    </div>
+    }
+  </div>
+</div>

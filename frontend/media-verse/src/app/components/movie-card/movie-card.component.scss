@@ -1,4 +1,5 @@
 @use "../../../styles/variables" as *;
+@use "../../../styles/mixins/discover-page-list-media-mixin" as *;
 
 :host {
   display: contents;
@@ -7,10 +8,12 @@
 .card {
   display: grid;
   grid-template-rows: subgrid;
-  grid-row: span 3;
+  grid-row: span 2;
   background: var(--app-background-color);
   border-radius: $radius-sm;
   cursor: pointer;
+  gap: 0;
+  user-select: none;
 
   &__img {
     display: inline-block;
@@ -41,6 +44,27 @@
 
     .rating {
       align-self: flex-end;
+    }
+  }
+}
+
+:host[discover] .card {
+  @include discover-page-list-media-mixin {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    &__img {
+      width: 30%;
+      height: 8rem;
+      object-fit: cover;
+      margin: $spacing-sm 0 $spacing-sm $spacing-sm;
+      border-radius: $radius-sm;
+    }
+
+    &__info {
+      width: 70%;
+      justify-content: space-around;
+      padding: 0 $spacing-md;
     }
   }
 }

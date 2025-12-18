@@ -1,0 +1,58 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
+
+.dropdown {
+  margin: $spacing-md;
+  position: relative;
+  padding: $spacing-sm $spacing-xs;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  user-select: none;
+
+  align-items: center;
+  max-width: 16rem;
+  font-size: $font-size-xxl;
+
+  &:hover {
+    background: var(--dropdown-background);
+    transition: background 0.3s ease;
+  }
+
+  i {
+    font-size: $font-size-xs;
+  }
+
+  .panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100%);
+    background: var(--app-background-color);
+    border: 1px solid var(--dropdown-border);
+    z-index: 10;
+
+    .option {
+      padding: $spacing-sm;
+      cursor: pointer;
+      font-size: $font-size-xs;
+
+      &:hover {
+        background: var(--dropdown-background);
+      }
+    }
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .panel.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @include desktop-mobile-media-mixin {
+    font-size: $font-size-xl;
+  }
+}

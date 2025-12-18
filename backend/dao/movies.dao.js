@@ -49,11 +49,11 @@ async function getMovieById(id) {
 async function upsertMoviePageCache(page, category, movieIds, totalPages) {
   const res = await pool.query(
     `
-    INSERT INTO movie_page_cache (page, category, movie_ids, total_pages, last_updated)
+    INSERT INTO movie_page_cache (page, category, movie_ids, total_results, last_updated)
     VALUES ($1,$2,$3,$4,NOW())
     ON CONFLICT (page, category) DO UPDATE
       SET movie_ids = EXCLUDED.movie_ids,
-          total_pages = EXCLUDED.total_pages,
+          total_results = EXCLUDED.total_results,
           last_updated = NOW()
     RETURNING *;
   `,

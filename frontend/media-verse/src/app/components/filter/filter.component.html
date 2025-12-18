@@ -1,0 +1,34 @@
+<div class="filter">
+  <div class="filter__genres_header" (click)="toggleGenres()">
+    Genres
+    <i
+      class="pi"
+      [ngClass]="isGenresOpen ? 'pi-angle-up' : 'pi-angle-down'"
+    ></i>
+  </div>
+
+  <div class="filter__genres" [class.open]="isGenresOpen">
+    @for (genre of this.genres(); track genre.id) {
+    <button
+      (click)="toggleGenre(genre.id)"
+      [class.active]="selectedGenres.includes(genre.id)"
+      class="genre-btn"
+    >
+      {{ genre.name }}
+    </button>
+    }
+  </div>
+
+  <div class="filter__sortby">
+    <p-select
+      [options]="sortOptions"
+      placeholder="Sort By"
+      class="select"
+      [(ngModel)]="selectedSortBy"
+    ></p-select>
+  </div>
+
+  <div class="filter__apply">
+    <p-button (onClick)="applyFilters()">Apply Filters</p-button>
+  </div>
+</div>

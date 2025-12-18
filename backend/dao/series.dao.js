@@ -56,11 +56,11 @@ async function getSeriesById(id) {
 async function upsertSeriesPageCache(page, category, seriesIds, totalPages) {
   const res = await pool.query(
     `
-    INSERT INTO series_page_cache (page, category, series_ids, total_pages, last_updated)
+    INSERT INTO series_page_cache (page, category, series_ids, total_results, last_updated)
     VALUES ($1,$2,$3,$4,NOW())
     ON CONFLICT (page, category) DO UPDATE
       SET series_ids = EXCLUDED.series_ids,
-          total_pages = EXCLUDED.total_pages,
+          total_results = EXCLUDED.total_results,
           last_updated = NOW()
     RETURNING *;
   `,

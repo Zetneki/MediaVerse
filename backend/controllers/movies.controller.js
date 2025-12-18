@@ -3,29 +3,6 @@ const moviesDao = require("../dao/movies.dao");
 const genreDao = require("../dao/genre.dao");
 const { isOutdated } = require("../utils/date.util");
 
-/*
-exports.createMovie = async (req, res) => {
-  try {
-    
-    const movie = {
-      id: 1,
-      title: "asd",
-      overview: "most modositottam",
-      release_date: new Date(),
-    };
-    await moviesDao.upsertMovieCache(movie);
-    const getMovieById = await moviesDao.getMovieById(1);
-    res.json(getMovieById);
-
-    const data = await tmdbService.getMovieGenres();
-
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to create movie" });
-  }
-};
-*/
-
 exports.getTopRatedMovies = async (req, res) => {
   try {
     const source = "movie";
@@ -61,7 +38,7 @@ exports.getTopRatedMovies = async (req, res) => {
         page,
         category,
         dataFromApi.results.map((m) => m.id),
-        dataFromApi.total_pages
+        dataFromApi.total_results
       );
     }
 
@@ -69,7 +46,7 @@ exports.getTopRatedMovies = async (req, res) => {
 
     res.json({
       page: page,
-      total_pages: pageCache.total_pages,
+      total_results: pageCache.total_results,
       results: data,
     });
   } catch (err) {
@@ -113,7 +90,7 @@ exports.getPopularMovies = async (req, res) => {
         page,
         category,
         dataFromApi.results.map((m) => m.id),
-        dataFromApi.total_pages
+        dataFromApi.total_results
       );
     }
 
@@ -121,7 +98,7 @@ exports.getPopularMovies = async (req, res) => {
 
     res.json({
       page: page,
-      total_pages: pageCache.total_pages,
+      total_results: pageCache.total_results,
       results: data,
     });
   } catch (err) {

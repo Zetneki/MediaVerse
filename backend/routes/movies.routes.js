@@ -7,6 +7,5 @@ router.get("/popular", moviesController.getPopularMovies);
 router.get("/search", moviesController.searchMovies);
 router.get("/filter", moviesController.filterMovies);
 router.get("/details/:id", moviesController.searchMovieDetails);
-//router.get("/create", moviesController.createMovie);
 
 module.exports = router;

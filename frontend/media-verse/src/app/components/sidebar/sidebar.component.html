@@ -1,9 +1,11 @@
-<p-drawer [(visible)]="visible" position="right">
+<p-drawer [(visible)]="visible" position="right" [blockScroll]="true">
   <div class="description">
     <div class="about">
       <p class="about__title">Copyright © 2025 MediaVerse</p>
-      <a routerLink="/about" class="about__link">About</a>
-      <p-button (onClick)="scrollToTop()">Back to top</p-button>
+      <a routerLink="/about" class="about__link" (click)="closeDrawer()"
+        >About</a
+      >
+      <p-button (onClick)="scrollToTop(); closeDrawer()">Back to top</p-button>
     </div>
     <div class="credit">
       <h1>Credits</h1>

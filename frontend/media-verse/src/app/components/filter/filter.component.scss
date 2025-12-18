@@ -1,0 +1,104 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
+@use "../../../styles/mixins/discover-page-list-media-mixin" as *;
+
+.filter {
+  display: grid;
+  grid-template-columns: 2fr auto;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "filter__genres_header filter__apply"
+    "filter__genres filter__apply"
+    "filter__sortby filter__apply";
+  column-gap: $spacing-md;
+  padding: $spacing-md;
+  width: 70%;
+  margin: 0 auto;
+  border-radius: $radius-lg;
+  user-select: none;
+
+  &__genres_header {
+    background: var(--discover-page-genres-background);
+    padding: $spacing-sm $spacing-sm;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $font-size-lg;
+    border: 1px solid var(--border-color);
+  }
+
+  &__genres {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.4s ease;
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin-top: $spacing-sm;
+    padding: 0;
+
+    background: var(--discover-page-genres-background);
+    border-radius: $radius-sm;
+
+    &.open {
+      padding: $spacing-sm;
+      max-height: 30rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .genre-btn {
+      padding: $spacing-xs $spacing-md;
+      border-radius: $radius-md;
+      border: 1px solid var(--app-primary-color);
+      background: transparent;
+      cursor: pointer;
+      transition: 0.2s;
+
+      &.active {
+        background: var(--app-primary-color);
+      }
+    }
+  }
+
+  &__sortby {
+    grid-area: filter__sortby;
+    margin-top: $spacing-sm;
+    font-size: $font-size-lg;
+    border-radius: $radius-md;
+    .select {
+      width: 100%;
+    }
+  }
+
+  &__apply {
+    grid-area: filter__apply;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  @include discover-page-list-media-mixin {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "filter__genres_header"
+      "filter__genres"
+      "filter__sortby"
+      "filter__apply";
+
+    width: 100%;
+
+    &__apply {
+      margin-top: $spacing-md;
+    }
+  }
+
+  @include desktop-mobile-media-mixin {
+    &__genres_header,
+    &__sortby,
+    &__apply {
+      font-size: $font-size-md;
+    }
+  }
+}

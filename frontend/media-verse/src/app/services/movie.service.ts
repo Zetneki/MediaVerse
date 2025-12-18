@@ -1,33 +1,71 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MoviesResponse } from '../models/moviesresponse';
+import { Genre } from '../models/genre';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MovieService {
-  private readonly baseUrl: string = 'http://localhost:3000';
+  private readonly baseUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
-  getPopularMovies(): Observable<MoviesResponse> {
-    try {
-      return this.http.get<MoviesResponse>(
-        `${this.baseUrl}/api/movies/popular`
-      );
-    } catch (error) {
-      throw 'Could not connect to server';
-    }
+  getPopularMovies(page: number = 1): Observable<MoviesResponse> {
+    const params = new HttpParams().set('page', page.toString());
+
+    return this.http.get<MoviesResponse>(`${this.baseUrl}/api/movies/popular`, {
+      params,
+    });
   }
 
-  getTopRatedMovies(): Observable<MoviesResponse> {
-    try {
-      return this.http.get<MoviesResponse>(
-        `${this.baseUrl}/api/movies/toprated`
-      );
-    } catch (error) {
-      throw 'Could not connect to server';
+  getTopRatedMovies(page: number = 1): Observable<MoviesResponse> {
+    const params = new HttpParams().set('page', page.toString());
+
+    return this.http.get<MoviesResponse>(
+      `${this.baseUrl}/api/movies/toprated`,
+      { params }
+    );
+  }
+
+  searchMovies(query: string, page: number = 1): Observable<MoviesResponse> {
+    let params = new HttpParams().set('query', query);
+
+    if (page) {
+      params = params.set('page', page.toString());
     }
+
+    return this.http.get<MoviesResponse>(`${this.baseUrl}/api/movies/search`, {
+      params,
+    });
+  }
+
+  filterMovies(
+    genreIds: number[] = [],
+    sortBy: string = '',
+    page: number = 1
+  ): Observable<MoviesResponse> {
+    let params = new HttpParams();
+
+    if (genreIds.length > 0) {
+      params = params.set('genreIds', genreIds.join(','));
+    }
+
+    if (sortBy) {
+      params = params.set('sortBy', sortBy);
+    }
+
+    if (page) {
+      params = params.set('page', page.toString());
+    }
+
+    return this.http.get<MoviesResponse>(`${this.baseUrl}/api/movies/filter`, {
+      params,
+    });
+  }
+
+  getMovieGenres(): Observable<Genre[]> {
+    return this.http.get<Genre[]>(`${this.baseUrl}/api/genres/movies`);
   }
 }

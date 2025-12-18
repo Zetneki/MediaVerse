@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SeriesResponse } from '../models/seriesresponse';
+import { Genre } from '../models/genre';
 
 @Injectable({
   providedIn: 'root',
@@ -11,23 +12,60 @@ export class SeriesService {
 
   constructor(private http: HttpClient) {}
 
-  getPopularSeries(): Observable<SeriesResponse> {
-    try {
-      return this.http.get<SeriesResponse>(
-        `${this.baseUrl}/api/series/popular`
-      );
-    } catch (error) {
-      throw 'Could not connect to server';
-    }
+  getPopularSeries(page: number = 1): Observable<SeriesResponse> {
+    const params = new HttpParams().set('page', page.toString());
+
+    return this.http.get<SeriesResponse>(`${this.baseUrl}/api/series/popular`, {
+      params,
+    });
   }
 
-  getTopRatedSeries(): Observable<SeriesResponse> {
-    try {
-      return this.http.get<SeriesResponse>(
-        `${this.baseUrl}/api/series/toprated`
-      );
-    } catch (error) {
-      throw 'Could not connect to server';
+  getTopRatedSeries(page: number = 1): Observable<SeriesResponse> {
+    const params = new HttpParams().set('page', page.toString());
+
+    return this.http.get<SeriesResponse>(
+      `${this.baseUrl}/api/series/toprated`,
+      { params }
+    );
+  }
+
+  searchSeries(query: string, page: number = 1): Observable<SeriesResponse> {
+    let params = new HttpParams().set('query', query);
+
+    if (page) {
+      params = params.set('page', page.toString());
     }
+
+    return this.http.get<SeriesResponse>(`${this.baseUrl}/api/series/search`, {
+      params,
+    });
+  }
+
+  filterSeries(
+    genreIds: number[] = [],
+    sortBy: string = '',
+    page: number = 1
+  ): Observable<SeriesResponse> {
+    let params = new HttpParams();
+
+    if (genreIds.length > 0) {
+      params = params.set('genreIds', genreIds.join(','));
+    }
+
+    if (sortBy) {
+      params = params.set('sortBy', sortBy);
+    }
+
+    if (page) {
+      params = params.set('page', page.toString());
+    }
+
+    return this.http.get<SeriesResponse>(`${this.baseUrl}/api/series/filter`, {
+      params,
+    });
+  }
+
+  getSeriesGenres(): Observable<Genre[]> {
+    return this.http.get<Genre[]>(`${this.baseUrl}/api/genres/series`);
   }
 }
