@@ -19,6 +19,7 @@ $radius-xl: 2rem;
 
 $breakpoint-lg: 1024px;
 $breakpoint-discover-page-list: 783px;
+$breakpoint-content-details-galleria: 1440px;
 
 :root {
   //system tokens
@@ -44,6 +45,11 @@ $breakpoint-discover-page-list: 783px;
   --home-page-list-background: rgba(0, 0, 0, 0.05);
   --discover-page-list-background: rgba(0, 0, 0, 0.05);
   --discover-page-genres-background: rgba(0, 0, 0, 0.05);
+  --details-page-items-background: rgba(0, 0, 0, 0.05);
+  --details-page-items-active: rgba(0, 0, 0, 0.1);
+  --details-page-default-backdrop-0: rgba(255, 255, 255, 0.6);
+  --details-page-default-backdrop-100: rgba(0, 0, 0, 0.6);
+  --details-page-episode-text-color: rgba(0, 0, 0, 0.5);
   --dropdown-background: var(--app-background-color-dark);
   --dropdown-border: var(--app-background-color-dark);
   --tabs-hover-color: var(--app-background-color-dark);
@@ -73,6 +79,11 @@ $breakpoint-discover-page-list: 783px;
   --home-page-list-background: rgba(255, 255, 255, 0.05);
   --discover-page-list-background: rgba(255, 255, 255, 0.05);
   --discover-page-genres-background: rgba(0, 0, 0, 0.1);
+  --details-page-items-background: rgba(255, 255, 255, 0.05);
+  --details-page-items-active: rgba(255, 255, 255, 0.1);
+  --details-page-default-backdrop-0: rgba(255, 255, 255, 0.2);
+  --details-page-default-backdrop-100: rgba(0, 0, 0, 0.05);
+  --details-page-episode-text-color: rgba(255, 255, 255, 0.5);
   --dropdown-background: var(--app-background-color-lighter);
   --dropdown-border: var(--app-background-color-lighter);
   --tabs-hover-color: var(--app-background-color-lighter);

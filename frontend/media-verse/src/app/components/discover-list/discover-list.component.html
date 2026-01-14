@@ -1,0 +1,12 @@
+<div class="list">
+  @if (isLoading()) { @for (i of [1,2,3,4,5,6,7,8,9,10]; track i) {
+  <app-skeleton-card discover />
+  } } @else if (items().length) { @for (item of items(); track item.id) {
+  @switch (type()) { @case ('movies') {
+  <app-movie-card discover [movie]="item" />
+  } @case ('series') {
+  <app-series-card discover [series]="item" />
+  } } } } @else {
+  <p>There are no results to show.</p>
+  }
+</div>

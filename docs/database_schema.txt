@@ -1,91 +1,130 @@
--- Movie cache
-CREATE TABLE movie_cache (
-    id BIGINT PRIMARY KEY,
-    title TEXT NOT NULL,
-    overview TEXT,
-    release_date DATE,
-    poster_path TEXT,
-    backdrops TEXT[],           -- JSON/Array of strings
-    trailer TEXT,
-    vote_average NUMERIC,
-    genres JSONB,               -- [ {id, name} ]
-    popularity NUMERIC,
-    runtime INT,
-    homepage TEXT,
-    similar movies JSONB,       -- [ {id, title, poster_path, vote_average} ]
-    last_updated TIMESTAMP DEFAULT now()
+BEGIN;
+
+
+CREATE TABLE IF NOT EXISTS public.genre_cache
+(
+    source text COLLATE pg_catalog."default" NOT NULL,
+    id text COLLATE pg_catalog."default" NOT NULL,
+    name text COLLATE pg_catalog."default" NOT NULL,
+    last_updated timestamp without time zone DEFAULT now(),
+    CONSTRAINT genre_cache_pkey PRIMARY KEY (source, id)
 );
 
--- Series cache
-CREATE TABLE series_cache (
-    id BIGINT PRIMARY KEY,
-    name TEXT NOT NULL,
-    overview TEXT,
-    first_air_date DATE,
-    poster_path TEXT,
-    backdrops TEXT[],
-    trailer TEXT,
-    vote_average NUMERIC,
-    genres JSONB,
-    popularity NUMERIC,
-    total_seasons INT,
-    total_episodes INT,
-    seasons JSONB,              -- [ {season_number, episode_count, poster_path} ]
-    homepage TEXT,
-    similar_series JSONB,
-    last_updated TIMESTAMP DEFAULT now()
+CREATE TABLE IF NOT EXISTS public.movie_cache
+(
+    id bigint NOT NULL,
+    title text COLLATE pg_catalog."default" NOT NULL,
+    overview text COLLATE pg_catalog."default",
+    release_date date,
+    poster_path text COLLATE pg_catalog."default",
+    backdrops text[] COLLATE pg_catalog."default",
+    trailer text COLLATE pg_catalog."default",
+    vote_average numeric,
+    genres jsonb,
+    popularity numeric,
+    runtime integer,
+    homepage text COLLATE pg_catalog."default",
+    similar_movies jsonb,
+    last_updated timestamp without time zone DEFAULT now(),
+    CONSTRAINT movie_cache_pkey PRIMARY KEY (id)
 );
 
--- User profile
-CREATE TABLE user_profile (
-    id SERIAL PRIMARY KEY,
-    username TEXT UNIQUE NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT now()
+CREATE TABLE IF NOT EXISTS public.movie_page_cache
+(
+    page integer NOT NULL,
+    category text COLLATE pg_catalog."default" NOT NULL,
+    movie_ids bigint[] NOT NULL,
+    last_updated timestamp without time zone DEFAULT now(),
+    total_results bigint,
+    CONSTRAINT movie_page_cache_pkey PRIMARY KEY (page, category)
 );
 
--- Movie progress
-CREATE TABLE user_movie_progress (
-    user_id INT REFERENCES user_profile(id) ON DELETE CASCADE,
-    movie_id BIGINT REFERENCES movie_cache(id),
-    watched BOOLEAN DEFAULT FALSE,
-    last_watched TIMESTAMP,
-    PRIMARY KEY (user_id, movie_id)
+CREATE TABLE IF NOT EXISTS public.series_cache
+(
+    id bigint NOT NULL,
+    name text COLLATE pg_catalog."default" NOT NULL,
+    overview text COLLATE pg_catalog."default",
+    first_air_date date,
+    poster_path text COLLATE pg_catalog."default",
+    backdrops text[] COLLATE pg_catalog."default",
+    trailer text COLLATE pg_catalog."default",
+    vote_average numeric,
+    genres jsonb,
+    popularity numeric,
+    total_seasons integer,
+    total_episodes integer,
+    seasons jsonb,
+    homepage text COLLATE pg_catalog."default",
+    similar_series jsonb,
+    last_updated timestamp without time zone DEFAULT now(),
+    CONSTRAINT series_cache_pkey PRIMARY KEY (id)
 );
 
--- Series progress
-CREATE TABLE user_series_progress (
-    user_id INT REFERENCES user_profile(id) ON DELETE CASCADE,
-    series_id BIGINT REFERENCES series_cache(id),
-    current_season INT DEFAULT 1,
-    current_episode INT DEFAULT 1,
-    last_watched TIMESTAMP,
-    PRIMARY KEY (user_id, series_id)
+CREATE TABLE IF NOT EXISTS public.series_page_cache
+(
+    page integer NOT NULL,
+    category text COLLATE pg_catalog."default" NOT NULL,
+    series_ids bigint[] NOT NULL,
+    last_updated timestamp without time zone DEFAULT now(),
+    total_results bigint,
+    CONSTRAINT series_page_cache_pkey PRIMARY KEY (page, category)
 );
 
--- Movie page cache (popular / top_rated)
-CREATE TABLE movie_page_cache (
-    page INT NOT NULL,
-    category TEXT NOT NULL,         -- 'popular' or 'top_rated'
-    movie_ids BIGINT[] NOT NULL,    -- movie_cache ids
-    last_updated TIMESTAMP DEFAULT now(),
-    PRIMARY KEY(page, category)
+CREATE TABLE IF NOT EXISTS public.user_movie_progress
+(
+    user_id integer NOT NULL,
+    movie_id bigint NOT NULL,
+    watched boolean DEFAULT false,
+    last_watched timestamp without time zone,
+    CONSTRAINT user_movie_progress_pkey PRIMARY KEY (user_id, movie_id)
 );
 
--- Series page cache (popular / top_rated)
-CREATE TABLE series_page_cache (
-    page INT NOT NULL,
-    category TEXT NOT NULL,         -- 'popular' or 'top_rated'
-    series_ids BIGINT[] NOT NULL,   -- series_cache ids
-    last_updated TIMESTAMP DEFAULT now(),
-    PRIMARY KEY(page, category)
+CREATE TABLE IF NOT EXISTS public.user_profile
+(
+    id serial NOT NULL,
+    username text COLLATE pg_catalog."default" NOT NULL,
+    email text COLLATE pg_catalog."default" NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    CONSTRAINT user_profile_pkey PRIMARY KEY (id),
+    CONSTRAINT user_profile_email_key UNIQUE (email),
+    CONSTRAINT user_profile_username_key UNIQUE (username)
 );
 
--- Genre page cache
-CREATE TABLE genre_cache (
-    source TEXT NOT NULL,  -- 'movie', 'game', 'book'
-    id TEXT NOT NULL,      -- RAWG, TMDB int, OpenLibrary string
-    name TEXT NOT NULL,
-    last_updated TIMESTAMP DEFAULT now(),
-    PRIMARY KEY (source, id)
+CREATE TABLE IF NOT EXISTS public.user_series_progress
+(
+    user_id integer NOT NULL,
+    series_id bigint NOT NULL,
+    current_season integer DEFAULT 1,
+    current_episode integer DEFAULT 1,
+    last_watched timestamp without time zone,
+    CONSTRAINT user_series_progress_pkey PRIMARY KEY (user_id, series_id)
 );
+
+ALTER TABLE IF EXISTS public.user_movie_progress
+    ADD CONSTRAINT user_movie_progress_movie_id_fkey FOREIGN KEY (movie_id)
+    REFERENCES public.movie_cache (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.user_movie_progress
+    ADD CONSTRAINT user_movie_progress_user_id_fkey FOREIGN KEY (user_id)
+    REFERENCES public.user_profile (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+
+
+ALTER TABLE IF EXISTS public.user_series_progress
+    ADD CONSTRAINT user_series_progress_series_id_fkey FOREIGN KEY (series_id)
+    REFERENCES public.series_cache (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.user_series_progress
+    ADD CONSTRAINT user_series_progress_user_id_fkey FOREIGN KEY (user_id)
+    REFERENCES public.user_profile (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+
+END;

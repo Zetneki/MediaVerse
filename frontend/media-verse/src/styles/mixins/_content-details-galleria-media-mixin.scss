@@ -1,0 +1,7 @@
+@use "../variables" as *;
+
+@mixin content-details-galleria-media-mixin {
+  @media (max-width: $breakpoint-content-details-galleria) {
+    @content;
+  }
+}

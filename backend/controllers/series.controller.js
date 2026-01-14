@@ -157,7 +157,7 @@ exports.searchSeriesDetails = async (req, res) => {
       series = await seriesDao.upsertSeriesCache(dataFromApi, true);
     }
 
-    res.json({ results: series });
+    res.json(series);
   } catch (err) {
     //console.log(err);
     res.status(500).json({ error: "Failed to fetch series details" });

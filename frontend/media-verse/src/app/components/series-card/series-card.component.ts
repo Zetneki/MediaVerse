@@ -4,10 +4,11 @@ import { KnobModule } from 'primeng/knob';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Series } from '../../models/series';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-series-card',
-  imports: [TruncatePipe, KnobModule, FormsModule, DatePipe],
+  imports: [TruncatePipe, KnobModule, FormsModule, DatePipe, RouterModule],
   templateUrl: './series-card.component.html',
   styleUrl: './series-card.component.scss',
 })

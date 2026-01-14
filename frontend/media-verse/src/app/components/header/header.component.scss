@@ -65,10 +65,10 @@ header {
     }
 
     &__link:hover {
-      background-color: var(--app-background-color-lighter);
+      background-color: var(--app-background-color-light);
     }
     &__link:active {
-      background-color: var(--app-background-color-light);
+      background-color: var(--app-background-color-dark);
     }
   }
 

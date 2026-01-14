@@ -1,0 +1,23 @@
+<div class="backdrops" [class.open]="isGalleriaOpen">
+  <div (click)="toggleGalleria()" class="backdrops__btn">
+    Backdrops<i
+      class="pi"
+      [ngClass]="isGalleriaOpen ? 'pi-angle-up' : 'pi-angle-down'"
+    ></i>
+  </div>
+  @if (backDrops().length > 0) {
+  <div class="backdrops__active">
+    <a [href]="activeImg" target="_blank" rel="noopener">
+      <img [src]="activeImg" alt="backdrop" />
+    </a>
+  </div>
+
+  <div class="backdrops__thumbnails" appDragscroll>
+    @for (backdrop of backDrops(); track backdrop) {
+    <img [src]="backdrop" alt="backdrop" (click)="openBackdrop(backdrop)" />
+    }
+  </div>
+  } @else {
+  <p class="backdrops__no-backdrops">There are no backdrops to show.</p>
+  }
+</div>

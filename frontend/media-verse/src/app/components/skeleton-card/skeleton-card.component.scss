@@ -1,0 +1,46 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins/discover-page-list-media-mixin" as *;
+
+.skeleton-desktop {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  border-radius: $radius-sm;
+  background-color: var(--app-background-color);
+
+  &__rating {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.skeleton-mobile {
+  display: none;
+  align-items: center;
+  background-color: var(--app-background-color);
+  border-radius: $radius-sm;
+  padding: $spacing-md;
+  gap: $spacing-md;
+
+  &__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+}
+
+:host[discover] {
+  .skeleton-mobile {
+    display: none;
+  }
+  @include discover-page-list-media-mixin {
+    .skeleton-desktop {
+      display: none;
+    }
+    .skeleton-mobile {
+      display: flex;
+    }
+  }
+}

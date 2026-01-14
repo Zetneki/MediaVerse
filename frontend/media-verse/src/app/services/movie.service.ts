@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MoviesResponse } from '../models/moviesresponse';
 import { Genre } from '../models/genre';
+import { MovieDetails } from '../models/moviedetails';
 
 @Injectable({
   providedIn: 'root',
@@ -63,6 +64,12 @@ export class MovieService {
     return this.http.get<MoviesResponse>(`${this.baseUrl}/api/movies/filter`, {
       params,
     });
+  }
+
+  getMovie(id: number): Observable<MovieDetails> {
+    return this.http.get<MovieDetails>(
+      `${this.baseUrl}/api/movies/details/${id}`
+    );
   }
 
   getMovieGenres(): Observable<Genre[]> {

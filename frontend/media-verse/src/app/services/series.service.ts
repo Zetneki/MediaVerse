@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SeriesResponse } from '../models/seriesresponse';
 import { Genre } from '../models/genre';
+import { SeriesDetails } from '../models/seriesdetails';
 
 @Injectable({
   providedIn: 'root',
@@ -63,6 +64,12 @@ export class SeriesService {
     return this.http.get<SeriesResponse>(`${this.baseUrl}/api/series/filter`, {
       params,
     });
+  }
+
+  getSeries(id: number): Observable<SeriesDetails> {
+    return this.http.get<SeriesDetails>(
+      `${this.baseUrl}/api/series/details/${id}`
+    );
   }
 
   getSeriesGenres(): Observable<Genre[]> {

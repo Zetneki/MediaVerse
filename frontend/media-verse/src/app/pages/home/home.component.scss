@@ -1,5 +1,6 @@
 @use "../../../styles/variables" as *;
 @use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
+@use "../../../styles/mixins/card-scrollable-list-mixin" as *;
 
 .home {
   margin-inline: $spacing-xxl;
@@ -51,35 +52,7 @@
   }
 
   .list {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 15rem;
-    grid-template-rows: auto auto;
-    border-radius: $radius-sm;
-    background: var(--home-page-list-background);
-    padding: $spacing-md;
-    column-gap: $spacing-md;
-
-    &.dragging {
-      cursor: grabbing;
-    }
-
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    scrollbar-width: thin;
-    scrollbar-color: #888 rgba(0, 0, 0, 0);
-
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeSlideIn 0.6s ease forwards;
-
-    @keyframes fadeSlideIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    @include card-scrollable-list-mixin();
 
     @include desktop-mobile-media-mixin {
       grid-auto-columns: 12rem;
@@ -97,6 +70,10 @@
       border-radius: 0;
       margin-inline: calc(#{$spacing-lg} * -1);
     }
+  }
+
+  .list.skeleton {
+    grid-template-rows: auto;
   }
 
   #p-1 {

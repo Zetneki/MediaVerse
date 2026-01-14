@@ -1,0 +1,8 @@
+@use "../../../styles/variables" as *;
+
+.skeleton-details {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+  margin: $spacing-xl;
+}

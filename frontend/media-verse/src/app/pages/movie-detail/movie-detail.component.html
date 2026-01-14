@@ -1,0 +1,111 @@
+@if (isLoading) {
+<app-skeleton-details></app-skeleton-details>
+} @else if (movie) {
+<div class="movie-detail">
+  <div class="backdrop-container">
+    @if (this.movie.backdrops.length > 0) {
+    <img [src]="movie.backdrops[0]" alt="backdrop" class="backdrop" />
+    } @else {
+    <div class="backdrop"></div>
+    }
+
+    <div class="overlay-info">
+      <img [src]="movie.poster_path" alt="poster" class="poster" />
+
+      <div class="basic-info">
+        <h1>{{ movie.title }}</h1>
+        <div class="rating">
+          <p>Rating:</p>
+          <p-knob
+            [(ngModel)]="ratingValue"
+            [min]="0"
+            [max]="10"
+            [step]="0.5"
+            [readonly]="true"
+            [strokeWidth]="10"
+            [size]="60"
+            [disabled]="true"
+            [textColor]="'white'"
+          ></p-knob>
+        </div>
+        <p>
+          <span class="release">Release:</span>
+          {{ movie.release_date | date }}
+        </p>
+        <p><span class="overview">Overview:</span> {{ movie.overview }}</p>
+      </div>
+      <div class="add-button">
+        <p-button label="Add to Library" (click)="showDialog()" />
+      </div>
+    </div>
+
+    <div class="mobile-info">
+      <h1>{{ movie.title }}</h1>
+      <div class="mobile-info__data">
+        <div class="rating">
+          <p>Rating:</p>
+          <p-knob
+            [(ngModel)]="ratingValue"
+            [min]="0"
+            [max]="10"
+            [step]="0.5"
+            [readonly]="true"
+            [strokeWidth]="10"
+            [size]="60"
+            [disabled]="true"
+            [textColor]="'white'"
+          ></p-knob>
+        </div>
+        <p>
+          <span class="release">Release:</span>
+          {{ movie.release_date | date }}
+        </p>
+        <p><span class="overview">Overview:</span> {{ movie.overview }}</p>
+      </div>
+      <div class="mobile__add-button">
+        <p-button label="Add to Library" (click)="showDialog()" />
+      </div>
+    </div>
+  </div>
+
+  <div class="details">
+    <div class="details__genres">
+      <h2>Genres</h2>
+      @for (genre of movie.genres; track genre) {
+      <p>{{ genre.name }}</p>
+      }
+    </div>
+    <div class="details__other-info">
+      <h2>Details</h2>
+      <p>Runtime: {{ movie.runtime }} min</p>
+      <p>Popularity: {{ movie.popularity }}</p>
+      @if (movie.homepage) {
+      <p><a [href]="movie.homepage" target="_blank">Homepage</a></p>
+      }
+    </div>
+  </div>
+
+  <app-trailer [originalTrailerUrl]="movie.trailer ?? ''"></app-trailer>
+
+  <app-galleria [backDrops]="movie.backdrops"></app-galleria>
+
+  @if (similarMovies.length > 0) {
+  <div class="similar-movies">
+    <h2>Similar Movies</h2>
+    <div class="similar-movies__list" appDragscroll #similarList>
+      @for (movie of similarMovies; track movie.id) {
+      <app-movie-card [movie]="movie"></app-movie-card>
+      }
+    </div>
+  </div>
+  }
+</div>
+
+<app-add-to-library
+  [visible]="addToLibraryVisible()"
+  (visibleChange)="addToLibraryVisible.set($event)"
+></app-add-to-library>
+
+} @else {
+<p>There is no movie to show.</p>
+}

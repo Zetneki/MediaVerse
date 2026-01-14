@@ -1,0 +1,52 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
+
+.trailer {
+  width: calc(100% - 10rem);
+  margin: auto;
+  overflow: hidden;
+  max-height: 3rem;
+  transition: max-height 0.4s ease;
+  border-radius: $radius-sm;
+  background: var(--details-page-items-background);
+
+  &__btn {
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    text-align: start;
+    font-size: $font-size-lg;
+    font-weight: bold;
+    padding-inline: $spacing-md;
+  }
+
+  &__btn:hover {
+    background: var(--details-page-items-active);
+  }
+
+  &__video {
+    display: block;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    height: auto;
+  }
+
+  &__no-trailer {
+    font-size: $font-size-md;
+    margin-block: $spacing-xxl;
+    text-align: center;
+  }
+
+  &.open {
+    max-height: 150vh;
+  }
+
+  @include desktop-mobile-media-mixin {
+    width: 100%;
+    border-radius: 0;
+  }
+}

@@ -14,6 +14,20 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'discover/movie/:id',
+    loadComponent: () =>
+      import('./pages/movie-detail/movie-detail.component').then(
+        (m) => m.MovieDetailComponent
+      ),
+  },
+  {
+    path: 'discover/series/:id',
+    loadComponent: () =>
+      import('./pages/series-detail/series-detail.component').then(
+        (m) => m.SeriesDetailComponent
+      ),
+  },
+  {
     path: 'library',
     loadComponent: () =>
       import('./pages/library/library.component').then(

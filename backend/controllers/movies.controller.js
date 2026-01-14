@@ -157,7 +157,7 @@ exports.searchMovieDetails = async (req, res) => {
       movie = await moviesDao.upsertMovieCache(dataFromApi, true);
     }
 
-    res.json({ results: movie });
+    res.json(movie);
   } catch (err) {
     //console.log(err);
     res.status(500).json({ error: "Failed to fetch movie details" });

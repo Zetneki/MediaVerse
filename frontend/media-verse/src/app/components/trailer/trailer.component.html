@@ -1,0 +1,18 @@
+<div class="trailer" [class.open]="isTrailerOpen">
+  <div (click)="toggleTrailer()" class="trailer__btn">
+    Trailer<i
+      class="pi"
+      [ngClass]="isTrailerOpen ? 'pi-angle-up' : 'pi-angle-down'"
+    ></i>
+  </div>
+  @if (isTrailerVisible && safeTrailerUrl) {
+  <iframe
+    [src]="safeTrailerUrl"
+    frameborder="0"
+    allowfullscreen
+    class="trailer__video"
+  ></iframe>
+  } @else if (isTrailerVisible && !safeTrailerUrl) {
+  <p class="trailer__no-trailer">There is no trailer to show.</p>
+  }
+</div>

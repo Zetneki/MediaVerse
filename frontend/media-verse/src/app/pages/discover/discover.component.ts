@@ -1,4 +1,11 @@
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { Movie } from '../../models/movie';
 import { Series } from '../../models/series';
 import { MovieService } from '../../services/movie.service';
@@ -11,9 +18,11 @@ import { FormControl, FormsModule } from '@angular/forms';
 import {
   debounceTime,
   distinctUntilChanged,
-  forkJoin,
+  finalize,
   of,
+  Subscription,
   switchMap,
+  tap,
 } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Genre } from '../../models/genre';
@@ -21,6 +30,10 @@ import { AccordionModule } from 'primeng/accordion';
 import { SelectModule } from 'primeng/select';
 import { FilterComponent } from '../../components/filter/filter.component';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { SkeletonCardComponent } from '../../components/skeleton-card/skeleton-card.component';
+import { DiscoverListComponent } from '../../components/discover-list/discover-list.component';
+import { ContentService } from '../../services/content.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-discover',
@@ -34,13 +47,15 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
     FormsModule,
     FilterComponent,
     PaginatorModule,
+    SkeletonCardComponent,
   ],
   templateUrl: './discover.component.html',
   styleUrl: './discover.component.scss',
 })
-export class DiscoverComponent implements OnInit {
-  movieService = inject(MovieService);
-  seriesService = inject(SeriesService);
+export class DiscoverComponent implements OnInit, OnDestroy {
+  skeletonArray = Array(20);
+
+  contentService = inject(ContentService);
 
   popularMovies: Movie[] = [];
   topRatedMovies: Movie[] = [];
@@ -54,7 +69,7 @@ export class DiscoverComponent implements OnInit {
   filterSeries: Series[] = [];
   seriesGenres: Genre[] = [];
 
-  selectedTypeSignal = signal<SelectOption>({
+  selectedTypeSignal = signal<SelectOption<'movies' | 'series'>>({
     label: 'Movies',
     value: 'movies',
   });
@@ -63,11 +78,13 @@ export class DiscoverComponent implements OnInit {
   tabs: string[] = ['Popular', 'Top Rated', 'Search', 'Filter'];
   tabsValues: string[] = ['popular', 'top_rated', 'search', 'filter'];
 
+  isSearching = signal(false);
   searchControl = new FormControl('');
 
+  isFiltering = signal(false);
   lastFilter: { genres: number[]; sortBy: string } = {
     genres: [],
-    sortBy: 'popularity.desc',
+    sortBy: '',
   };
 
   first: number = 0;
@@ -104,20 +121,33 @@ export class DiscoverComponent implements OnInit {
     });
   }
 
+  private subscriptions = new Subscription();
+
   ngOnInit() {
-    this.getPopular();
+    this.subscriptions.add(
+      this.searchContent$.subscribe((data) => {
+        this.searchMovies = data.movies;
+        this.searchSeries = data.series;
 
-    this.getTopRated();
+        this.totalRecordsMap['movies']['search'] = data.totalMovies;
+        this.totalRecordsMap['series']['search'] = data.totalSeries;
+      })
+    );
+    this.subscriptions.add(
+      this.contentService.getMovieGenres$().subscribe((genres) => {
+        this.movieGenres = genres;
+      })
+    );
 
-    this.searchContent();
+    this.subscriptions.add(
+      this.contentService.getSeriesGenres$().subscribe((genres) => {
+        this.seriesGenres = genres;
+      })
+    );
+  }
 
-    this.movieService.getMovieGenres().subscribe((data) => {
-      this.movieGenres = data;
-    });
-
-    this.seriesService.getSeriesGenres().subscribe((data) => {
-      this.seriesGenres = data;
-    });
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   get totalRecords(): number {
@@ -153,151 +183,194 @@ export class DiscoverComponent implements OnInit {
   setActiveTab(index: number) {
     this.activeTab.set(index);
     this.first = 0;
-  }
 
-  private mapMovie(movie: Movie): Movie {
-    return {
-      ...movie,
-      poster_path: movie.poster_path
-        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-        : '/assets/tmdb_no_img.png',
-    };
-  }
+    const page = 1;
+    const tab = this.tabs[index];
 
-  private mapSeries(series: Series): Series {
-    return {
-      ...series,
-      poster_path: series.poster_path
-        ? `https://image.tmdb.org/t/p/w500${series.poster_path}`
-        : '/assets/tmdb_no_img.png',
-    };
+    switch (tab) {
+      case 'Popular':
+        this.getPopular(page);
+        break;
+      case 'Top Rated':
+        this.getTopRated(page);
+        break;
+      case 'Search':
+        this.searchContentPage(page);
+        break;
+      case 'Filter':
+        this.onApplyFilters(this.lastFilter, page);
+        break;
+    }
   }
 
   getPopular(page: number = 1) {
-    switch (this.selectedTypeSignal().value) {
+    const type = this.selectedTypeSignal().value;
+    switch (type) {
       case 'movies':
-        this.movieService.getPopularMovies(page).subscribe((data) => {
-          this.popularMovies = data.results.map((movie) =>
-            this.mapMovie(movie)
-          );
-          this.totalRecordsMap['movies']['popular'] = data.total_results;
+        this.contentService.getPopularMovies$(page).subscribe((data) => {
+          this.popularMovies = data.results;
+          this.totalRecordsMap['movies']['popular'] = data.total;
         });
         break;
       case 'series':
-        this.seriesService.getPopularSeries(page).subscribe((data) => {
-          this.popularSeries = data.results.map((series) =>
-            this.mapSeries(series)
-          );
-          this.totalRecordsMap['series']['popular'] = data.total_results;
+        this.contentService.getPopularSeries$(page).subscribe((data) => {
+          this.popularSeries = data.results;
+          this.totalRecordsMap['series']['popular'] = data.total;
         });
         break;
     }
   }
 
   getTopRated(page: number = 1) {
-    switch (this.selectedTypeSignal().value) {
+    const type = this.selectedTypeSignal().value;
+    switch (type) {
       case 'movies':
-        this.movieService.getTopRatedMovies(page).subscribe((data) => {
-          this.topRatedMovies = data.results.map((movie) =>
-            this.mapMovie(movie)
-          );
-          this.totalRecordsMap['movies']['top_rated'] = data.total_results;
+        this.contentService.getTopRatedMovies$(page).subscribe((data) => {
+          this.topRatedMovies = data.results;
+          this.totalRecordsMap['movies']['top_rated'] = data.total;
         });
         break;
       case 'series':
-        this.seriesService.getTopRatedSeries(page).subscribe((data) => {
-          this.topRatedSeries = data.results.map((series) =>
-            this.mapSeries(series)
-          );
-          this.totalRecordsMap['series']['top_rated'] = data.total_results;
+        this.contentService.getTopRatedSeries$(page).subscribe((data) => {
+          this.topRatedSeries = data.results;
+          this.totalRecordsMap['series']['top_rated'] = data.total;
         });
         break;
     }
   }
 
-  searchContent() {
-    this.searchControl.valueChanges
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap((query) => {
-          if (!query || query.length < 2) {
-            return of({
-              movies: { results: [], total_results: 0 },
-              series: { results: [], total_results: 0 },
-            });
-          }
+  searchContent$ = this.searchControl.valueChanges.pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+    tap(() => (this.first = 0)),
+    switchMap((query) => {
+      if (!query || query.length < 2) {
+        return of({ movies: [], series: [], totalMovies: 0, totalSeries: 0 });
+      }
+      this.isSearching.set(true);
+      return this.contentService
+        .searchContent$(query)
+        .pipe(finalize(() => this.isSearching.set(false)));
+    })
+  );
 
-          return forkJoin({
-            movies: this.movieService.searchMovies(query),
-            series: this.seriesService.searchSeries(query),
-          });
-        })
-      )
-      .subscribe((data) => {
-        this.searchMovies = data.movies.results.map((movie) =>
-          this.mapMovie(movie)
-        );
-        this.searchSeries = data.series.results.map((series) =>
-          this.mapSeries(series)
-        );
-        this.totalRecordsMap['movies']['search'] = data.movies.total_results;
-        this.totalRecordsMap['series']['search'] = data.series.total_results;
+  searchContentPage(page: number = 1) {
+    const type = this.selectedTypeSignal().value;
+    const query = this.searchControl.value ?? '';
+
+    this.isSearching.set(true);
+
+    this.contentService
+      .searchContentPage$(type, query, page)
+      .pipe(finalize(() => this.isSearching.set(false)))
+      .subscribe((results) => {
+        switch (type) {
+          case 'movies':
+            this.searchMovies = results as Movie[];
+            break;
+          case 'series':
+            this.searchSeries = results as Series[];
+            break;
+        }
       });
   }
 
-  searchContentPage(page: number = 1) {
-    switch (this.selectedTypeSignal().value) {
-      case 'movies':
-        this.movieService
-          .searchMovies(this.searchControl.value ?? '', page)
-          .subscribe((data) => {
-            this.searchMovies = data.results.map((movie) =>
-              this.mapMovie(movie)
-            );
-          });
-        break;
-      case 'series':
-        this.seriesService
-          .searchSeries(this.searchControl.value ?? '', page)
-          .subscribe((data) => {
-            this.searchSeries = data.results.map((series) =>
-              this.mapSeries(series)
-            );
-          });
-        break;
-    }
-  }
-
   onApplyFilters(
-    event: { genres: number[]; sortBy: string },
+    filter: { genres: number[]; sortBy: string },
     page: number = 1
   ) {
-    this.lastFilter = event;
+    this.lastFilter = filter;
+    this.isFiltering.set(true);
 
-    const { genres, sortBy } = event;
+    const type = this.selectedTypeSignal().value;
 
-    switch (this.selectedTypeSignal().value) {
-      case 'movies':
-        this.movieService
-          .filterMovies(genres, sortBy, page)
-          .subscribe((data) => {
-            this.filterMovies = data.results.map((movie) =>
-              this.mapMovie(movie)
-            );
-            this.totalRecordsMap['movies']['filter'] = data.total_results;
-          });
-        break;
-      case 'series':
-        this.seriesService
-          .filterSeries(genres, sortBy, page)
-          .subscribe((data) => {
-            this.filterSeries = data.results.map((series) =>
-              this.mapSeries(series)
-            );
-            this.totalRecordsMap['series']['filter'] = data.total_results;
-          });
-        break;
-    }
+    this.contentService
+      .filterContent$(type, filter, page)
+      .pipe(finalize(() => this.isFiltering.set(false)))
+      .subscribe(({ results, total }) => {
+        if (type === 'movies') {
+          this.filterMovies = results as Movie[];
+          this.totalRecordsMap['movies']['filter'] = total;
+        } else {
+          this.filterSeries = results as Series[];
+          this.totalRecordsMap['series']['filter'] = total;
+        }
+      });
   }
+
+  // get currentType() {
+  //   return this.selectedTypeSignal().value;
+  // }
+
+  // get currentGenres(): Genre[] {
+  //   switch (this.currentType) {
+  //     case 'movies':
+  //       return this.movieGenres;
+  //     case 'series':
+  //       return this.seriesGenres;
+
+  //     default:
+  //       return [];
+  //   }
+  // }
+
+  // get currentItems(): any[] {
+  //   const tabKey = this.tabsValues[this.activeTab()];
+  //   switch (this.currentType) {
+  //     case 'movies':
+  //       return this.getItemsByTab(
+  //         this.popularMovies,
+  //         this.topRatedMovies,
+  //         this.searchMovies,
+  //         this.filterMovies,
+  //         tabKey
+  //       );
+  //     case 'series':
+  //       return this.getItemsByTab(
+  //         this.popularSeries,
+  //         this.topRatedSeries,
+  //         this.searchSeries,
+  //         this.filterSeries,
+  //         tabKey
+  //       );
+  //     default:
+  //       return [];
+  //   }
+  // }
+
+  // private getItemsByTab(
+  //   popular: any[],
+  //   topRated: any[],
+  //   search: any[],
+  //   filter: any[],
+  //   tabKey: string
+  // ): any[] {
+  //   switch (tabKey) {
+  //     case 'popular':
+  //       return popular;
+  //     case 'top_rated':
+  //       return topRated;
+  //     case 'search':
+  //       return search;
+  //     case 'filter':
+  //       return filter;
+  //     default:
+  //       return [];
+  //   }
+  // }
+
+  // get currentIsLoading(): boolean {
+  //   const tabKey = this.tabsValues[this.activeTab()];
+  //   switch (tabKey) {
+  //     case 'popular':
+  //     case 'top_rated':
+  //       return this.currentItems.length === 0;
+  //     case 'search':
+  //       return this.isSearching();
+  //     case 'filter':
+  //       return this.isFiltering();
+  //     default:
+  //       return false;
+  //   }
+  // }
 }

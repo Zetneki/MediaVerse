@@ -10,19 +10,25 @@
   @if (this.selectedTypeSignal().value == "movies") { @if (tabs[activeTab()] ==
   "Popular") {
   <div class="list">
-    @for (movie of popularMovies; track movie.id) {
+    @if (popularMovies.length === 0) { @for (i of skeletonArray; let idx =
+    $index; track idx) {
+    <app-skeleton-card discover></app-skeleton-card>
+    } } @else { @for (movie of popularMovies; track movie.id) {
     <app-movie-card discover [movie]="movie"></app-movie-card>
     }@empty {
     <p>There are no movies to show.</p>
-    }
+    } }
   </div>
   } @else if (tabs[activeTab()] == "Top Rated") {
   <div class="list">
-    @for (movie of topRatedMovies; track movie.id) {
+    @if (popularMovies.length === 0) { @for (i of skeletonArray; let idx =
+    $index; track idx) {
+    <app-skeleton-card discover></app-skeleton-card>
+    } } @else { @for (movie of topRatedMovies; track movie.id) {
     <app-movie-card discover [movie]="movie"></app-movie-card>
     }@empty {
     <p>There are no movies to show.</p>
-    }
+    } }
   </div>
   } @else if (tabs[activeTab()] == "Search") {
   <div class="search">
@@ -30,11 +36,14 @@
   </div>
 
   <div class="list">
-    @for (movie of searchMovies;track movie.id) {
+    @if (isSearching()) { @for (i of skeletonArray; let idx = $index; track idx)
+    {
+    <app-skeleton-card discover></app-skeleton-card>
+    } } @else { @for (movie of searchMovies;track movie.id) {
     <app-movie-card discover [movie]="movie"></app-movie-card>
     }@empty {
     <p>There are no movies to show.</p>
-    }
+    } }
   </div>
   } @else if (tabs[activeTab()] == "Filter") {
   <app-filter
@@ -43,24 +52,33 @@
   ></app-filter>
 
   <div class="list">
-    @for (movie of filterMovies; track movie.id) {
+    @if (isFiltering()) { @for (i of skeletonArray; let idx = $index; track idx)
+    {
+    <app-skeleton-card discover></app-skeleton-card>
+    } } @else { @for (movie of filterMovies; track movie.id) {
     <app-movie-card discover [movie]="movie"></app-movie-card>
     }@empty {
     <p>There are no movies to show.</p>
-    }
+    } }
   </div>
-  }} @else if (this.selectedTypeSignal().value == "series") {@if
+  }} @else if (this.selectedTypeSignal().value == "series") { @if
   (tabs[activeTab()] == "Popular") {
   <div class="list">
-    @for (series of popularSeries; track series.id) {
+    @if (popularSeries.length === 0) { @for (i of skeletonArray; let idx =
+    $index; track idx) {
+    <app-skeleton-card discover></app-skeleton-card>
+    } } @else { @for (series of popularSeries; track series.id) {
     <app-series-card discover [series]="series"></app-series-card>
-    }
+    } }
   </div>
   } @else if (tabs[activeTab()] == "Top Rated") {
   <div class="list">
-    @for (series of topRatedSeries; track series.id) {
+    @if (popularSeries.length === 0) { @for (i of skeletonArray; let idx =
+    $index; track idx) {
+    <app-skeleton-card discover></app-skeleton-card>
+    } } @else { @for (series of topRatedSeries; track series.id) {
     <app-series-card discover [series]="series"></app-series-card>
-    }
+    } }
   </div>
   } @else if (tabs[activeTab()] == "Search") {
   <div class="search">
@@ -68,11 +86,14 @@
   </div>
 
   <div class="list">
-    @for (series of searchSeries; track series.id) {
+    @if (isSearching()) { @for (i of skeletonArray; let idx = $index; track idx)
+    {
+    <app-skeleton-card discover></app-skeleton-card>
+    } } @else { @for (series of searchSeries; track series.id) {
     <app-series-card discover [series]="series"></app-series-card>
     }@empty {
     <p>There are no series to show.</p>
-    }
+    } }
   </div>
   } @else if (tabs[activeTab()] == "Filter") {
   <app-filter
@@ -81,11 +102,14 @@
   ></app-filter>
 
   <div class="list">
-    @for (series of filterSeries; track series.id) {
+    @if (isFiltering()) { @for (i of skeletonArray; let idx = $index; track idx)
+    {
+    <app-skeleton-card discover></app-skeleton-card>
+    } } @else { @for (series of filterSeries; track series.id) {
     <app-series-card discover [series]="series"></app-series-card>
     }@empty {
     <p>There are no series to show.</p>
-    }
+    } }
   </div>
 
   }} @if (totalRecords !== 0 ) {
@@ -110,3 +134,46 @@
   </div>
   }
 </div>
+
+<!--
+<div class="discover-page">
+  @if (tabs[activeTab()] === 'Search') {
+  <div class="search">
+    <input type="text" placeholder="Search" [formControl]="searchControl" />
+  </div>
+  } @if (tabs[activeTab()] === 'Filter') {
+  <app-filter
+    [genres]="currentGenres"
+    (apply)="onApplyFilters($event)"
+  ></app-filter>
+  }
+
+  <app-discover-list
+    [items]="currentItems"
+    [isLoading]="currentIsLoading"
+    [type]="currentType"
+  />
+
+  @if (totalRecords !== 0) {
+  <div class="paginator">
+    <div class="desktop">
+      <p-paginator
+        (onPageChange)="onPageChange($event)"
+        [first]="first"
+        [rows]="rows"
+        [totalRecords]="totalRecords"
+      />
+    </div>
+    <div class="mobile">
+      <p-paginator
+        (onPageChange)="onPageChange($event)"
+        [first]="first"
+        [rows]="rows"
+        [totalRecords]="totalRecords"
+        [pageLinkSize]="1"
+      />
+    </div>
+  </div>
+  }
+</div>
+-->

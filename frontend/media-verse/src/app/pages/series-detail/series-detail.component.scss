@@ -1,0 +1,250 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
+@use "../../../styles/mixins/card-scrollable-list-mixin" as *;
+
+.series-detail {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+  margin-bottom: $spacing-xl;
+
+  .backdrop-container {
+    position: relative;
+    width: 100%;
+    min-height: 30vh;
+    overflow: hidden;
+
+    .backdrop {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        circle,
+        var(--details-page-default-backdrop-0) 0%,
+        var(--details-page-default-backdrop-100) 100%
+      );
+      object-fit: cover;
+      background-position: center;
+      filter: brightness(0.4) blur(3px);
+      transform: scale(1.02);
+      z-index: 0;
+    }
+
+    .overlay-info {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: $spacing-xxl;
+      padding: 5vh 5rem;
+
+      .poster {
+        width: clamp(200px, 15vw, 400px);
+        height: auto;
+        object-fit: cover;
+        border-radius: $radius-sm;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+      }
+
+      .basic-info {
+        color: white;
+        font-size: $font-size-md;
+        min-width: 50%;
+
+        h1 {
+          margin-top: 0;
+        }
+
+        .rating {
+          display: flex;
+          gap: $spacing-md;
+          flex-direction: row;
+          font-weight: bold;
+        }
+
+        .release,
+        .overview {
+          font-weight: bold;
+        }
+      }
+      .add-button {
+        margin-top: auto;
+        flex-shrink: 0;
+      }
+    }
+
+    .mobile-info {
+      display: none;
+    }
+
+    @include desktop-mobile-media-mixin {
+      .overlay-info {
+        justify-content: flex-start;
+        align-items: center;
+        padding: $spacing-md;
+
+        .poster {
+          width: clamp(100px, 50%, 200px);
+        }
+
+        .basic-info,
+        .add-button {
+          display: none;
+        }
+      }
+
+      .mobile-info {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-md;
+        color: white;
+        position: relative;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0 $spacing-md $spacing-md $spacing-md;
+
+        h1 {
+          margin-bottom: 0;
+        }
+
+        .rating {
+          display: flex;
+          gap: $spacing-md;
+          flex-direction: row;
+          align-items: center;
+          font-weight: bold;
+        }
+
+        .release,
+        .overview {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .details {
+    display: grid;
+    gap: $spacing-md;
+    grid-template-areas: "details__genres details__other-info";
+    margin: 0 5rem 0 5rem;
+
+    &__genres {
+      grid-area: details__genres;
+    }
+
+    &__other-info {
+      grid-area: details__other-info;
+      background-color: var(--details-page-items-background);
+      padding-inline: $spacing-md;
+
+      p {
+        a {
+          color: var(--app-primary-color);
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    &__genres,
+    &__other-info {
+      background-color: var(--details-page-items-background);
+      padding-inline: $spacing-md;
+      border-radius: $radius-sm;
+    }
+
+    @include desktop-mobile-media-mixin {
+      margin: 0;
+      grid-template-areas:
+        "details__genres"
+        "details__other-info";
+
+      &__genres,
+      &__other-info {
+        border-radius: 0;
+      }
+    }
+  }
+
+  .seasons {
+    margin-inline: 5rem;
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: $spacing-sm;
+    }
+
+    &__list {
+      @include card-scrollable-list-mixin();
+
+      .season-details {
+        display: grid;
+        grid-template-rows: subgrid;
+        grid-row: span 2;
+        background: var(--app-background-color);
+        border-radius: $radius-sm;
+        gap: 0;
+        user-select: none;
+
+        &__img {
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          margin: auto;
+          border-radius: $radius-sm $radius-sm 0 0;
+        }
+
+        &__info {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          padding: $spacing-sm $spacing-sm;
+
+          .season,
+          .episode {
+            margin: 0;
+          }
+          .episode {
+            font-size: $font-size-sm;
+            color: var(--details-page-episode-text-color);
+            padding-inline: 0.2rem;
+          }
+        }
+      }
+    }
+
+    @include desktop-mobile-media-mixin {
+      margin-inline: $spacing-md;
+      padding: $spacing-sm;
+      &__list {
+        grid-auto-columns: 12rem;
+      }
+    }
+  }
+
+  .similar-series {
+    margin-inline: 5rem;
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: $spacing-sm;
+    }
+
+    &__list {
+      @include card-scrollable-list-mixin();
+    }
+    @include desktop-mobile-media-mixin {
+      margin-inline: $spacing-md;
+
+      &__list {
+        grid-auto-columns: 12rem;
+      }
+    }
+  }
+}
