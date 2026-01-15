@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const db = require("../config/db");
 
 // --- Movie cache ---
 async function upsertMovieCache(movie, updateLastUpdated = false) {
@@ -36,18 +36,18 @@ async function upsertMovieCache(movie, updateLastUpdated = false) {
     movie.homepage,
     movie.similar_movies ? JSON.stringify(movie.similar_movies) : null,
   ];
-  const res = await pool.query(query, values);
+  const res = await db.query(query, values);
   return res.rows[0];
 }
 
 async function getMovieById(id) {
-  const res = await pool.query("SELECT * FROM movie_cache WHERE id = $1", [id]);
+  const res = await db.query("SELECT * FROM movie_cache WHERE id = $1", [id]);
   return res.rows[0];
 }
 
 // --- Page cache ---
 async function upsertMoviePageCache(page, category, movieIds, totalPages) {
-  const res = await pool.query(
+  const res = await db.query(
     `
     INSERT INTO movie_page_cache (page, category, movie_ids, total_results, last_updated)
     VALUES ($1,$2,$3,$4,NOW())
@@ -63,7 +63,7 @@ async function upsertMoviePageCache(page, category, movieIds, totalPages) {
 }
 
 async function getMoviePageCache(page, category) {
-  const res = await pool.query(
+  const res = await db.query(
     "SELECT * FROM movie_page_cache WHERE page=$1 AND category=$2",
     [page, category]
   );
@@ -74,67 +74,12 @@ async function getMoviesByCategory(page, category) {
   const pageCache = await getMoviePageCache(page, category);
   if (!pageCache) return [];
 
-  const res = await pool.query(
+  const res = await db.query(
     "SELECT * FROM movie_cache WHERE id = ANY($1) ORDER BY array_position($1::bigint[], id)",
     [pageCache.movie_ids]
   );
   return res.rows;
 }
-
-//do not need these functions
-/*
-async function getGenreById(source, id) {
-  const res = await pool.query(
-    "SELECT * FROM genre_cache WHERE source = $1 AND id = $2",
-    [source, id]
-  );
-  return res.rows[0];
-}
-
-// --- Search and filter
-async function searchMovies(query, page = 1, limit = 20) {
-  const offset = (page - 1) * limit;
-  const res = await pool.query(
-    `
-    SELECT * FROM movie_cache
-    WHERE title ILIKE $1
-    ORDER BY id
-    LIMIT $2 OFFSET $3
-    `,
-    [`%${query}%`, limit, offset]
-  );
-  return res.rows;
-}
-
-async function filterMovies({
-  genreIds = [],
-  sortBy = "popularity.desc",
-  page = 1,
-  limit = 20,
-}) {
-  const offset = (page - 1) * limit;
-
-  let whereClause = "";
-  let values = [];
-  if (genreIds.length > 0) {
-    whereClause = "WHERE genres && $1::bigint[]";
-    values.push(genreIds);
-  }
-
-  let sortByArray = sortBy.split(".");
-
-  const query = `
-    SELECT * FROM movie_cache
-    ${whereClause}
-    ORDER BY ${sortByArray[0]} ${sortByArray[1]}
-    LIMIT $${values.length + 1} OFFSET $${values.length + 2}
-  `;
-  values.push(limit, offset);
-
-  const res = await pool.query(query, values);
-  return res.rows;
-}
-*/
 
 module.exports = {
   upsertMovieCache,
@@ -142,7 +87,4 @@ module.exports = {
   upsertMoviePageCache,
   getMoviePageCache,
   getMoviesByCategory,
-  //getGenreById,
-  //searchMovies,
-  //filterMovies,
 };

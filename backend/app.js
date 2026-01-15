@@ -8,7 +8,7 @@ var logger = require("morgan");
 const cors = require("cors");
 
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
+const usersRouter = require("./routes/users.routes");
 const moviesRouter = require("./routes/movies.routes");
 const seriesRouter = require("./routes/series.routes");
 const genresRouter = require("./routes/genre.routes");

@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const db = require("../config/db");
 
 async function upsertGenreCache(source, genre) {
   const query = `
@@ -10,12 +10,12 @@ async function upsertGenreCache(source, genre) {
     RETURNING *;
   `;
   const values = [source, genre.id, genre.name];
-  const res = await pool.query(query, values);
+  const res = await db.query(query, values);
   return res.rows[0];
 }
 
 async function getGenresBySource(source) {
-  const res = await pool.query(
+  const res = await db.query(
     "SELECT * FROM genre_cache WHERE source = $1 ORDER BY name",
     [source]
   );

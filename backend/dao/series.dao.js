@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const db = require("../config/db");
 
 // --- Series cache ---
 async function upsertSeriesCache(series, updateLastUpdated = false) {
@@ -40,21 +40,19 @@ async function upsertSeriesCache(series, updateLastUpdated = false) {
     series.homepage,
     series.similar_series ? JSON.stringify(series.similar_series) : null,
   ];
-  const res = await pool.query(query, values);
+  const res = await db.query(query, values);
   return res.rows[0];
 }
 
 async function getSeriesById(id) {
-  const res = await pool.query("SELECT * FROM series_cache WHERE id = $1", [
-    id,
-  ]);
+  const res = await db.query("SELECT * FROM series_cache WHERE id = $1", [id]);
   return res.rows[0];
 }
 
 // --- Page cache ---
 
 async function upsertSeriesPageCache(page, category, seriesIds, totalPages) {
-  const res = await pool.query(
+  const res = await db.query(
     `
     INSERT INTO series_page_cache (page, category, series_ids, total_results, last_updated)
     VALUES ($1,$2,$3,$4,NOW())
@@ -70,7 +68,7 @@ async function upsertSeriesPageCache(page, category, seriesIds, totalPages) {
 }
 
 async function getSeriesPageCache(page, category) {
-  const res = await pool.query(
+  const res = await db.query(
     "SELECT * FROM series_page_cache WHERE page=$1 AND category=$2",
     [page, category]
   );
@@ -81,7 +79,7 @@ async function getSeriesByCategory(page, category) {
   const pageCache = await getSeriesPageCache(page, category);
   if (!pageCache) return [];
 
-  const res = await pool.query(
+  const res = await db.query(
     "SELECT * FROM series_cache WHERE id = ANY($1) ORDER BY array_position($1::bigint[], id)",
     [pageCache.series_ids]
   );
