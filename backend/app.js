@@ -15,7 +15,12 @@ const genresRouter = require("./routes/genre.routes");
 
 var app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:4200",
+    //credentials: true,
+  })
+);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

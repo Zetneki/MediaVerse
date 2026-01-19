@@ -23,16 +23,17 @@ async function findById(id) {
 }
 
 async function updatePassword(userId, newHash) {
-  const res = await db.query(
-    `UPDATE user_profile SET password_hash = $1 WHERE id = $2`,
-    [newHash, userId]
-  );
+  await db.query(`UPDATE user_profile SET password_hash = $1 WHERE id = $2`, [
+    newHash,
+    userId,
+  ]);
 }
 
 async function deleteUser(userId) {
   const res = await db.query(`DELETE FROM user_profile WHERE id = $1`, [
     userId,
   ]);
+  return res.rowCount;
 }
 
 module.exports = {

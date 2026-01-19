@@ -21,8 +21,8 @@
       height: 100%;
       background: radial-gradient(
         circle,
-        var(--details-page-default-backdrop) 0%,
-        rgba(0, 0, 0, 0.6) 100%
+        var(--details-page-default-backdrop-0) 0%,
+        var(--details-page-default-backdrop-100) 100%
       );
       object-fit: cover;
       background-position: center;

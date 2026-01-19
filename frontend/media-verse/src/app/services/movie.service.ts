@@ -26,7 +26,7 @@ export class MovieService {
 
     return this.http.get<MoviesResponse>(
       `${this.baseUrl}/api/movies/toprated`,
-      { params }
+      { params },
     );
   }
 
@@ -45,7 +45,7 @@ export class MovieService {
   filterMovies(
     genreIds: number[] = [],
     sortBy: string = '',
-    page: number = 1
+    page: number = 1,
   ): Observable<MoviesResponse> {
     let params = new HttpParams();
 
@@ -68,7 +68,7 @@ export class MovieService {
 
   getMovie(id: number): Observable<MovieDetails> {
     return this.http.get<MovieDetails>(
-      `${this.baseUrl}/api/movies/details/${id}`
+      `${this.baseUrl}/api/movies/details/${id}`,
     );
   }
 

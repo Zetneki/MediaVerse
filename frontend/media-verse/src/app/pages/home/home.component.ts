@@ -26,18 +26,18 @@ import { ContentService } from '../../services/content.service';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  contentService = inject(ContentService);
+  themeService = inject(ThemeService);
+
   skeletonArray = Array(20);
 
-  contentService = inject(ContentService);
+  checked: boolean = false;
 
   popularMovies$ = this.contentService.getPopularMovies$();
   topRatedMovies$ = this.contentService.getTopRatedMovies$();
 
   popularSeries$ = this.contentService.getPopularSeries$();
   topRatedSeries$ = this.contentService.getTopRatedSeries$();
-
-  checked: boolean = false;
-  themeService = inject(ThemeService);
 
   toggleTheme() {
     this.themeService.toggleTheme();

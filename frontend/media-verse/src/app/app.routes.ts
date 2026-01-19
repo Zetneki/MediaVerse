@@ -10,36 +10,48 @@ export const routes: Routes = [
     path: 'discover',
     loadComponent: () =>
       import('./pages/discover/discover.component').then(
-        (m) => m.DiscoverComponent
+        (m) => m.DiscoverComponent,
       ),
   },
   {
     path: 'discover/movie/:id',
     loadComponent: () =>
       import('./pages/movie-detail/movie-detail.component').then(
-        (m) => m.MovieDetailComponent
+        (m) => m.MovieDetailComponent,
       ),
   },
   {
     path: 'discover/series/:id',
     loadComponent: () =>
       import('./pages/series-detail/series-detail.component').then(
-        (m) => m.SeriesDetailComponent
+        (m) => m.SeriesDetailComponent,
       ),
   },
   {
     path: 'library',
     loadComponent: () =>
       import('./pages/library/library.component').then(
-        (m) => m.LibraryComponent
+        (m) => m.LibraryComponent,
       ),
   },
   {
     path: 'profile',
     loadComponent: () =>
       import('./pages/profile/profile.component').then(
-        (m) => m.ProfileComponent
+        (m) => m.ProfileComponent,
       ),
+  },
+  {
+    path: 'registration',
+    loadComponent: () =>
+      import('./pages/registration/registration.component').then(
+        (m) => m.RegistrationComponent,
+      ),
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'quests',
@@ -55,7 +67,7 @@ export const routes: Routes = [
     path: 'page-not-found',
     loadComponent: () =>
       import('./pages/page-not-found/page-not-found.component').then(
-        (m) => m.PageNotFoundComponent
+        (m) => m.PageNotFoundComponent,
       ),
   },
   {
@@ -67,7 +79,7 @@ export const routes: Routes = [
     path: '**',
     loadComponent: () =>
       import('./pages/page-not-found/page-not-found.component').then(
-        (m) => m.PageNotFoundComponent
+        (m) => m.PageNotFoundComponent,
       ),
   },
 ];
