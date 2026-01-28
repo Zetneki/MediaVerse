@@ -1,7 +1,105 @@
-<p>registration works!</p>
-<form action="http://localhost:3000/users/register" method="post">
-  <input type="text" name="username" placeholder="Username" />
-  <input type="password" name="password" placeholder="Password" />
-  <!--<input type="password" name="confirmPassword" placeholder="Confirm Password">-->
-  <input type="submit" value="Register" />
-</form>
+<div class="hero">
+  <div class="hero__content">
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="register">
+      <h1>Create an account</h1>
+      <p-floatlabel variant="on" class="register__username">
+        <input
+          pInputText
+          id="on_label"
+          fluid="true"
+          formControlName="username"
+        />
+        <label for="on_label">Username</label>
+      </p-floatlabel>
+      @if (
+        registerForm.get("username") && registerForm.get("username")?.dirty
+      ) {
+        @if (registerForm.get("username")?.errors?.["required"]) {
+          <small>Username is required</small>
+        }
+        @if (registerForm.get("username")?.errors?.["minlength"]) {
+          <small>Minimum 3 characters</small>
+        }
+        @if (registerForm.get("username")?.errors?.["maxlength"]) {
+          <small>Maximum 30 characters</small>
+        }
+      }
+      <p-floatlabel variant="on" class="register__password">
+        <p-password
+          id="on_label"
+          [toggleMask]="true"
+          [feedback]="true"
+          [weakLabel]="passwordErrors.join(', ')"
+          [mediumLabel]="passwordErrors.join(', ')"
+          [strongLabel]="passwordErrors.join(', ')"
+          fluid="true"
+          formControlName="password"
+        />
+        <label for="on_label">Password</label>
+      </p-floatlabel>
+      <!-- @if (
+    registerForm.get("password") &&
+    (registerForm.get("password")?.dirty ||
+      registerForm.get("password")?.touched)
+  ) {
+    @if (registerForm.get("password")?.errors?.["required"]) {
+      <small>Password is required</small>
+    }
+
+    @if (registerForm.get("password")?.errors?.["minlength"]) {
+      <small>Minimum 8 characters</small>
+    }
+
+    @if (registerForm.get("password")?.errors?.["pattern"]) {
+      <small>Must contain atleast 1 uppercase, lowercase and a number</small>
+    }
+  } -->
+      <p-floatlabel variant="on" class="register__password-confirmation">
+        <p-password
+          id="on_label"
+          [toggleMask]="true"
+          [feedback]="false"
+          fluid="true"
+          formControlName="passwordConfirmation"
+        />
+        <label for="on_label">Password Confirmation</label>
+      </p-floatlabel>
+      @if (registerForm.errors?.["passwordsMismatch"] && registerForm.touched) {
+        <small>Passwords do not match</small>
+      }
+      <p class="register__redirect">
+        <span>Already have an account? </span>
+        <a routerLink="/login">Login here</a>
+      </p>
+      <p-button
+        type="submit"
+        label="Register"
+        class="register__button"
+      ></p-button>
+    </form>
+    <div class="text">
+      <h2>Track what you watch</h2>
+      <p>Discover what's popular right now.</p>
+    </div>
+  </div>
+</div>
+
+<!-- @if (
+  registerForm.get("passwordConfirmation") &&
+  (registerForm.get("passwordConfirmation")?.dirty ||
+    registerForm.get("passwordConfirmation")?.touched)
+) {
+  @if (registerForm.get("passwordConfirmation")?.errors?.["required"]) {
+    <small>Password is required</small>
+  }
+
+  @if (registerForm.get("passwordConfirmation")?.errors?.["minlength"]) {
+    <small>Minimum 8 characters</small>
+  }
+
+  @if (registerForm.get("passwordConfirmation")?.errors?.["pattern"]) {
+    <small>Must contain atleast 1 uppercase, lowercase and a number</small>
+  }
+} -->
+
+<app-demo-marquee></app-demo-marquee>

@@ -1,0 +1,92 @@
+@use "../../../styles/variables.scss" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
+@use "../../../styles/mixins/login-register-content-mixin" as *;
+
+.hero {
+  padding: $spacing-xl;
+  background: var(--login-register-form-background);
+  border-bottom: 1px solid var(--border-color);
+
+  &__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4rem;
+    align-items: center;
+
+    .login {
+      display: flex;
+      flex-direction: column;
+      background: var(--app-page-background);
+      border-radius: $radius-sm $radius-sm;
+      border: 1px solid var(--border-color);
+      padding: $spacing-xl;
+
+      h1 {
+        margin-top: 0;
+      }
+
+      &__password,
+      &__redirect,
+      &__button {
+        margin-top: $spacing-md;
+      }
+
+      &__username,
+      &__password {
+        max-width: 15rem;
+      }
+
+      &__redirect {
+        a {
+          color: var(--app-primary-color);
+          text-decoration: none;
+          text-decoration: underline;
+
+          &:hover {
+            color: var(--app-primary-color-lighter);
+          }
+        }
+      }
+
+      small {
+        color: var(--error-color);
+      }
+    }
+
+    .text {
+      color: var(--text-color-muted);
+
+      h2 {
+        font-size: $font-size-xxl;
+        margin-bottom: $spacing-sm;
+      }
+
+      p {
+        font-size: $font-size-md;
+        margin-top: 0;
+      }
+    }
+
+    @include desktop-mobile-media-mixin {
+      grid-template-columns: auto;
+
+      .text {
+        display: none;
+      }
+    }
+  }
+
+  @include login-register-content-mixin {
+    padding: 0;
+    border-bottom: none;
+
+    .login {
+      border: none;
+      border-bottom: 1px solid var(--border-color);
+      border-radius: 0;
+      background: var(--login-register-form-background);
+    }
+  }
+}

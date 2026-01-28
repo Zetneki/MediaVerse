@@ -1,0 +1,7 @@
+@use "../variables" as *;
+
+@mixin login-register-content-mixin {
+  @media (max-width: $breakpoint-login-content) {
+    @content;
+  }
+}

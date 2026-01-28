@@ -5,7 +5,7 @@ async function createUser(username, passwordHash) {
     `INSERT INTO user_profile (username, password_hash)
     VALUES ($1, $2)
     RETURNING id, username`,
-    [username, passwordHash]
+    [username, passwordHash],
   );
   return res.rows[0];
 }
@@ -19,6 +19,14 @@ async function findByUsername(username) {
 
 async function findById(id) {
   const res = await db.query(`SELECT * FROM user_profile WHERE id = $1`, [id]);
+  return res.rows[0];
+}
+
+async function updateUsername(userId, newUsername) {
+  const res = await db.query(
+    `UPDATE user_profile SET username = $1 where id = $2 RETURNING *`,
+    [newUsername, userId],
+  );
   return res.rows[0];
 }
 
@@ -36,10 +44,19 @@ async function deleteUser(userId) {
   return res.rowCount;
 }
 
+async function incrementTokenVersion(userId) {
+  await db.query(
+    "UPDATE user_profile SET token_version = token_version + 1 WHERE id = $1",
+    [userId],
+  );
+}
+
 module.exports = {
   createUser,
   findByUsername,
   findById,
+  updateUsername,
   updatePassword,
   deleteUser,
+  incrementTokenVersion,
 };

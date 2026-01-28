@@ -1,0 +1,24 @@
+<div class="demo">
+  <div class="viewport">
+    <div class="track-movie">
+      @if (popularMovies$ | async; as data) {
+        @for (movie of data.results; track movie.id) {
+          <img [src]="movie.poster_path" class="img" />
+        }
+        @for (movie of data.results; track movie.id + "-dup") {
+          <img [src]="movie.poster_path" class="img" />
+        }
+      }
+    </div>
+    <div class="track-series">
+      @if (popularSeries$ | async; as data) {
+        @for (series of data.results; track series.id) {
+          <img [src]="series.poster_path" class="img" />
+        }
+        @for (series of data.results; track series.id + "-dup") {
+          <img [src]="series.poster_path" class="img" />
+        }
+      }
+    </div>
+  </div>
+</div>

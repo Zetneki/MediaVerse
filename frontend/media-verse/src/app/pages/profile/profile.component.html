@@ -1,1 +1,110 @@
 <p>profile works!</p>
+@if (user) {
+  <p-button (click)="onLogout()" label="Logout"></p-button>
+
+  <p>Username: {{ user.username }}</p>
+  <p>Wallet address: {{ user.wallet_address }}</p>
+  <p>Wallet verified: {{ user.wallet_verified }}</p>
+  <p>Created at: {{ user.created_at | date }}</p>
+
+  <form [formGroup]="usernameChangeForm" (ngSubmit)="onUsernameChange()">
+    <div class="username">
+      <input type="text" formControlName="newUsername" />
+    </div>
+    <p-button type="submit" label="Change username"></p-button>
+  </form>
+
+  @if (
+    usernameChangeForm.get("newUsername") &&
+    usernameChangeForm.get("newUsername")?.dirty
+  ) {
+    @if (usernameChangeForm.get("newUsername")?.errors?.["required"]) {
+      <small>Username is required</small>
+    }
+    @if (usernameChangeForm.get("newUsername")?.errors?.["minlength"]) {
+      <small>Minimum 3 characters</small>
+    }
+    @if (usernameChangeForm.get("newUsername")?.errors?.["maxlength"]) {
+      <small>Maximum 30 characters</small>
+    }
+  }
+
+  <form [formGroup]="passwordChangeForm" (ngSubmit)="onPasswordChange()">
+    <div class="password">
+      <label for="oldPassword">Old password</label>
+      <input type="password" formControlName="oldPassword" />
+    </div>
+    <div class="password-confirmation">
+      <label for="newPassword">New password</label>
+      <input type="password" formControlName="newPassword" />
+    </div>
+    <div class="password-confirmation">
+      <label for="newPasswordConfirmation">New password confirmation</label>
+      <input type="password" formControlName="newPasswordConfirmation" />
+    </div>
+    <p-button type="submit" label="Change password"></p-button>
+  </form>
+
+  @if (
+    passwordChangeForm.get("oldPassword") &&
+    passwordChangeForm.get("oldPassword")?.dirty
+  ) {
+    @if (passwordChangeForm.get("oldPassword")?.errors?.["required"]) {
+      <small>Old password is required</small>
+    }
+
+    @if (passwordChangeForm.get("oldPassword")?.errors?.["minlength"]) {
+      <small>Minimum 8 characters</small>
+    }
+  }
+  @if (
+    passwordChangeForm.get("newPassword") &&
+    passwordChangeForm.get("newPassword")?.dirty
+  ) {
+    @if (passwordChangeForm.get("newPassword")?.errors?.["required"]) {
+      <small>New password is required</small>
+    }
+
+    @if (passwordChangeForm.get("newPassword")?.errors?.["minlength"]) {
+      <small>Minimum 8 characters</small>
+    }
+
+    @if (passwordChangeForm.get("newPassword")?.errors?.["pattern"]) {
+      <small>Must contain atleast 1 uppercase, lowercase and a number</small>
+    }
+  }
+  @if (
+    passwordChangeForm.get("newPasswordConfirmation") &&
+    passwordChangeForm.get("newPasswordConfirmation")?.dirty
+  ) {
+    @if (
+      passwordChangeForm.get("newPasswordConfirmation")?.errors?.["required"]
+    ) {
+      <small>New password confirmation is required</small>
+    }
+
+    @if (
+      passwordChangeForm.get("newPasswordConfirmation")?.errors?.["minlength"]
+    ) {
+      <small>Minimum 8 characters</small>
+    }
+
+    @if (
+      passwordChangeForm.get("newPasswordConfirmation")?.errors?.["pattern"]
+    ) {
+      <small>Must contain atleast 1 uppercase, lowercase and a number</small>
+    }
+  }
+  @if (
+    passwordChangeForm.errors?.["passwordsMismatch"] &&
+    passwordChangeForm.touched
+  ) {
+    <small>Passwords do not match</small>
+  }
+
+  <p-button
+    class="danger"
+    (click)="onDeleteAccount()"
+    label="Delete acccount"
+  ></p-button>
+}

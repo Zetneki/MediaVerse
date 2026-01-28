@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS public.user_profile
     wallet_address text COLLATE pg_catalog."default",
     wallet_verified boolean DEFAULT false,
     password_hash text COLLATE pg_catalog."default" NOT NULL,
+    token_version integer DEFAULT 0,
     CONSTRAINT user_profile_pkey PRIMARY KEY (id),
     CONSTRAINT user_profile_username_key UNIQUE (username),
     CONSTRAINT user_profile_wallet_address_key UNIQUE (wallet_address)

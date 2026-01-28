@@ -1,7 +1,48 @@
-<p>login works!</p>
-<form action="http://localhost:3000/users/login" method="post">
-  <input type="text" name="username" placeholder="Username" />
-  <input type="password" name="password" placeholder="Password" />
-  <!--<input type="password" name="confirmPassword" placeholder="Confirm Password">-->
-  <input type="submit" value="Login" />
-</form>
+<div class="hero">
+  <div class="hero__content">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login">
+      <h1>Welcome back!</h1>
+      <p-floatlabel variant="on" class="login__username">
+        <input
+          pInputText
+          id="on_label"
+          fluid="true"
+          formControlName="username"
+        />
+        <label for="on_label">Username</label>
+      </p-floatlabel>
+      @if (loginForm.get("username")?.touched) {
+        @if (loginForm.get("username")?.errors?.["required"]) {
+          <small>Username is required</small>
+        }
+      }
+      <p-floatlabel variant="on" class="login__password">
+        <p-password
+          id="on_label"
+          [toggleMask]="true"
+          [feedback]="false"
+          fluid="true"
+          formControlName="password"
+        />
+        <label for="on_label">Password</label>
+      </p-floatlabel>
+      @if (loginForm.get("password")?.touched) {
+        @if (loginForm.get("password")?.errors?.["required"]) {
+          <small>Password is required</small>
+        }
+      }
+      <p class="login__redirect">
+        <span>Don't have an account yet? </span>
+        <a routerLink="/registration">Register here</a>
+      </p>
+      <p-button type="submit" label="Login" class="login__button"></p-button>
+    </form>
+
+    <div class="text">
+      <h2>Track what you watch</h2>
+      <p>Discover what's popular right now.</p>
+    </div>
+  </div>
+</div>
+
+<app-demo-marquee></app-demo-marquee>

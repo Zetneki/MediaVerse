@@ -4,8 +4,8 @@ import { Component } from '@angular/core';
   selector: 'app-library',
   imports: [],
   templateUrl: './library.component.html',
-  styleUrl: './library.component.scss'
+  styleUrl: './library.component.scss',
 })
 export class LibraryComponent {
-
+  constructor() {}
 }
