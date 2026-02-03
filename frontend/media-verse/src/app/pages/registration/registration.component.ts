@@ -15,6 +15,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { DemoMarqueeComponent } from '../../components/demo-marquee/demo-marquee.component';
+import { ProgressBar } from 'primeng/progressbar';
 
 @Component({
   selector: 'app-registration',
@@ -26,6 +27,7 @@ import { DemoMarqueeComponent } from '../../components/demo-marquee/demo-marquee
     FloatLabelModule,
     PasswordModule,
     DemoMarqueeComponent,
+    ProgressBar,
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
@@ -59,14 +61,7 @@ export class RegistrationComponent {
             Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$'),
           ],
         ],
-        passwordConfirmation: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(8),
-            Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$'),
-          ],
-        ],
+        passwordConfirmation: ['', [Validators.required]],
       },
       {
         validators: [this.passwordsMatchValidator],
@@ -78,6 +73,19 @@ export class RegistrationComponent {
     passwordControl?.valueChanges.subscribe(() => {
       this.updatePasswordErrors(passwordControl);
     });
+  }
+
+  get disabled() {
+    return this.registerForm.invalid;
+  }
+
+  passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password')?.value;
+    const confirm = control.get('passwordConfirmation')?.value;
+
+    return password && confirm && password !== confirm
+      ? { passwordsMismatch: true }
+      : null;
   }
 
   private updatePasswordErrors(control: AbstractControl | null) {
@@ -98,15 +106,6 @@ export class RegistrationComponent {
     if (control.errors['pattern']) {
       this.passwordErrors.push('Must contain uppercase, lowercase and number');
     }
-  }
-
-  passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('password')?.value;
-    const confirm = control.get('passwordConfirmation')?.value;
-
-    return password && confirm && password !== confirm
-      ? { passwordsMismatch: true }
-      : null;
   }
 
   onRegister(): void {

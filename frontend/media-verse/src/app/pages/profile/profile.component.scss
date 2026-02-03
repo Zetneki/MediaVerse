@@ -1,0 +1,184 @@
+@use "../../../styles/variables.scss" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
+@use "../../../styles/mixins/profile-settings-media-mixin" as *;
+
+.profile {
+  display: flex;
+  flex-direction: column;
+
+  &__component {
+    background: var(--profile-page-background);
+    padding: $spacing-md;
+    margin: $spacing-md $spacing-md 0 $spacing-md;
+    border-radius: $radius-md;
+
+    .details {
+      margin-inline: $spacing-sm;
+
+      &__title {
+        font-weight: bold;
+      }
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+
+      h1 {
+        margin-top: 0;
+        margin-bottom: $spacing-sm;
+      }
+    }
+
+    .theme-changer-title,
+    .settings-title {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+
+      hr {
+        height: 1px;
+        border: none;
+        background: var(--app-text-color);
+
+        &:first-of-type {
+          width: $spacing-md;
+        }
+
+        &:last-of-type {
+          flex-grow: 1;
+        }
+      }
+    }
+
+    .settings {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: $spacing-lg;
+
+      .change-username,
+      .change-password {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .change-username {
+        .username-form {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: $spacing-md;
+          background: var(--profile-username-change);
+          border-radius: $radius-sm;
+          margin-top: 0;
+          padding: 0;
+          overflow: hidden;
+          max-height: 0;
+          flex-grow: 0;
+          opacity: 0;
+
+          transition:
+            margin-top 400ms ease-in-out,
+            padding 400ms ease-in-out,
+            max-height 400ms ease-in-out,
+            flex-grow 400ms ease-in-out,
+            opacity 150ms ease;
+
+          .actions {
+            align-self: flex-end;
+          }
+
+          .field {
+            small {
+              color: var(--error-color);
+            }
+          }
+        }
+
+        &.open {
+          .username-form {
+            margin-top: $spacing-xs;
+            padding: $spacing-md;
+            max-height: 300px;
+            flex-grow: 1;
+            opacity: 1;
+          }
+        }
+      }
+
+      .change-password {
+        .password-form {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: $spacing-md;
+          background: var(--profile-username-change);
+          border-radius: $radius-sm;
+          margin-top: 0;
+          padding: 0;
+          overflow: hidden;
+          max-height: 0;
+          flex-grow: 0;
+          opacity: 0;
+
+          transition:
+            margin-top 400ms ease-in-out,
+            padding 400ms ease-in-out,
+            max-height 400ms ease-in-out,
+            flex-grow 400ms ease-in-out,
+            opacity 150ms ease;
+
+          .actions {
+            align-self: flex-end;
+          }
+
+          .field {
+            display: flex;
+            flex-direction: column;
+
+            &__new-password,
+            &__new-password-confirmation {
+              margin-top: $spacing-md;
+            }
+
+            &__new-password {
+              transition: margin-bottom 0.2s ease;
+
+              &:has(input:focus) {
+                margin-bottom: 4rem;
+              }
+            }
+
+            small {
+              color: var(--error-color);
+            }
+          }
+        }
+
+        &.open {
+          .password-form {
+            margin-top: $spacing-xs;
+            padding: $spacing-md;
+            max-height: 500px;
+            flex-grow: 1;
+            opacity: 1;
+          }
+        }
+      }
+
+      @include profile-settings-media-mixin {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(3, auto);
+      }
+    }
+  }
+
+  .loading {
+    margin: 0;
+    padding-inline: $spacing-xl;
+
+    --p-progressbar-border-radius: 0 0 3px 3px;
+    --p-progressbar-height: 3px;
+    --p-progressbar-background: transparent;
+  }
+}

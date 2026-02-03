@@ -28,7 +28,6 @@
       }
 
       &__password {
-        margin-top: $spacing-md;
         transition: margin-bottom 0.2s ease;
 
         &:has(input:focus) {
@@ -46,7 +45,7 @@
       &__username,
       &__password,
       &__password-confirmation {
-        max-width: 17rem;
+        max-width: 15rem;
       }
 
       &__redirect {
@@ -80,6 +79,14 @@
       }
     }
 
+    .loading {
+      padding-inline: 0.5rem;
+
+      --p-progressbar-border-radius: 0 0 3px 3px;
+      --p-progressbar-height: 3px;
+      --p-progressbar-background: var(--login-register-form-background);
+    }
+
     @include desktop-mobile-media-mixin {
       grid-template-columns: auto;
 
@@ -98,6 +105,11 @@
       border-bottom: 1px solid var(--border-color);
       border-radius: 0;
       background: var(--login-register-form-background);
+    }
+
+    .loading {
+      padding: 0;
+      --p-progressbar-border-radius: 0;
     }
   }
 }

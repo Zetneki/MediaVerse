@@ -22,11 +22,15 @@ footer {
       font-size: $font-size-md;
     }
 
-    &__link:hover {
-      background-color: var(--app-background-color-light);
-    }
+    &__link:focus,
     &__link:active {
-      background-color: var(--app-background-color-dark);
+      background-color: transparent;
     }
+  }
+}
+
+@media (hover: hover) {
+  .nav__link:hover {
+    background-color: var(--app-background-color-light);
   }
 }

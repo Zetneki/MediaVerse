@@ -37,23 +37,7 @@
         />
         <label for="on_label">Password</label>
       </p-floatlabel>
-      <!-- @if (
-    registerForm.get("password") &&
-    (registerForm.get("password")?.dirty ||
-      registerForm.get("password")?.touched)
-  ) {
-    @if (registerForm.get("password")?.errors?.["required"]) {
-      <small>Password is required</small>
-    }
 
-    @if (registerForm.get("password")?.errors?.["minlength"]) {
-      <small>Minimum 8 characters</small>
-    }
-
-    @if (registerForm.get("password")?.errors?.["pattern"]) {
-      <small>Must contain atleast 1 uppercase, lowercase and a number</small>
-    }
-  } -->
       <p-floatlabel variant="on" class="register__password-confirmation">
         <p-password
           id="on_label"
@@ -75,31 +59,18 @@
         type="submit"
         label="Register"
         class="register__button"
+        [disabled]="disabled"
       ></p-button>
     </form>
+
     <div class="text">
       <h2>Track what you watch</h2>
       <p>Discover what's popular right now.</p>
     </div>
+    @if (loading) {
+      <p-progressbar mode="indeterminate" class="loading" />
+    }
   </div>
 </div>
-
-<!-- @if (
-  registerForm.get("passwordConfirmation") &&
-  (registerForm.get("passwordConfirmation")?.dirty ||
-    registerForm.get("passwordConfirmation")?.touched)
-) {
-  @if (registerForm.get("passwordConfirmation")?.errors?.["required"]) {
-    <small>Password is required</small>
-  }
-
-  @if (registerForm.get("passwordConfirmation")?.errors?.["minlength"]) {
-    <small>Minimum 8 characters</small>
-  }
-
-  @if (registerForm.get("passwordConfirmation")?.errors?.["pattern"]) {
-    <small>Must contain atleast 1 uppercase, lowercase and a number</small>
-  }
-} -->
 
 <app-demo-marquee></app-demo-marquee>

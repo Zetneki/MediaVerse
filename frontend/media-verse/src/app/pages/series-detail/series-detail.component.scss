@@ -80,6 +80,8 @@
     }
 
     @include desktop-mobile-media-mixin {
+      font-size: $font-size-sm;
+
       .overlay-info {
         justify-content: flex-start;
         align-items: center;
@@ -159,6 +161,8 @@
     }
 
     @include desktop-mobile-media-mixin {
+      font-size: $font-size-sm;
+
       margin: 0;
       grid-template-areas:
         "details__genres"
@@ -220,6 +224,8 @@
     }
 
     @include desktop-mobile-media-mixin {
+      font-size: $font-size-sm;
+
       margin-inline: $spacing-md;
       padding: $spacing-sm;
       &__list {
@@ -240,6 +246,8 @@
       @include card-scrollable-list-mixin();
     }
     @include desktop-mobile-media-mixin {
+      font-size: $font-size-sm;
+
       margin-inline: $spacing-md;
 
       &__list {

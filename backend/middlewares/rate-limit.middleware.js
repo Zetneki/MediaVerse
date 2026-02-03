@@ -21,7 +21,15 @@ const registerLimiter = rateLimit({
   message: { error: "Too many registration attempts, please try again later" },
 });
 
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 100,
+  statusCode: 429,
+  message: { error: "Too many requests" },
+});
+
 module.exports = {
   loginLimiter,
   registerLimiter,
+  apiLimiter,
 };

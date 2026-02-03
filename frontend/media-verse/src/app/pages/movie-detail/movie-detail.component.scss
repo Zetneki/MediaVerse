@@ -106,6 +106,10 @@
         background: rgba(255, 255, 255, 0.1);
         padding: 0 $spacing-md $spacing-md $spacing-md;
 
+        h1 {
+          margin-bottom: 0;
+        }
+
         .rating {
           display: flex;
           gap: $spacing-md;
@@ -157,6 +161,8 @@
     }
 
     @include desktop-mobile-media-mixin {
+      font-size: $font-size-sm;
+
       margin: 0;
       grid-template-areas:
         "details__genres"
@@ -181,6 +187,8 @@
       @include card-scrollable-list-mixin();
     }
     @include desktop-mobile-media-mixin {
+      font-size: $font-size-sm;
+
       margin-inline: $spacing-md;
 
       &__list {

@@ -1,110 +1,201 @@
-<p>profile works!</p>
-@if (user) {
-  <p-button (click)="onLogout()" label="Logout"></p-button>
-
-  <p>Username: {{ user.username }}</p>
-  <p>Wallet address: {{ user.wallet_address }}</p>
-  <p>Wallet verified: {{ user.wallet_verified }}</p>
-  <p>Created at: {{ user.created_at | date }}</p>
-
-  <form [formGroup]="usernameChangeForm" (ngSubmit)="onUsernameChange()">
-    <div class="username">
-      <input type="text" formControlName="newUsername" />
-    </div>
-    <p-button type="submit" label="Change username"></p-button>
-  </form>
-
-  @if (
-    usernameChangeForm.get("newUsername") &&
-    usernameChangeForm.get("newUsername")?.dirty
-  ) {
-    @if (usernameChangeForm.get("newUsername")?.errors?.["required"]) {
-      <small>Username is required</small>
-    }
-    @if (usernameChangeForm.get("newUsername")?.errors?.["minlength"]) {
-      <small>Minimum 3 characters</small>
-    }
-    @if (usernameChangeForm.get("newUsername")?.errors?.["maxlength"]) {
-      <small>Maximum 30 characters</small>
-    }
-  }
-
-  <form [formGroup]="passwordChangeForm" (ngSubmit)="onPasswordChange()">
-    <div class="password">
-      <label for="oldPassword">Old password</label>
-      <input type="password" formControlName="oldPassword" />
-    </div>
-    <div class="password-confirmation">
-      <label for="newPassword">New password</label>
-      <input type="password" formControlName="newPassword" />
-    </div>
-    <div class="password-confirmation">
-      <label for="newPasswordConfirmation">New password confirmation</label>
-      <input type="password" formControlName="newPasswordConfirmation" />
-    </div>
-    <p-button type="submit" label="Change password"></p-button>
-  </form>
-
-  @if (
-    passwordChangeForm.get("oldPassword") &&
-    passwordChangeForm.get("oldPassword")?.dirty
-  ) {
-    @if (passwordChangeForm.get("oldPassword")?.errors?.["required"]) {
-      <small>Old password is required</small>
-    }
-
-    @if (passwordChangeForm.get("oldPassword")?.errors?.["minlength"]) {
-      <small>Minimum 8 characters</small>
-    }
-  }
-  @if (
-    passwordChangeForm.get("newPassword") &&
-    passwordChangeForm.get("newPassword")?.dirty
-  ) {
-    @if (passwordChangeForm.get("newPassword")?.errors?.["required"]) {
-      <small>New password is required</small>
-    }
-
-    @if (passwordChangeForm.get("newPassword")?.errors?.["minlength"]) {
-      <small>Minimum 8 characters</small>
-    }
-
-    @if (passwordChangeForm.get("newPassword")?.errors?.["pattern"]) {
-      <small>Must contain atleast 1 uppercase, lowercase and a number</small>
-    }
-  }
-  @if (
-    passwordChangeForm.get("newPasswordConfirmation") &&
-    passwordChangeForm.get("newPasswordConfirmation")?.dirty
-  ) {
-    @if (
-      passwordChangeForm.get("newPasswordConfirmation")?.errors?.["required"]
-    ) {
-      <small>New password confirmation is required</small>
-    }
-
-    @if (
-      passwordChangeForm.get("newPasswordConfirmation")?.errors?.["minlength"]
-    ) {
-      <small>Minimum 8 characters</small>
-    }
-
-    @if (
-      passwordChangeForm.get("newPasswordConfirmation")?.errors?.["pattern"]
-    ) {
-      <small>Must contain atleast 1 uppercase, lowercase and a number</small>
-    }
-  }
-  @if (
-    passwordChangeForm.errors?.["passwordsMismatch"] &&
-    passwordChangeForm.touched
-  ) {
-    <small>Passwords do not match</small>
-  }
-
-  <p-button
-    class="danger"
-    (click)="onDeleteAccount()"
-    label="Delete acccount"
-  ></p-button>
+@if (!user) {
+  <app-skeleton-details></app-skeleton-details>
 }
+<div class="profile">
+  <div class="profile__component">
+    <div class="header">
+      <h1>Profile</h1>
+      <p-button (onClick)="onLogout()" label="Logout"></p-button>
+    </div>
+
+    <p class="details">
+      <span class="details__title">Username:</span> {{ user.username }}
+    </p>
+    <p class="details">
+      <span class="details__title">Wallet address:</span>
+      {{ user.wallet_address }}
+    </p>
+    <p class="details">
+      <span class="details__title">Wallet verified:</span>
+      {{ user.wallet_verified }}
+    </p>
+    <p class="details">
+      <span class="details__title">Created at:</span>
+      {{ user.created_at | date }}
+    </p>
+
+    <div class="theme-changer-title">
+      <hr />
+      <h2>Theme switcher</h2>
+      <hr />
+    </div>
+
+    <p-select
+      [options]="themes"
+      [(ngModel)]="currentTheme"
+      (onChange)="onThemeChange()"
+    ></p-select>
+
+    <div class="settings-title">
+      <hr />
+      <h2>Settings</h2>
+      <hr />
+    </div>
+
+    <div class="settings">
+      <div class="change-username" [class.open]="openState.username">
+        <p-button
+          label="Username Change"
+          (onClick)="toggle('username')"
+          class="open-btn"
+          fluid="true"
+          severity="secondary"
+        ></p-button>
+
+        <form
+          [formGroup]="usernameChangeForm"
+          (ngSubmit)="onUsernameChange()"
+          class="username-form"
+        >
+          <div class="field">
+            <p-floatlabel variant="on">
+              <input
+                pInputText
+                id="on_label"
+                fluid="true"
+                formControlName="newUsername"
+              />
+              <label for="on_label">New Username</label>
+            </p-floatlabel>
+            @if (
+              usernameChangeForm.get("newUsername") &&
+              usernameChangeForm.get("newUsername")?.dirty
+            ) {
+              @if (
+                usernameChangeForm.get("newUsername")?.errors?.["required"]
+              ) {
+                <small>Username is required</small>
+              }
+              @if (
+                usernameChangeForm.get("newUsername")?.errors?.["minlength"]
+              ) {
+                <small>Minimum 3 characters</small>
+              }
+              @if (
+                usernameChangeForm.get("newUsername")?.errors?.["maxlength"]
+              ) {
+                <small>Maximum 30 characters</small>
+              }
+            }
+          </div>
+          <div class="actions">
+            <p-button
+              type="submit"
+              label="Save"
+              [disabled]="disabledUsernameChange"
+            ></p-button>
+          </div>
+        </form>
+      </div>
+
+      <div class="change-password" [class.open]="openState.password">
+        <p-button
+          label="Password Change"
+          (onClick)="toggle('password')"
+          fluid="true"
+          severity="secondary"
+        ></p-button>
+        <form
+          [formGroup]="passwordChangeForm"
+          (ngSubmit)="onPasswordChange()"
+          class="password-form"
+        >
+          <div class="field">
+            <p-floatlabel variant="on" class="field__old-password">
+              <p-password
+                id="on_label"
+                [toggleMask]="true"
+                [feedback]="false"
+                [weakLabel]="passwordErrors.join(', ')"
+                [mediumLabel]="passwordErrors.join(', ')"
+                [strongLabel]="passwordErrors.join(', ')"
+                fluid="true"
+                formControlName="oldPassword"
+              />
+              <label for="on_label">Old Password</label>
+            </p-floatlabel>
+            @if (
+              passwordChangeForm.get("oldPassword") &&
+              passwordChangeForm.get("oldPassword")?.dirty
+            ) {
+              @if (
+                passwordChangeForm.get("oldPassword")?.errors?.["required"]
+              ) {
+                <small>Old password is required</small>
+              }
+
+              @if (
+                passwordChangeForm.get("oldPassword")?.errors?.["minlength"]
+              ) {
+                <small>Minimum 8 characters</small>
+              }
+            }
+
+            <p-floatlabel variant="on" class="field__new-password">
+              <p-password
+                id="on_label"
+                [toggleMask]="true"
+                [feedback]="true"
+                [weakLabel]="passwordErrors.join(', ')"
+                [mediumLabel]="passwordErrors.join(', ')"
+                [strongLabel]="passwordErrors.join(', ')"
+                fluid="true"
+                formControlName="newPassword"
+              />
+              <label for="on_label">New Password</label>
+            </p-floatlabel>
+
+            <p-floatlabel variant="on" class="field__new-password-confirmation">
+              <p-password
+                id="on_label"
+                [toggleMask]="true"
+                [feedback]="false"
+                fluid="true"
+                formControlName="newPasswordConfirmation"
+              />
+              <label for="on_label">Password Confirmation</label>
+            </p-floatlabel>
+            @if (
+              passwordChangeForm.errors?.["passwordsMismatch"] &&
+              passwordChangeForm.touched
+            ) {
+              <small>Passwords do not match</small>
+            }
+          </div>
+          <div class="actions">
+            <p-button
+              type="submit"
+              label="Change password"
+              [disabled]="disabledPasswordChange"
+            ></p-button>
+          </div>
+        </form>
+      </div>
+
+      <div class="delete-account">
+        <p-button
+          (onClick)="onDeleteAccount()"
+          label="Delete acccount"
+          severity="danger"
+          fluid="true"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+  @if (loading) {
+    <p-progressbar mode="indeterminate" class="loading" />
+  }
+</div>
+<div class="confirmation">
+  <p-confirmDialog [style]="{ margin: '1rem' }"></p-confirmDialog>
+</div>

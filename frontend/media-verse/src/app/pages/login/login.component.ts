@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { PasswordModule } from 'primeng/password';
 import { DemoMarqueeComponent } from '../../components/demo-marquee/demo-marquee.component';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ import { DemoMarqueeComponent } from '../../components/demo-marquee/demo-marquee
     PasswordModule,
     RouterLink,
     DemoMarqueeComponent,
+    ProgressBarModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -43,6 +45,10 @@ export class LoginComponent {
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
+  }
+
+  get disabled() {
+    return this.loginForm.invalid;
   }
 
   onLogin(): void {

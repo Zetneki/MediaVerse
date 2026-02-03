@@ -1,20 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const usersController = require("../controllers/users.controller");
-const rateLimit = require("../utils/rate-limit.util");
-const { verifyToken } = require("../utils/jwt.util");
+const { authenticate } = require("../middlewares/auth.middleware");
+const {
+  loginLimiter,
+  registerLimiter,
+} = require("../middlewares/rate-limit.middleware");
 
-router.post(
-  "/register",
-  rateLimit.registerLimiter,
-  usersController.registerUser,
-);
-router.post("/login", rateLimit.loginLimiter, usersController.loginUser);
+router.post("/register", registerLimiter, usersController.registerUser);
+router.post("/login", loginLimiter, usersController.loginUser);
 
 //protected routes
-router.get("/me", verifyToken, usersController.getUser);
-router.put("/change-username", verifyToken, usersController.changeUsername);
-router.put("/change-password", verifyToken, usersController.changePassword);
-router.delete("/me", verifyToken, usersController.deleteAccount);
+router.get("/me", authenticate, usersController.getUser);
+router.put("/change-username", authenticate, usersController.changeUsername);
+router.put("/change-password", authenticate, usersController.changePassword);
+router.delete("/me", authenticate, usersController.deleteAccount);
 
 module.exports = router;

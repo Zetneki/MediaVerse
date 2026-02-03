@@ -35,13 +35,21 @@
         <span>Don't have an account yet? </span>
         <a routerLink="/registration">Register here</a>
       </p>
-      <p-button type="submit" label="Login" class="login__button"></p-button>
+      <p-button
+        type="submit"
+        label="Login"
+        [disabled]="disabled"
+        class="login__button"
+      ></p-button>
     </form>
 
     <div class="text">
       <h2>Track what you watch</h2>
       <p>Discover what's popular right now.</p>
     </div>
+    @if (loading) {
+      <p-progressbar mode="indeterminate" class="loading" />
+    }
   </div>
 </div>
 

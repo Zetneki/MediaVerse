@@ -21,6 +21,7 @@ $breakpoint-lg: 1024px;
 $breakpoint-discover-page-list: 783px;
 $breakpoint-content-details-galleria: 1440px;
 $breakpoint-login-content: 400px;
+$breakpoint-profile-settings: 400px;
 
 :root {
   //system tokens
@@ -56,6 +57,8 @@ $breakpoint-login-content: 400px;
   --dropdown-border: var(--app-background-color-dark);
   --tabs-hover-color: var(--app-background-color-dark);
   --login-register-form-background: var(--app-background-color-light);
+  --profile-page-background: var(--app-background-color);
+  --profile-username-change: var(--app-background-color-lighter);
 }
 
 .p-dark {
@@ -92,8 +95,14 @@ $breakpoint-login-content: 400px;
   --dropdown-border: var(--app-background-color-lighter);
   --tabs-hover-color: var(--app-background-color-lighter);
   --login-register-form-background: var(--app-background-color-dark);
+  --profile-page-background: rgba(255, 255, 255, 0.05);
+  --profile-username-change: var(--app-background-color);
 }
 
 .p-drawer {
   --p-drawer-background: var(--app-background-color);
+}
+
+.p-knob.p-disabled {
+  opacity: 1;
 }

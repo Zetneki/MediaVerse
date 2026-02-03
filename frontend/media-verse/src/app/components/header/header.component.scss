@@ -84,6 +84,10 @@ header {
     border: none;
     padding-inline: $spacing-xl;
 
+    i {
+      color: var(--app-text-color);
+    }
+
     @include desktop-mobile-media-mixin {
       display: inline-block;
     }

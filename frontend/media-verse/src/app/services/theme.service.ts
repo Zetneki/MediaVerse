@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { useTheme } from '@primeng/themes';
-import { AnotherPreset, MyPreset } from '../preset1';
+import {
+  AnotherPreset,
+  MyPreset,
+  EmeraldPreset,
+  BluePreset,
+  VioletPreset,
+  RosePreset,
+  Noir,
+} from '../preset1';
 
 type ThemeName = 'my' | 'another';
 
@@ -31,6 +39,53 @@ export class ThemeService {
       preset: this.currentTheme === 'my' ? MyPreset : AnotherPreset,
       options: { darkModeSelector: '.p-dark' },
     });
+  }
+
+  chooseTheme(theme: string) {
+    switch (theme) {
+      case 'my':
+        useTheme({
+          preset: MyPreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'another':
+        useTheme({
+          preset: AnotherPreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'emerald':
+        useTheme({
+          preset: EmeraldPreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'blue':
+        useTheme({
+          preset: BluePreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'violet':
+        useTheme({
+          preset: VioletPreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'rose':
+        useTheme({
+          preset: RosePreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'noir':
+        useTheme({
+          preset: Noir,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+    }
   }
 
   /* ===== DARK MODE ===== */

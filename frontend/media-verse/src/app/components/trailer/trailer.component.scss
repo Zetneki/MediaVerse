@@ -46,6 +46,8 @@
   }
 
   @include desktop-mobile-media-mixin {
+    font-size: $font-size-sm;
+
     width: 100%;
     border-radius: 0;
   }

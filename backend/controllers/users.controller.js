@@ -1,18 +1,20 @@
 const passwordUtil = require("../utils/password.util");
 const jwtUtil = require("../utils/jwt.util");
 const usersDao = require("../dao/users.dao");
-const { validateCredentials } = require("../utils/credentials-validation.util");
-const { validateUsername } = require("../utils/username-validation.util");
-const { validatePassword } = require("../utils/password-validation.util");
+const PasswordValidator = require("../utils/validation/password.validator");
+const UsernameValidator = require("../utils/validation/username.validator");
+const {
+  validateCredentials,
+} = require("../utils/validation/credentials.validator");
 
 exports.registerUser = async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password)
     return res.status(400).json({ error: "Missing username or password" });
 
-  const crendentialErrors = validateCredentials(password, username);
-  if (crendentialErrors.length > 0)
-    return res.status(400).json({ errors: crendentialErrors });
+  const credentialErrors = validateCredentials(password, username);
+  if (credentialErrors.length > 0)
+    return res.status(400).json({ errors: credentialErrors });
 
   const hash = await passwordUtil.hashPassword(password);
   try {
@@ -61,7 +63,10 @@ exports.changeUsername = async (req, res) => {
   const user = await usersDao.findById(req.user.id);
   if (!user) return res.status(404).json({ error: "User not found" });
 
-  const usernameErrors = validateUsername(user.username, newUsername);
+  const usernameErrors = UsernameValidator.validateChange(
+    user.username,
+    newUsername,
+  );
   if (usernameErrors.length > 0)
     return res.status(400).json({ errors: usernameErrors });
 
@@ -95,14 +100,13 @@ exports.changePassword = async (req, res) => {
     oldPassword,
     user.password_hash,
   );
-  if (!valid) return res.status(400).json({ error: "Old password incorrect" });
+  if (!valid) return res.status(401).json({ error: "Old password incorrect" });
 
-  if (oldPassword === newPassword)
-    return res
-      .status(400)
-      .json({ error: "New password cannot be the same as the old one" });
-
-  const passwordErrors = validatePassword(newPassword, req.user.username);
+  const passwordErrors = PasswordValidator.validateChange(
+    oldPassword,
+    newPassword,
+    user.username,
+  );
   if (passwordErrors.length > 0)
     return res.status(400).json({ errors: passwordErrors });
 

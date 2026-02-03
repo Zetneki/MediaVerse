@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const seriesController = require("../controllers/series.controller");
+const { apiLimiter } = require("../middlewares/rate-limit.middleware");
+
+router.use(apiLimiter);
 
 router.get("/toprated", seriesController.getTopRatedSeries);
 router.get("/popular", seriesController.getPopularSeries);
