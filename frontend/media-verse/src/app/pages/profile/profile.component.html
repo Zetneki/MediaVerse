@@ -30,11 +30,20 @@
       <hr />
     </div>
 
-    <p-select
-      [options]="themes"
-      [(ngModel)]="currentTheme"
-      (onChange)="onThemeChange()"
-    ></p-select>
+    <div class="theme-changer">
+      <p-selectbutton
+        [options]="themeModes"
+        [(ngModel)]="selectedMode"
+        optionLabel="label"
+        optionValue="value"
+        (onChange)="onThemeModeChange()"
+      />
+      <p-select
+        [options]="themes"
+        [(ngModel)]="currentTheme"
+        (onChange)="onThemeChange()"
+      ></p-select>
+    </div>
 
     <div class="settings-title">
       <hr />
@@ -185,7 +194,7 @@
       <div class="delete-account">
         <p-button
           (onClick)="onDeleteAccount()"
-          label="Delete acccount"
+          label="Delete account"
           severity="danger"
           fluid="true"
         ></p-button>

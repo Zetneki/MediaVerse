@@ -25,6 +25,7 @@ import { ConfirmationService } from 'primeng/api';
 import { SkeletonDetailsComponent } from '../../components/skeleton-details/skeleton-details.component';
 import { SelectModule } from 'primeng/select';
 import { ThemeService } from '../../services/theme.service';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
   selector: 'app-profile',
@@ -41,6 +42,7 @@ import { ThemeService } from '../../services/theme.service';
     SkeletonDetailsComponent,
     SelectModule,
     FormsModule,
+    SelectButtonModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './profile.component.html',
@@ -73,6 +75,18 @@ export class ProfileComponent {
 
   toggle(key: 'username' | 'password') {
     this.openState[key] = !this.openState[key];
+  }
+
+  themeModes = [
+    { label: 'Light', value: 'light' },
+    { label: 'Dark', value: 'dark' },
+    { label: 'System', value: 'system' },
+  ];
+
+  selectedMode: 'light' | 'dark' | 'system' = 'system';
+
+  onThemeModeChange() {
+    this.themeService.setMode(this.selectedMode);
   }
 
   constructor(
@@ -121,6 +135,8 @@ export class ProfileComponent {
     passwordControl?.valueChanges.subscribe(() => {
       this.updatePasswordErrors(passwordControl);
     });
+
+    this.selectedMode = this.themeService.getMode();
   }
 
   onThemeChange() {
@@ -165,9 +181,34 @@ export class ProfileComponent {
   }
 
   onLogout() {
-    this.authService.logout();
-    this.notificationService.success('Logged out successfully');
-    this.router.navigate(['/login']);
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to log out all of your devices?',
+      header: 'Confirmation',
+      closeOnEscape: true,
+      dismissableMask: true,
+      rejectButtonProps: {
+        severity: 'secondary',
+        label: 'Cancel',
+      },
+      acceptButtonProps: {
+        severity: 'danger',
+        label: 'Logout',
+      },
+      accept: () => {
+        this.authService.logout().subscribe({
+          next: (res: any) => {
+            this.notificationService.success(
+              res.message ?? 'Logged out successfully',
+            );
+            this.router.navigate(['/login']);
+          },
+          error: (err) => {
+            this.notificationService.error(err.error?.error ?? 'Logout failed');
+            this.router.navigate(['/login']);
+          },
+        });
+      },
+    });
   }
 
   onUsernameChange() {
@@ -248,7 +289,7 @@ export class ProfileComponent {
             this.notificationService.success(
               res.message ?? 'Password changed successfully',
             );
-            this.authService.logout();
+            this.authService.clearAuth();
             this.router.navigate(['/login']);
           },
           error: (err) => {
@@ -287,7 +328,7 @@ export class ProfileComponent {
         this.userService.deleteAccount().subscribe({
           next: (res: any) => {
             this.loading = false;
-            this.authService.logout();
+            this.authService.clearAuth();
             this.router.navigate(['/login']);
             this.notificationService.success(
               res.message ?? 'Account deleted successfully',

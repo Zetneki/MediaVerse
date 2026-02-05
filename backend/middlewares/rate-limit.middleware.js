@@ -1,4 +1,5 @@
 const rateLimit = require("express-rate-limit");
+const { stat } = require("fs");
 
 /**
  * @param {number} windowMs: time window for rate limiting in milliseconds
@@ -28,8 +29,16 @@ const apiLimiter = rateLimit({
   message: { error: "Too many requests" },
 });
 
+const refreshLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 10,
+  statusCode: 429,
+  message: { error: "Too many refresh attempts" },
+});
+
 module.exports = {
   loginLimiter,
   registerLimiter,
   apiLimiter,
+  refreshLimiter,
 };

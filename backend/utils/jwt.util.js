@@ -1,18 +1,31 @@
 const jwt = require("jsonwebtoken");
 
-const generateToken = (user) => {
-  return jwt.sign(
-    { id: user.id, username: user.username, tokenVersion: user.token_version },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN },
+const generateTokens = (user) => {
+  const accessToken = jwt.sign(
+    { id: user.id, tokenVersion: user.token_version },
+    process.env.JWT_ACCESS_SECRET,
+    { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN },
   );
+
+  const refreshToken = jwt.sign(
+    { id: user.id, tokenVersion: user.token_version },
+    process.env.JWT_REFRESH_SECRET,
+    { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN },
+  );
+
+  return { accessToken, refreshToken };
 };
 
-const verifyToken = (token) => {
-  return jwt.verify(token, process.env.JWT_SECRET);
+const verifyAccessToken = (token) => {
+  return jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+};
+
+const verifyRefreshToken = (token) => {
+  return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
 };
 
 module.exports = {
-  generateToken,
-  verifyToken,
+  generateTokens,
+  verifyAccessToken,
+  verifyRefreshToken,
 };

@@ -51,6 +51,11 @@
       }
     }
 
+    .theme-changer {
+      display: flex;
+      flex-direction: column;
+    }
+
     .settings {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

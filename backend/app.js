@@ -3,7 +3,7 @@ require("dotenv").config();
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
-var cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
 
@@ -18,8 +18,8 @@ var app = express();
 app.use(
   cors({
     origin: "http://localhost:4200",
-    //credentials: true,
-  })
+    credentials: true,
+  }),
 );
 
 // view engine setup

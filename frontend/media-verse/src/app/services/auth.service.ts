@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  lastValueFrom,
+  Observable,
+  tap,
+  throwError,
+} from 'rxjs';
 import { LoginResponse } from '../models/loginresponse';
 import { User } from '../models/user';
 
@@ -11,6 +18,8 @@ export class AuthService {
   private readonly baseUrl = 'http://localhost:3000';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
+
+  private accessToken: string | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -23,34 +32,68 @@ export class AuthService {
 
   login(username: string, password: string) {
     return this.http
-      .post<LoginResponse>(`${this.baseUrl}/users/login`, {
-        username,
-        password,
-      })
+      .post<LoginResponse>(
+        `${this.baseUrl}/users/login`,
+        {
+          username,
+          password,
+        },
+        { withCredentials: true },
+      )
       .pipe(
         tap((res) => {
-          localStorage.setItem('token', res.token);
+          this.accessToken = res.accessToken;
           this.currentUserSubject.next(res.user);
         }),
       );
   }
 
+  refreshAccessToken(): Observable<{ accessToken: string }> {
+    return this.http
+      .post<{
+        accessToken: string;
+      }>(`${this.baseUrl}/users/refresh`, {}, { withCredentials: true })
+      .pipe(
+        tap((res) => {
+          this.accessToken = res.accessToken;
+        }),
+        catchError((err) => {
+          this.clearAuth();
+          return throwError(() => err);
+        }),
+      );
+  }
+
   logout() {
-    localStorage.removeItem('token');
+    return this.http
+      .post(`${this.baseUrl}/users/logout`, {}, { withCredentials: true })
+      .pipe(
+        tap(() => this.clearAuth()),
+        catchError((err) => {
+          this.clearAuth();
+          return throwError(() => err);
+        }),
+      );
+  }
+
+  getAccessToken(): string | null {
+    return this.accessToken;
+  }
+
+  clearAuth(): void {
+    this.accessToken = null;
     this.currentUserSubject.next(null);
   }
 
-  get token() {
-    return localStorage.getItem('token');
-  }
-
-  loadUserFromToken() {
-    if (!this.token) return;
-
-    this.http.get<User>(`${this.baseUrl}/users/me`).subscribe({
-      next: (user) => this.currentUserSubject.next(user),
-      error: () => this.logout(),
-    });
+  async loadUserFromToken(): Promise<void> {
+    try {
+      const user = await lastValueFrom(
+        this.http.get<User>(`${this.baseUrl}/users/me`),
+      );
+      this.currentUserSubject.next(user);
+    } catch (error) {
+      this.clearAuth();
+    }
   }
 
   updateCurrentUser(user: User) {
@@ -58,6 +101,6 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.token;
+    return this.currentUserSubject.value !== null;
   }
 }

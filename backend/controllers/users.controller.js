@@ -1,5 +1,6 @@
 const passwordUtil = require("../utils/password.util");
 const jwtUtil = require("../utils/jwt.util");
+const jwt = require("jsonwebtoken");
 const usersDao = require("../dao/users.dao");
 const PasswordValidator = require("../utils/validation/password.validator");
 const UsernameValidator = require("../utils/validation/username.validator");
@@ -41,11 +42,53 @@ exports.loginUser = async (req, res) => {
   const isValid = await passwordUtil.comparePassword(password, password_hash);
   if (!isValid) return res.status(401).json({ error: "Invalid credentials" });
 
-  const token = jwtUtil.generateToken(user);
-  res.json({
-    token,
-    user: safeUser,
-  });
+  const { accessToken, refreshToken } = jwtUtil.generateTokens(user);
+
+  res
+    .cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    })
+    .json({
+      user: safeUser,
+      accessToken,
+    });
+};
+
+exports.refreshToken = async (req, res) => {
+  try {
+    const { accessToken, refreshToken: newRefreshToken } =
+      jwtUtil.generateTokens(req.user);
+
+    res
+      .cookie("refresh_token", newRefreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+      })
+      .json({ accessToken });
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid refresh token" });
+  }
+};
+
+exports.logoutUser = async (req, res) => {
+  try {
+    await usersDao.incrementTokenVersion(req.user.id);
+
+    res
+      .clearCookie("refresh_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      })
+      .json({ message: "Logged out successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
 };
 
 exports.getUser = async (req, res) => {
@@ -115,7 +158,14 @@ exports.changePassword = async (req, res) => {
     await usersDao.updatePassword(user.id, newHash);
     await usersDao.incrementTokenVersion(user.id);
 
-    res.status(200).json({ message: "Password changed successfully" });
+    res
+      .status(200)
+      .clearCookie("refresh_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      })
+      .json({ message: "Password changed successfully" });
   } catch (err) {
     res.status(500).json({ error: "Server error" });
   }
@@ -124,5 +174,12 @@ exports.changePassword = async (req, res) => {
 exports.deleteAccount = async (req, res) => {
   const deleted = await usersDao.deleteUser(req.user.id);
   if (deleted === 0) return res.status(404).json({ error: "User not found" });
-  res.json({ message: "Account deleted successfully" });
+
+  res
+    .clearCookie("refresh_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    })
+    .json({ message: "Account deleted successfully" });
 };

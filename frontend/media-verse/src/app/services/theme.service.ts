@@ -11,6 +11,7 @@ import {
 } from '../preset1';
 
 type ThemeName = 'my' | 'another';
+type ColorMode = 'light' | 'dark' | 'system';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,9 @@ type ThemeName = 'my' | 'another';
 export class ThemeService {
   private currentTheme: ThemeName = 'my';
   private dark = false;
+  private mode: ColorMode = 'system';
+
+  private systemDarkQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
   constructor() {
     // alap theme
@@ -26,8 +30,13 @@ export class ThemeService {
       options: { darkModeSelector: '.p-dark' },
     });
 
-    // alap mód: LIGHT
-    document.documentElement.classList.remove('p-dark');
+    this.systemDarkQuery.addEventListener('change', () => {
+      if (this.mode === 'system') {
+        this.applyMode();
+      }
+    });
+
+    this.applyMode();
   }
 
   /* ===== THEME (PRESET) ===== */
@@ -39,6 +48,29 @@ export class ThemeService {
       preset: this.currentTheme === 'my' ? MyPreset : AnotherPreset,
       options: { darkModeSelector: '.p-dark' },
     });
+  }
+
+  private applyMode() {
+    let dark: boolean;
+
+    if (this.mode === 'dark') {
+      dark = true;
+    } else if (this.mode === 'light') {
+      dark = false;
+    } else {
+      dark = this.systemDarkQuery.matches;
+    }
+
+    document.documentElement.classList.toggle('p-dark', dark);
+  }
+
+  setMode(mode: ColorMode) {
+    this.mode = mode;
+    this.applyMode();
+  }
+
+  getMode(): ColorMode {
+    return this.mode;
   }
 
   chooseTheme(theme: string) {

@@ -1,4 +1,9 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -7,6 +12,7 @@ import { MyPreset } from './preset1';
 import { routes } from './app.routes';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { MessageService } from 'primeng/api';
+import { AuthService } from './services/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,6 +33,10 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: '.p-dark',
         },
       },
+    }),
+    provideAppInitializer(() => {
+      const authService = inject(AuthService);
+      return authService.loadUserFromToken();
     }),
   ],
 };
