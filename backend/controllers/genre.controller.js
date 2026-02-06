@@ -1,3 +1,4 @@
+const { handleControllerError } = require("../utils/error-response.util");
 const tmdbService = require("../services/tmdb.service");
 const genreDao = require("../dao/genre.dao");
 const { isOutdated } = require("../utils/date.util");
@@ -32,8 +33,8 @@ exports.getMovieGenres = async (req, res) => {
 
     res.json(genres);
   } catch (err) {
-    //console.error(err);
-    res.status(500).json({ error: "Failed to fetch movie genres" });
+    //console.log(err);
+    handleControllerError(err, res, "Failed to fetch movie genres");
   }
 };
 
@@ -67,7 +68,7 @@ exports.getSeriesGenres = async (req, res) => {
 
     res.json(genres);
   } catch (err) {
-    //console.error(err);
-    res.status(500).json({ error: "Failed to fetch series genres" });
+    //console.log(err);
+    handleControllerError(err, res, "Failed to fetch series genres");
   }
 };

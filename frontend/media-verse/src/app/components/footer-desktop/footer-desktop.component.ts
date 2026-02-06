@@ -12,4 +12,8 @@ export class FooterDesktopComponent {
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  getYear() {
+    return new Date().getFullYear();
+  }
 }

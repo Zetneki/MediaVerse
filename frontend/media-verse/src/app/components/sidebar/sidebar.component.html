@@ -1,7 +1,7 @@
 <p-drawer [(visible)]="visible" position="right" [blockScroll]="true">
   <div class="description">
     <div class="about">
-      <p class="about__title">Copyright © 2025 MediaVerse</p>
+      <p class="about__title">Copyright © {{ getYear() }} MediaVerse</p>
       <a routerLink="/about" class="about__link" (click)="closeDrawer()"
         >About</a
       >

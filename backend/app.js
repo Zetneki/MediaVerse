@@ -7,7 +7,6 @@ const cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
 
-const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users.routes");
 const moviesRouter = require("./routes/movies.routes");
 const seriesRouter = require("./routes/series.routes");
@@ -32,7 +31,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/api/movies", moviesRouter);
 app.use("/api/series", seriesRouter);

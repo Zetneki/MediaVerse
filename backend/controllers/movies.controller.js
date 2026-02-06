@@ -1,3 +1,5 @@
+const { AppError } = require("../middlewares/error-handler.middleware");
+const { handleControllerError } = require("../utils/error-response.util");
 const tmdbService = require("../services/tmdb.service");
 const moviesDao = require("../dao/movies.dao");
 const genreDao = require("../dao/genre.dao");
@@ -38,7 +40,7 @@ exports.getTopRatedMovies = async (req, res) => {
         page,
         category,
         dataFromApi.results.map((m) => m.id),
-        dataFromApi.total_results
+        dataFromApi.total_results,
       );
     }
 
@@ -51,7 +53,7 @@ exports.getTopRatedMovies = async (req, res) => {
     });
   } catch (err) {
     //console.log(err);
-    res.status(500).json({ error: "Failed to fetch top rated movies" });
+    handleControllerError(err, res, "Failed to fetch top rated movies");
   }
 };
 
@@ -90,7 +92,7 @@ exports.getPopularMovies = async (req, res) => {
         page,
         category,
         dataFromApi.results.map((m) => m.id),
-        dataFromApi.total_results
+        dataFromApi.total_results,
       );
     }
 
@@ -103,15 +105,15 @@ exports.getPopularMovies = async (req, res) => {
     });
   } catch (err) {
     //console.log(err);
-    res.status(500).json({ error: "Failed to fetch popularmovies" });
+    handleControllerError(err, res, "Failed to fetch popularmovies");
   }
 };
 
 exports.searchMovies = async (req, res) => {
   try {
     const { query, page } = req.query;
-    if (!query)
-      return res.status(400).json({ error: "Missing query parameter" });
+    //if (!query) throw new AppError("Missing query parameter", 400);
+    if (!query) throw AppError.badRequest("Missing query parameter");
 
     const data = await tmdbService.searchMovies({
       query: query,
@@ -121,7 +123,7 @@ exports.searchMovies = async (req, res) => {
     res.json(data);
   } catch (err) {
     //console.log(err);
-    res.status(500).json({ error: "Failed to fetch searched movies" });
+    handleControllerError(err, res, "Failed to fetch searched movies");
   }
 };
 
@@ -142,14 +144,15 @@ exports.filterMovies = async (req, res) => {
     res.json(data);
   } catch (err) {
     //console.log(err);
-    res.status(500).json({ error: "Failed to fetch filtered movies" });
+    handleControllerError(err, res, "Failed to fetch filtered movies");
   }
 };
 
 exports.searchMovieDetails = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!id) return res.status(400).json({ error: "Missing movie ID" });
+    //if (!id) throw new AppError("Missing movie ID", 400);
+    if (!id) throw AppError.badRequest("Missing movie ID");
 
     let movie = await moviesDao.getMovieById(id);
     if (!movie || isOutdated(movie.last_updated)) {
@@ -160,6 +163,6 @@ exports.searchMovieDetails = async (req, res) => {
     res.json(movie);
   } catch (err) {
     //console.log(err);
-    res.status(500).json({ error: "Failed to fetch movie details" });
+    handleControllerError(err, res, "Failed to fetch movie details");
   }
 };

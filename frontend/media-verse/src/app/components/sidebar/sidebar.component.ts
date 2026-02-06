@@ -19,4 +19,8 @@ export class SidebarComponent {
   closeDrawer() {
     this.visible.set(false);
   }
+
+  getYear() {
+    return new Date().getFullYear();
+  }
 }
