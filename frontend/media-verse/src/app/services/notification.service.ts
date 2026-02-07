@@ -19,14 +19,16 @@ export class NotificationService {
   error(detail: string[] | string, summary = 'Error') {
     const messages = Array.isArray(detail) ? detail : [detail];
 
-    messages.forEach((message) => {
-      this.messageService.add({
-        severity: 'error',
-        summary,
-        detail: message,
-        life: 3000,
+    setTimeout(() => {
+      messages.forEach((message) => {
+        this.messageService.add({
+          severity: 'error',
+          summary,
+          detail: message,
+          life: 3000,
+        });
       });
-    });
+    }, 0);
   }
 
   info(detail: string, summary = 'Info') {

@@ -26,6 +26,7 @@ import { SkeletonDetailsComponent } from '../../components/skeleton-details/skel
 import { SelectModule } from 'primeng/select';
 import { ThemeService } from '../../services/theme.service';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { shouldHandleError } from '../../utils/error-handler';
 
 @Component({
   selector: 'app-profile',
@@ -246,6 +247,7 @@ export class ProfileComponent {
           },
           error: (err) => {
             this.loading = false;
+            if (!shouldHandleError(err)) return;
 
             const errors = err.error?.errors ?? [];
             if (err.error?.error) {
@@ -294,6 +296,7 @@ export class ProfileComponent {
           },
           error: (err) => {
             this.loading = false;
+            if (!shouldHandleError(err)) return;
 
             const errors = err.error?.errors ?? [];
             if (err.error?.error) {
@@ -336,9 +339,11 @@ export class ProfileComponent {
           },
           error: (err) => {
             this.loading = false;
-            this.notificationService.error(
-              err.error?.error ?? 'Account deletion failed',
-            );
+            if (shouldHandleError(err)) {
+              this.notificationService.error(
+                err.error?.error ?? 'Account deletion failed',
+              );
+            }
           },
         });
       },

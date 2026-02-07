@@ -23,8 +23,9 @@ export class ThemeService {
 
   private systemDarkQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-  constructor() {
-    // alap theme
+  constructor() {}
+
+  init() {
     useTheme({
       preset: MyPreset,
       options: { darkModeSelector: '.p-dark' },

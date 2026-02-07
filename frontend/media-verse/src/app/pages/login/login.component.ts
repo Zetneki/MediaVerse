@@ -69,7 +69,8 @@ export class LoginComponent {
       },
       error: (err) => {
         this.loading = false;
-        this.notificationService.error(err.error?.error ?? 'Login failed');
+        if (![403, 404, 429].includes(err.status) && err.status < 500)
+          this.notificationService.error(err.error?.error ?? 'Login failed');
       },
     });
   }

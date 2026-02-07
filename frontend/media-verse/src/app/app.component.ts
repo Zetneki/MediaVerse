@@ -20,8 +20,4 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
   title = 'media-verse';
-
-  // constructor(private authService: AuthService) {
-  //   this.authService.loadUserFromToken();
-  // }
 }

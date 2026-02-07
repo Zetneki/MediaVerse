@@ -13,6 +13,9 @@ import { routes } from './app.routes';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { MessageService } from 'primeng/api';
 import { AuthService } from './services/auth.service';
+import { ThemeService } from './services/theme.service';
+import { rateLimitInterceptor } from './interceptors/rate-limit.interceptor';
+import { globalErrorInterceptor } from './interceptors/global-error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,7 +26,13 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'top',
       }),
     ),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(
+      withInterceptors([
+        rateLimitInterceptor,
+        authInterceptor,
+        globalErrorInterceptor,
+      ]),
+    ),
     MessageService,
     provideAnimationsAsync(),
     providePrimeNG({
@@ -36,6 +45,8 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAppInitializer(() => {
       const authService = inject(AuthService);
+      const themeService = inject(ThemeService);
+      themeService.init();
       return authService.loadUserFromToken();
     }),
   ],

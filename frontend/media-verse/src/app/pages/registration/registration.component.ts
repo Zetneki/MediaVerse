@@ -16,6 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { DemoMarqueeComponent } from '../../components/demo-marquee/demo-marquee.component';
 import { ProgressBar } from 'primeng/progressbar';
+import { shouldHandleError } from '../../utils/error-handler';
 
 @Component({
   selector: 'app-registration',
@@ -128,6 +129,7 @@ export class RegistrationComponent {
       },
       error: (err) => {
         this.loading = false;
+        if (!shouldHandleError(err)) return;
 
         const errors = err.error?.errors ?? [];
         if (err.error?.error) {
