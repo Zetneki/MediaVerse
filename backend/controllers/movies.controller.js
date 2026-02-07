@@ -1,56 +1,14 @@
 const { AppError } = require("../middlewares/error-handler.middleware");
 const { handleControllerError } = require("../utils/error-response.util");
-const tmdbService = require("../services/tmdb.service");
-const moviesDao = require("../dao/movies.dao");
-const genreDao = require("../dao/genre.dao");
-const { isOutdated } = require("../utils/date.util");
+const tmdbMoviesService = require("../services/tmdb/tmdb-movies.service");
 
 exports.getTopRatedMovies = async (req, res) => {
   try {
-    const source = "movie";
-    const allGenres = await genreDao.getGenresBySource(source);
-    const genreMap = {};
-    allGenres.forEach((g) => {
-      genreMap[g.id] = g.name;
-    });
-
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const category = "toprated";
 
-    let pageCache = await moviesDao.getMoviePageCache(page, category);
-
-    if (!pageCache || isOutdated(pageCache.last_updated)) {
-      const dataFromApi = await tmdbService.getTopRatedMovies(page);
-
-      for (const movie of dataFromApi.results) {
-        const genres = (movie.genre_ids || []).map((id) => ({
-          id,
-          name: genreMap[id],
-        }));
-
-        const movieData = {
-          ...movie,
-          genres,
-        };
-
-        await moviesDao.upsertMovieCache(movieData);
-      }
-
-      pageCache = await moviesDao.upsertMoviePageCache(
-        page,
-        category,
-        dataFromApi.results.map((m) => m.id),
-        dataFromApi.total_results,
-      );
-    }
-
-    const data = await moviesDao.getMoviesByCategory(page, category);
-
-    res.json({
-      page: page,
-      total_results: pageCache.total_results,
-      results: data,
-    });
+    const data = await tmdbMoviesService.getPaginatedMovies(page, category);
+    res.json(data);
   } catch (err) {
     //console.log(err);
     handleControllerError(err, res, "Failed to fetch top rated movies");
@@ -59,50 +17,11 @@ exports.getTopRatedMovies = async (req, res) => {
 
 exports.getPopularMovies = async (req, res) => {
   try {
-    const source = "movie";
-    const allGenres = await genreDao.getGenresBySource(source);
-    const genreMap = {};
-    allGenres.forEach((g) => {
-      genreMap[g.id] = g.name;
-    });
-
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const category = "popular";
 
-    let pageCache = await moviesDao.getMoviePageCache(page, category);
-
-    if (!pageCache || isOutdated(pageCache.last_updated)) {
-      const dataFromApi = await tmdbService.getPopularMovies(page);
-
-      for (const movie of dataFromApi.results) {
-        const genres = (movie.genre_ids || []).map((id) => ({
-          id,
-          name: genreMap[id],
-        }));
-
-        const movieData = {
-          ...movie,
-          genres,
-        };
-
-        await moviesDao.upsertMovieCache(movieData);
-      }
-
-      pageCache = await moviesDao.upsertMoviePageCache(
-        page,
-        category,
-        dataFromApi.results.map((m) => m.id),
-        dataFromApi.total_results,
-      );
-    }
-
-    const data = await moviesDao.getMoviesByCategory(page, category);
-
-    res.json({
-      page: page,
-      total_results: pageCache.total_results,
-      results: data,
-    });
+    const data = await tmdbMoviesService.getPaginatedMovies(page, category);
+    res.json(data);
   } catch (err) {
     //console.log(err);
     handleControllerError(err, res, "Failed to fetch popularmovies");
@@ -112,13 +31,12 @@ exports.getPopularMovies = async (req, res) => {
 exports.searchMovies = async (req, res) => {
   try {
     const { query, page } = req.query;
-    //if (!query) throw new AppError("Missing query parameter", 400);
     if (!query) throw AppError.badRequest("Missing query parameter");
 
-    const data = await tmdbService.searchMovies({
-      query: query,
-      page: page ? parseInt(page, 10) : 1,
-    });
+    const data = await tmdbMoviesService.searchMovies(
+      query,
+      page ? parseInt(page, 10) : 1,
+    );
 
     res.json(data);
   } catch (err) {
@@ -135,11 +53,11 @@ exports.filterMovies = async (req, res) => {
       ? genreIds.split(",").map((g) => parseInt(g, 10))
       : [];
 
-    const data = await tmdbService.filterMovies({
-      genreIds: parsedGenreIds,
-      sortBy: sortBy || null,
-      page: page ? parseInt(page, 10) : 1,
-    });
+    const data = await tmdbMoviesService.filterMovies(
+      parsedGenreIds,
+      sortBy || null,
+      page ? parseInt(page, 10) : 1,
+    );
 
     res.json(data);
   } catch (err) {
@@ -151,15 +69,9 @@ exports.filterMovies = async (req, res) => {
 exports.searchMovieDetails = async (req, res) => {
   try {
     const { id } = req.params;
-    //if (!id) throw new AppError("Missing movie ID", 400);
     if (!id) throw AppError.badRequest("Missing movie ID");
 
-    let movie = await moviesDao.getMovieById(id);
-    if (!movie || isOutdated(movie.last_updated)) {
-      const dataFromApi = await tmdbService.searchMovieDetails(id);
-      movie = await moviesDao.upsertMovieCache(dataFromApi, true);
-    }
-
+    const movie = await tmdbMoviesService.getMovieDetails(id);
     res.json(movie);
   } catch (err) {
     //console.log(err);
