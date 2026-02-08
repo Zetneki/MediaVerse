@@ -1,5 +1,7 @@
 const rateLimit = require("express-rate-limit");
-const { stat } = require("fs");
+const {
+  getRefreshTokenCookieOptions,
+} = require("../utils/cookie-options-helper.util");
 
 /**
  * @param {number} windowMs: time window for rate limiting in milliseconds
@@ -31,9 +33,13 @@ const apiLimiter = rateLimit({
 
 const refreshLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 10,
+  max: 100,
   statusCode: 429,
   message: { error: "Too many refresh attempts" },
+  handler: (req, res, _next, options) => {
+    res.clearCookie("refresh_token", getRefreshTokenCookieOptions());
+    res.status(options.statusCode).json(options.message);
+  },
 });
 
 module.exports = {

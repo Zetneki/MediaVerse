@@ -1,17 +1,9 @@
 const { AppError } = require("../middlewares/error-handler.middleware");
 const { handleControllerError } = require("../utils/error-response.util");
 const usersService = require("../services/users.service");
-
-/**
- * Cookie options helper
- */
-
-const getRefreshTokenCookieOptions = () => ({
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "strict",
-  maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-});
+const {
+  getRefreshTokenCookieOptions,
+} = require("../utils/cookie-options-helper.util");
 
 exports.registerUser = async (req, res) => {
   try {
