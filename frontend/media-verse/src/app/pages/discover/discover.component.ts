@@ -84,7 +84,7 @@ export class DiscoverComponent implements OnInit, OnDestroy {
   isFiltering = signal(false);
   lastFilter: { genres: number[]; sortBy: string } = {
     genres: [],
-    sortBy: '',
+    sortBy: 'popularity.desc',
   };
 
   first: number = 0;
@@ -131,18 +131,18 @@ export class DiscoverComponent implements OnInit, OnDestroy {
 
         this.totalRecordsMap['movies']['search'] = data.totalMovies;
         this.totalRecordsMap['series']['search'] = data.totalSeries;
-      })
+      }),
     );
     this.subscriptions.add(
       this.contentService.getMovieGenres$().subscribe((genres) => {
         this.movieGenres = genres;
-      })
+      }),
     );
 
     this.subscriptions.add(
       this.contentService.getSeriesGenres$().subscribe((genres) => {
         this.seriesGenres = genres;
-      })
+      }),
     );
   }
 
@@ -251,7 +251,7 @@ export class DiscoverComponent implements OnInit, OnDestroy {
       return this.contentService
         .searchContent$(query)
         .pipe(finalize(() => this.isSearching.set(false)));
-    })
+    }),
   );
 
   searchContentPage(page: number = 1) {
@@ -277,7 +277,7 @@ export class DiscoverComponent implements OnInit, OnDestroy {
 
   onApplyFilters(
     filter: { genres: number[]; sortBy: string },
-    page: number = 1
+    page: number = 1,
   ) {
     this.lastFilter = filter;
     this.isFiltering.set(true);

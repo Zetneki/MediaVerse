@@ -1,23 +1,50 @@
 import { Injectable } from '@angular/core';
 import { useTheme } from '@primeng/themes';
 import {
-  AnotherPreset,
-  MyPreset,
+  IndigoPreset,
+  GreenPreset,
   EmeraldPreset,
   BluePreset,
   VioletPreset,
   RosePreset,
   Noir,
-} from '../preset1';
+  LimePreset,
+  RedPreset,
+  OrangePreset,
+  AmberPreset,
+  YellowPreset,
+  CyanPreset,
+  SkyPreset,
+  PurplePreset,
+  FuchsiaPreset,
+  PinkPreset,
+} from '../utils/themePresets';
 
-type ThemeName = 'my' | 'another';
+type ThemeName =
+  | 'indigo'
+  | 'green'
+  | 'emerald'
+  | 'blue'
+  | 'violet'
+  | 'rose'
+  | 'noir'
+  | 'lime'
+  | 'red'
+  | 'orange'
+  | 'amber'
+  | 'yellow'
+  | 'cyan'
+  | 'sky'
+  | 'purple'
+  | 'fuchsia'
+  | 'pink';
 type ColorMode = 'light' | 'dark' | 'system';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThemeService {
-  private currentTheme: ThemeName = 'my';
+  private currentTheme: ThemeName = 'indigo';
   private dark = false;
   private mode: ColorMode = 'system';
 
@@ -27,7 +54,7 @@ export class ThemeService {
 
   init() {
     useTheme({
-      preset: MyPreset,
+      preset: IndigoPreset,
       options: { darkModeSelector: '.p-dark' },
     });
 
@@ -43,12 +70,11 @@ export class ThemeService {
   /* ===== THEME (PRESET) ===== */
 
   toggleTheme() {
-    this.currentTheme = this.currentTheme === 'my' ? 'another' : 'my';
-
-    useTheme({
-      preset: this.currentTheme === 'my' ? MyPreset : AnotherPreset,
-      options: { darkModeSelector: '.p-dark' },
-    });
+    // this.currentTheme = this.currentTheme === 'my' ? 'another' : 'my';
+    // useTheme({
+    //   preset: this.currentTheme === 'my' ? MyPreset : AnotherPreset,
+    //   options: { darkModeSelector: '.p-dark' },
+    // });
   }
 
   private applyMode() {
@@ -76,15 +102,15 @@ export class ThemeService {
 
   chooseTheme(theme: string) {
     switch (theme) {
-      case 'my':
+      case 'indigo':
         useTheme({
-          preset: MyPreset,
+          preset: IndigoPreset,
           options: { darkModeSelector: '.p-dark' },
         });
         break;
-      case 'another':
+      case 'green':
         useTheme({
-          preset: AnotherPreset,
+          preset: GreenPreset,
           options: { darkModeSelector: '.p-dark' },
         });
         break;
@@ -115,6 +141,66 @@ export class ThemeService {
       case 'noir':
         useTheme({
           preset: Noir,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'lime':
+        useTheme({
+          preset: LimePreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'red':
+        useTheme({
+          preset: RedPreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'orange':
+        useTheme({
+          preset: OrangePreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'amber':
+        useTheme({
+          preset: AmberPreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'yellow':
+        useTheme({
+          preset: YellowPreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'cyan':
+        useTheme({
+          preset: CyanPreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'sky':
+        useTheme({
+          preset: SkyPreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'purple':
+        useTheme({
+          preset: PurplePreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'fuchsia':
+        useTheme({
+          preset: FuchsiaPreset,
+          options: { darkModeSelector: '.p-dark' },
+        });
+        break;
+      case 'pink':
+        useTheme({
+          preset: PinkPreset,
           options: { darkModeSelector: '.p-dark' },
         });
         break;

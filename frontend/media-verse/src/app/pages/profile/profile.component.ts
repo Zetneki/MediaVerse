@@ -58,16 +58,26 @@ export class ProfileComponent {
   closable: boolean = false;
 
   themes: string[] = [
-    'my',
-    'another',
+    'indigo',
+    'green',
     'emerald',
     'blue',
     'violet',
     'rose',
     'noir',
+    'lime',
+    'red',
+    'orange',
+    'amber',
+    'yellow',
+    'cyan',
+    'sky',
+    'purple',
+    'fuchsia',
+    'pink',
   ];
 
-  currentTheme: string = 'my';
+  currentTheme: string = 'indigo';
 
   openState = {
     username: false,

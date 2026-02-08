@@ -8,7 +8,7 @@ import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
-import { MyPreset } from './preset1';
+import { IndigoPreset } from './utils/themePresets';
 import { routes } from './app.routes';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { MessageService } from 'primeng/api';
@@ -28,8 +28,8 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(
       withInterceptors([
-        rateLimitInterceptor,
         authInterceptor,
+        rateLimitInterceptor,
         globalErrorInterceptor,
       ]),
     ),
@@ -37,7 +37,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: MyPreset,
+        preset: IndigoPreset,
         options: {
           darkModeSelector: '.p-dark',
         },

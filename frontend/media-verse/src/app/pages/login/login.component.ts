@@ -15,6 +15,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { PasswordModule } from 'primeng/password';
 import { DemoMarqueeComponent } from '../../components/demo-marquee/demo-marquee.component';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { shouldHandleError } from '../../utils/error-handler';
 
 @Component({
   selector: 'app-login',
@@ -69,7 +70,7 @@ export class LoginComponent {
       },
       error: (err) => {
         this.loading = false;
-        if (![403, 404, 429].includes(err.status) && err.status < 500)
+        if (shouldHandleError(err))
           this.notificationService.error(err.error?.error ?? 'Login failed');
       },
     });

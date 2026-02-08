@@ -57,7 +57,7 @@ export class AuthService {
         tap((res) => {
           this.accessToken = res.accessToken;
         }),
-        catchError((err) => {
+        catchError((err: any) => {
           this.clearAuth();
           return throwError(() => err);
         }),
@@ -90,6 +90,7 @@ export class AuthService {
       const user = await lastValueFrom(
         this.http.get<User>(`${this.baseUrl}/users/me`),
       );
+
       this.currentUserSubject.next(user);
     } catch (error) {
       this.clearAuth();
