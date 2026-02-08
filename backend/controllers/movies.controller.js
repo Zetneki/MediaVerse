@@ -2,7 +2,7 @@ const { AppError } = require("../middlewares/error-handler.middleware");
 const { handleControllerError } = require("../utils/error-response.util");
 const tmdbMoviesService = require("../services/tmdb/tmdb-movies.service");
 
-exports.getTopRatedMovies = async (req, res) => {
+const getTopRatedMovies = async (req, res) => {
   try {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const category = "toprated";
@@ -15,7 +15,7 @@ exports.getTopRatedMovies = async (req, res) => {
   }
 };
 
-exports.getPopularMovies = async (req, res) => {
+const getPopularMovies = async (req, res) => {
   try {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const category = "popular";
@@ -28,7 +28,7 @@ exports.getPopularMovies = async (req, res) => {
   }
 };
 
-exports.searchMovies = async (req, res) => {
+const searchMovies = async (req, res) => {
   try {
     const { query, page } = req.query;
     if (!query) throw AppError.badRequest("Missing query parameter");
@@ -45,7 +45,7 @@ exports.searchMovies = async (req, res) => {
   }
 };
 
-exports.filterMovies = async (req, res) => {
+const filterMovies = async (req, res) => {
   try {
     const { genreIds, sortBy, page } = req.query;
 
@@ -66,7 +66,7 @@ exports.filterMovies = async (req, res) => {
   }
 };
 
-exports.searchMovieDetails = async (req, res) => {
+const searchMovieDetails = async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) throw AppError.badRequest("Missing movie ID");
@@ -77,4 +77,12 @@ exports.searchMovieDetails = async (req, res) => {
     //console.log(err);
     handleControllerError(err, res, "Failed to fetch movie details");
   }
+};
+
+module.exports = {
+  getTopRatedMovies,
+  getPopularMovies,
+  searchMovies,
+  filterMovies,
+  searchMovieDetails,
 };

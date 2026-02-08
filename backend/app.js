@@ -11,6 +11,7 @@ const usersRouter = require("./routes/users.routes");
 const moviesRouter = require("./routes/movies.routes");
 const seriesRouter = require("./routes/series.routes");
 const genresRouter = require("./routes/genre.routes");
+const userThemesRouter = require("./routes/user-themes.routes");
 
 var app = express();
 
@@ -39,6 +40,7 @@ app.use("/users", usersRouter);
 app.use("/api/movies", moviesRouter);
 app.use("/api/series", seriesRouter);
 app.use("/api/genres", genresRouter);
+app.use("/user-themes", userThemesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,7 +1,7 @@
 const { handleControllerError } = require("../utils/error-response.util");
 const tmdbGenreService = require("../services/tmdb/tmdb-genre.service");
 
-exports.getMovieGenres = async (req, res) => {
+const getMovieGenres = async (req, res) => {
   try {
     const source = "movie";
     const genres = await tmdbGenreService.getSourceGenres(source);
@@ -13,7 +13,7 @@ exports.getMovieGenres = async (req, res) => {
   }
 };
 
-exports.getSeriesGenres = async (req, res) => {
+const getSeriesGenres = async (req, res) => {
   try {
     const source = "series";
     const genres = await tmdbGenreService.getSourceGenres(source);
@@ -23,4 +23,9 @@ exports.getSeriesGenres = async (req, res) => {
     //console.log(err);
     handleControllerError(err, res, "Failed to fetch series genres");
   }
+};
+
+module.exports = {
+  getMovieGenres,
+  getSeriesGenres,
 };

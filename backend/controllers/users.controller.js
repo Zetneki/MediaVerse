@@ -5,7 +5,7 @@ const {
   getRefreshTokenCookieOptions,
 } = require("../utils/cookie-options-helper.util");
 
-exports.registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
   try {
     const { username, password } = req.body;
     if (!username || !password)
@@ -18,7 +18,7 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-exports.loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
     if (!username || !password)
@@ -40,7 +40,7 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-exports.refreshToken = async (req, res) => {
+const refreshToken = async (req, res) => {
   try {
     const { accessToken, refreshToken: newRefreshToken } =
       await usersService.refreshToken(req.user);
@@ -52,7 +52,7 @@ exports.refreshToken = async (req, res) => {
   }
 };
 
-exports.logoutUser = async (req, res) => {
+const logoutUser = async (req, res) => {
   try {
     await usersService.logout(req.user.id);
 
@@ -64,7 +64,7 @@ exports.logoutUser = async (req, res) => {
   }
 };
 
-exports.getUser = async (req, res) => {
+const getUser = async (req, res) => {
   try {
     const user = await usersService.getUserById(req.user.id);
     res.json(user);
@@ -73,7 +73,7 @@ exports.getUser = async (req, res) => {
   }
 };
 
-exports.changeUsername = async (req, res) => {
+const changeUsername = async (req, res) => {
   try {
     const { newUsername } = req.body;
     if (!newUsername) throw AppError.badRequest("Missing new username");
@@ -86,7 +86,7 @@ exports.changeUsername = async (req, res) => {
   }
 };
 
-exports.changePassword = async (req, res) => {
+const changePassword = async (req, res) => {
   try {
     const { oldPassword, newPassword } = req.body;
     if (!oldPassword || !newPassword)
@@ -103,7 +103,7 @@ exports.changePassword = async (req, res) => {
   }
 };
 
-exports.deleteAccount = async (req, res) => {
+const deleteAccount = async (req, res) => {
   try {
     await usersService.deleteAccount(req.user.id);
 
@@ -113,4 +113,15 @@ exports.deleteAccount = async (req, res) => {
   } catch (err) {
     handleControllerError(err, res);
   }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  refreshToken,
+  logoutUser,
+  getUser,
+  changeUsername,
+  changePassword,
+  deleteAccount,
 };

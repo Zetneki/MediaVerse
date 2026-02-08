@@ -2,7 +2,7 @@ const { AppError } = require("../middlewares/error-handler.middleware");
 const { handleControllerError } = require("../utils/error-response.util");
 const tmdbSeriesService = require("../services/tmdb/tmdb-series.service");
 
-exports.getTopRatedSeries = async (req, res) => {
+const getTopRatedSeries = async (req, res) => {
   try {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const category = "toprated";
@@ -15,7 +15,7 @@ exports.getTopRatedSeries = async (req, res) => {
   }
 };
 
-exports.getPopularSeries = async (req, res) => {
+const getPopularSeries = async (req, res) => {
   try {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const category = "popular";
@@ -28,7 +28,7 @@ exports.getPopularSeries = async (req, res) => {
   }
 };
 
-exports.searchSeries = async (req, res) => {
+const searchSeries = async (req, res) => {
   try {
     const { query, page } = req.query;
     if (!query) throw AppError.badRequest("Missing query parameter");
@@ -45,7 +45,7 @@ exports.searchSeries = async (req, res) => {
   }
 };
 
-exports.filterSeries = async (req, res) => {
+const filterSeries = async (req, res) => {
   try {
     const { genreIds, sortBy, page } = req.query;
 
@@ -66,7 +66,7 @@ exports.filterSeries = async (req, res) => {
   }
 };
 
-exports.searchSeriesDetails = async (req, res) => {
+const searchSeriesDetails = async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) throw AppError.badRequest("Missing series ID");
@@ -77,4 +77,12 @@ exports.searchSeriesDetails = async (req, res) => {
     //console.log(err);
     handleControllerError(err, res, "Failed to fetch series details");
   }
+};
+
+module.exports = {
+  getTopRatedSeries,
+  getPopularSeries,
+  searchSeries,
+  filterSeries,
+  searchSeriesDetails,
 };
