@@ -64,6 +64,35 @@ const logoutUser = async (req, res) => {
   }
 };
 
+const activeMode = async (req, res) => {
+  try {
+    const { modeName } = req.body;
+    if (!modeName) throw AppError.badRequest("Missing active mode");
+
+    await usersService.activeMode(req.user.id, modeName);
+    return res.status(200).json({
+      message: "Active mode updated",
+    });
+  } catch (err) {
+    handleControllerError(err, res);
+  }
+};
+
+const activeTheme = async (req, res) => {
+  try {
+    const { themeName } = req.body;
+    if (!themeName) throw AppError.badRequest("Missing active theme");
+
+    await usersService.activeTheme(req.user.id, themeName);
+    return res.status(200).json({
+      message: "Active theme updated",
+    });
+  } catch (err) {
+    //console.log(err);
+    handleControllerError(err, res);
+  }
+};
+
 const getUser = async (req, res) => {
   try {
     const user = await usersService.getUserById(req.user.id);
@@ -120,6 +149,8 @@ module.exports = {
   loginUser,
   refreshToken,
   logoutUser,
+  activeMode,
+  activeTheme,
   getUser,
   changeUsername,
   changePassword,

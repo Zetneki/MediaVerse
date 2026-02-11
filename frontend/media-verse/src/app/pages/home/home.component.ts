@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
-import { ThemeService } from '../../services/theme.service';
 import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
 import { SeriesCardComponent } from '../../components/series-card/series-card.component';
 import { DragscrollDirective } from '../../directives/dragscroll.directive';
@@ -27,7 +26,6 @@ import { ContentService } from '../../services/content.service';
 })
 export class HomeComponent {
   contentService = inject(ContentService);
-  themeService = inject(ThemeService);
 
   skeletonArray = Array(20);
 
@@ -38,12 +36,4 @@ export class HomeComponent {
 
   popularSeries$ = this.contentService.getPopularSeries$();
   topRatedSeries$ = this.contentService.getTopRatedSeries$();
-
-  toggleTheme() {
-    this.themeService.toggleTheme();
-  }
-
-  toggleDarkMode() {
-    this.themeService.toggleDarkMode();
-  }
 }

@@ -1,9 +1,18 @@
 @use "../../../styles/variables" as *;
 @use "../../../styles/mixins/header-footer-mixin" as *;
 @use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
+@use "../../../styles/mixins/background-img-mixin" as *;
 
 header {
   @include header-footer-mixin();
+
+  @include background-img-mixin(
+    var(--p-theme-header-background-image),
+    var(--p-theme-background-gradient, none),
+    auto 100%,
+    repeat-x,
+    center top
+  );
 
   transition: transform 0.5s ease;
 
@@ -65,9 +74,22 @@ header {
     }
 
     &__link:hover {
+      @include background-img-mixin(
+        var(--p-theme-header-background-image),
+        var(--p-theme-background-gradient, none),
+        auto 100%,
+        repeat-x,
+        center top
+      );
       background-color: var(--app-background-color-light);
     }
     &__link:active {
+      @include background-img-mixin(
+        var(--p-theme-header-background-image),
+        var(--p-theme-background-gradient, none) auto 100%,
+        repeat-x,
+        center top
+      );
       background-color: var(--app-background-color-dark);
     }
   }

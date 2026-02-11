@@ -88,6 +88,8 @@ CREATE TABLE IF NOT EXISTS public.user_profile
     wallet_verified boolean DEFAULT false,
     password_hash text COLLATE pg_catalog."default" NOT NULL,
     token_version integer DEFAULT 0,
+    active_theme text COLLATE pg_catalog."default" DEFAULT 'indigo'::text,
+    active_dark_light_mode text COLLATE pg_catalog."default" DEFAULT 'system'::text,
     CONSTRAINT user_profile_pkey PRIMARY KEY (id),
     CONSTRAINT user_profile_username_key UNIQUE (username),
     CONSTRAINT user_profile_wallet_address_key UNIQUE (wallet_address)
@@ -101,6 +103,15 @@ CREATE TABLE IF NOT EXISTS public.user_series_progress
     current_episode integer DEFAULT 1,
     last_watched timestamp without time zone,
     CONSTRAINT user_series_progress_pkey PRIMARY KEY (user_id, series_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.user_themes
+(
+    id serial NOT NULL,
+    user_id integer NOT NULL,
+    name text COLLATE pg_catalog."default" NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    CONSTRAINT user_themes_pkey PRIMARY KEY (id)
 );
 
 ALTER TABLE IF EXISTS public.user_movie_progress
@@ -130,4 +141,27 @@ ALTER TABLE IF EXISTS public.user_series_progress
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
 
+
+ALTER TABLE IF EXISTS public.user_themes
+    ADD CONSTRAINT user_themes_user_id_fkey FOREIGN KEY (user_id)
+    REFERENCES public.user_profile (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+
+END; 
+
+
+
+CREATE OR REPLACE FUNCTION insert_default_theme()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO user_themes (user_id, name)
+  VALUES (NEW.id, 'indigo');
+  RETURN NEW;
 END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER user_default_theme
+AFTER INSERT ON user_profile
+FOR EACH ROW
+EXECUTE FUNCTION insert_default_theme();

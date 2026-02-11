@@ -1,9 +1,12 @@
 const usersDao = require("../dao/users.dao");
+
 const passwordUtil = require("../utils/password.util");
 const jwtUtil = require("../utils/jwt.util");
 const {
   validateCredentials,
 } = require("../utils/validation/credentials.validator");
+const userThemesService = require("./user-themes.service");
+const { VALID_THEME_NAMES } = require("../constants/themes");
 const PasswordValidator = require("../utils/validation/password.validator");
 const UsernameValidator = require("../utils/validation/username.validator");
 const { AppError } = require("../middlewares/error-handler.middleware");
@@ -85,6 +88,62 @@ const refreshToken = async (user) => {
 
 const logout = async (userId) => {
   await usersDao.incrementTokenVersion(userId);
+};
+
+/**
+ * Set user active dark light mode
+ * @param {number} userId
+ * @param {string} activeMode dark light system
+ * @returns {Promise<void>}
+ */
+
+const activeMode = async (userId, modeName) => {
+  const user = await usersDao.findById(userId);
+  if (!user) throw AppError.notFound("User not found");
+
+  const validModes = ["light", "dark", "system"];
+  if (!validModes.includes(modeName)) {
+    throw AppError.badRequest(
+      `Invalid mode. Must be one of: ${validModes.join(", ")}`,
+    );
+  }
+
+  if (user.active_dark_light_mode === modeName) {
+    return;
+  }
+
+  await usersDao.activeMode(userId, modeName);
+};
+
+/**
+ * Set user active theme
+ * @param {number} userId
+ * @param {string} activeTheme theme name
+ * @returns {Promise<void>}
+ */
+
+const activeTheme = async (userId, themeName) => {
+  const user = await usersDao.findById(userId);
+  if (!user) throw AppError.notFound("User not found");
+
+  if (!VALID_THEME_NAMES.includes(themeName)) {
+    throw AppError.badRequest(
+      `Invalid theme. Must be one of: ${VALID_THEME_NAMES.join(", ")}`,
+    );
+  }
+
+  if (user.active_theme === themeName) {
+    return;
+  }
+
+  const userThemes = await userThemesService.getUserThemes(userId);
+
+  const themeNames = userThemes.map((t) => t.name);
+  if (!themeNames.includes(themeName)) {
+    throw AppError.forbidden("User does not own this theme");
+  }
+
+  await usersDao.activeTheme(userId, themeName);
 };
 
 /**
@@ -187,6 +246,8 @@ module.exports = {
   login,
   refreshToken,
   logout,
+  activeMode,
+  activeTheme,
   getUserById,
   changeUsername,
   changePassword,

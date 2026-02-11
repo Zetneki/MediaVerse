@@ -23,6 +23,8 @@ router.post(
 //protected routes
 router.get("/me", authenticate, usersController.getUser);
 router.post("/logout", authenticate, usersController.logoutUser);
+router.put("/active-mode", authenticate, usersController.activeMode);
+router.put("/active-theme", authenticate, usersController.activeTheme);
 router.put("/change-username", authenticate, usersController.changeUsername);
 router.put("/change-password", authenticate, usersController.changePassword);
 router.delete("/me", authenticate, usersController.deleteAccount);

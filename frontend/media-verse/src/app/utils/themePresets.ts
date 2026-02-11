@@ -51,6 +51,13 @@ export const IndigoPreset = definePreset(Aura, {
       950: '{indigo.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
 export const GreenPreset = definePreset(Aura, {
@@ -103,6 +110,13 @@ export const GreenPreset = definePreset(Aura, {
       950: '{green.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
 export const EmeraldPreset = definePreset(Aura, {
@@ -111,7 +125,7 @@ export const EmeraldPreset = definePreset(Aura, {
       light: {
         surface: {
           0: '#ffffff',
-          50: '#f7faf9', // hideg, kékészöld hint
+          50: '#f7faf9',
           100: '#eff5f3',
           200: '#e0ebe7',
           300: '#cdddd7',
@@ -127,7 +141,7 @@ export const EmeraldPreset = definePreset(Aura, {
       dark: {
         surface: {
           0: '#ffffff',
-          50: '#f7faf9', // hideg, kékészöld hint
+          50: '#f7faf9',
           100: '#eff5f3',
           200: '#e0ebe7',
           300: '#cdddd7',
@@ -153,6 +167,13 @@ export const EmeraldPreset = definePreset(Aura, {
       800: '{emerald.800}',
       900: '{emerald.900}',
       950: '{emerald.950}',
+    },
+  },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
     },
   },
 });
@@ -207,6 +228,13 @@ export const BluePreset = definePreset(Aura, {
       950: '{blue.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
 export const VioletPreset = definePreset(Aura, {
@@ -257,6 +285,13 @@ export const VioletPreset = definePreset(Aura, {
       800: '{violet.800}',
       900: '{violet.900}',
       950: '{violet.950}',
+    },
+  },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
     },
   },
 });
@@ -311,6 +346,13 @@ export const RosePreset = definePreset(Aura, {
       950: '{rose.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
 export const Noir = definePreset(Aura, {
@@ -359,9 +401,15 @@ export const Noir = definePreset(Aura, {
       },
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
-// LIME
 export const LimePreset = definePreset(Aura, {
   semantic: {
     colorScheme: {
@@ -412,9 +460,15 @@ export const LimePreset = definePreset(Aura, {
       950: '{lime.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
-// RED
 export const RedPreset = definePreset(Aura, {
   semantic: {
     colorScheme: {
@@ -465,9 +519,15 @@ export const RedPreset = definePreset(Aura, {
       950: '{red.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
-// ORANGE
 export const OrangePreset = definePreset(Aura, {
   semantic: {
     colorScheme: {
@@ -518,9 +578,15 @@ export const OrangePreset = definePreset(Aura, {
       950: '{orange.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
-// AMBER
 export const AmberPreset = definePreset(Aura, {
   semantic: {
     colorScheme: {
@@ -571,9 +637,15 @@ export const AmberPreset = definePreset(Aura, {
       950: '{amber.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
-// YELLOW
 export const YellowPreset = definePreset(Aura, {
   semantic: {
     colorScheme: {
@@ -624,9 +696,15 @@ export const YellowPreset = definePreset(Aura, {
       950: '{yellow.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
-// CYAN
 export const CyanPreset = definePreset(Aura, {
   semantic: {
     colorScheme: {
@@ -677,9 +755,15 @@ export const CyanPreset = definePreset(Aura, {
       950: '{cyan.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
-// SKY
 export const SkyPreset = definePreset(Aura, {
   semantic: {
     colorScheme: {
@@ -730,9 +814,15 @@ export const SkyPreset = definePreset(Aura, {
       950: '{sky.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
-// PURPLE
 export const PurplePreset = definePreset(Aura, {
   semantic: {
     colorScheme: {
@@ -783,9 +873,15 @@ export const PurplePreset = definePreset(Aura, {
       950: '{purple.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
-// FUCHSIA
 export const FuchsiaPreset = definePreset(Aura, {
   semantic: {
     colorScheme: {
@@ -836,9 +932,15 @@ export const FuchsiaPreset = definePreset(Aura, {
       950: '{fuchsia.950}',
     },
   },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
 });
 
-// PINK
 export const PinkPreset = definePreset(Aura, {
   semantic: {
     colorScheme: {
@@ -887,6 +989,299 @@ export const PinkPreset = definePreset(Aura, {
       800: '{pink.800}',
       900: '{pink.900}',
       950: '{pink.950}',
+    },
+  },
+  extend: {
+    root: {
+      'theme-background-image': 'none',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient': 'none',
+    },
+  },
+});
+
+export const ChristmasPreset = definePreset(Aura, {
+  semantic: {
+    colorScheme: {
+      light: {
+        surface: {
+          0: '#ffffff',
+          50: '#f9faf8',
+          100: '#f3f5f1',
+          200: '#e7ebe3',
+          300: '#d5dccf',
+          400: '#b8c4ad',
+          500: '#98aa89',
+          600: '#7a8d6b',
+          700: '#617155',
+          800: '#4a5742',
+          900: '#343e30',
+          950: '#20261e',
+        },
+      },
+      dark: {
+        surface: {
+          0: '#ffffff',
+          50: '#f9faf8',
+          100: '#f3f5f1',
+          200: '#e7ebe3',
+          300: '#d5dccf',
+          400: '#b8c4ad',
+          500: '#98aa89',
+          600: '#7a8d6b',
+          700: '#617155',
+          800: '#4a5742',
+          900: '#343e30',
+          950: '#20261e',
+        },
+      },
+    },
+    primary: {
+      50: '#fef2f2',
+      100: '#fee2e2',
+      200: '#fecaca',
+      300: '#fca5a5',
+      400: '#f87171',
+      500: '#dc2626',
+      600: '#b91c1c',
+      700: '#991b1b',
+      800: '#7f1d1d',
+      900: '#651a1a',
+      950: '#450a0a',
+    },
+  },
+  extend: {
+    root: {
+      'theme-background-image': 'url("/assets/christmas.png")',
+      'theme-header-background-image': 'url("/assets/christmas-lights.png")',
+      'theme-background-gradient': 'none',
+    },
+  },
+});
+
+export const HalloweenPreset = definePreset(Aura, {
+  semantic: {
+    colorScheme: {
+      light: {
+        surface: {
+          0: '#ffffff',
+          50: '#faf9fb',
+          100: '#f4f2f6',
+          200: '#e9e5ed',
+          300: '#d8d0df',
+          400: '#bdb0c9',
+          500: '#9f8db0',
+          600: '#826d94',
+          700: '#685678',
+          800: '#50425c',
+          900: '#392f42',
+          950: '#231d29',
+        },
+      },
+      dark: {
+        surface: {
+          0: '#ffffff',
+          50: '#faf9fb',
+          100: '#f4f2f6',
+          200: '#e9e5ed',
+          300: '#d8d0df',
+          400: '#bdb0c9',
+          500: '#9f8db0',
+          600: '#826d94',
+          700: '#685678',
+          800: '#50425c',
+          900: '#392f42',
+          950: '#231d29',
+        },
+      },
+    },
+    primary: {
+      50: '#fff7ed',
+      100: '#ffedd5',
+      200: '#fed7aa',
+      300: '#fdba74',
+      400: '#fb923c',
+      500: '#f97316',
+      600: '#ea580c',
+      700: '#c2410c',
+      800: '#9a3412',
+      900: '#7c2d12',
+      950: '#431407',
+    },
+  },
+  extend: {
+    root: {
+      'theme-background-image': 'url("/assets/halloween.png")',
+      'theme-header-background-image': 'url("/assets/halloween-string.png")',
+      'theme-background-gradient': 'none',
+    },
+  },
+});
+
+export const CyberpunkPreset = definePreset(Aura, {
+  semantic: {
+    primary: {
+      50: '#f0f9ff',
+      100: '#e0f2fe',
+      200: '#bae6fd',
+      300: '#7dd3fc',
+      400: '#38bdf8',
+      500: '#0ea5e9',
+      600: '#0284c7',
+      700: '#0369a1',
+      800: '#075985',
+      900: '#0c4a6e',
+      950: '#082f49',
+    },
+    colorScheme: {
+      light: {
+        surface: {
+          0: '#422006',
+          50: '#713f12',
+          100: '#854d0e',
+          200: '#a16207',
+          300: '#ca8a04',
+          400: '#eab308',
+          500: '#facc15',
+          600: '#fde047',
+          700: '#fef08a',
+          800: '#fef9c3',
+          900: '#fefce8',
+          950: '#ffffff',
+        },
+        primary: {
+          color: '#0ea5e9',
+          inverseColor: '#422006',
+          hoverColor: '#0284c7',
+          activeColor: '#0369a1',
+        },
+        highlight: {
+          background: '#0ea5e9',
+          focusBackground: '#0284c7',
+          color: '#ffffff',
+          focusColor: '#ffffff',
+        },
+      },
+      dark: {
+        surface: {
+          0: '#ffffff',
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#38bdf8',
+          500: '#0ea5e9',
+          600: '#0284c7',
+          700: '#0369a1',
+          800: '#075985',
+          900: '#0c4a6e',
+          950: '#082f49',
+        },
+        primary: {
+          color: '#fde047',
+          inverseColor: '#082f49',
+          hoverColor: '#fef08a',
+          activeColor: '#fef9c3',
+        },
+        highlight: {
+          background: 'rgba(253, 224, 71, .16)',
+          focusBackground: 'rgba(253, 224, 71, .24)',
+          color: 'rgba(8, 47, 73, .87)',
+          focusColor: 'rgba(8, 47, 73, .87)',
+        },
+      },
+    },
+  },
+  extend: {
+    root: {
+      'theme-background-image': 'url("/assets/cyberpunk.png")',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient':
+        'linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6))',
+    },
+  },
+});
+
+export const NeonPreset = definePreset(Aura, {
+  semantic: {
+    primary: {
+      50: '#f0fdf4',
+      100: '#dcfce7',
+      200: '#bbf7d0',
+      300: '#86efac',
+      400: '#4ade80',
+      500: '#22c55e',
+      600: '#16a34a',
+      700: '#15803d',
+      800: '#166534',
+      900: '#14532d',
+      950: '#052e16',
+    },
+    colorScheme: {
+      light: {
+        surface: {
+          0: '#500724',
+          50: '#831843',
+          100: '#9d174d',
+          200: '#be185d',
+          300: '#db2777',
+          400: '#ec4899',
+          500: '#f472b6',
+          600: '#f9a8d4',
+          700: '#fbcfe8',
+          800: '#fce7f3',
+          900: '#fdf2f8',
+          950: '#ffffff',
+        },
+        primary: {
+          color: '#22c55e',
+          inverseColor: '#500724',
+          hoverColor: '#16a34a',
+          activeColor: '#15803d',
+        },
+        highlight: {
+          background: '#22c55e',
+          focusBackground: '#16a34a',
+          color: '#ffffff',
+          focusColor: '#ffffff',
+        },
+      },
+      dark: {
+        surface: {
+          0: '#ffffff',
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+          950: '#052e16',
+        },
+        primary: {
+          color: '#f9a8d4',
+          inverseColor: '#052e16',
+          hoverColor: '#fbcfe8',
+          activeColor: '#fce7f3',
+        },
+        highlight: {
+          background: 'rgba(249, 168, 212, .16)',
+          focusBackground: 'rgba(249, 168, 212, .24)',
+          color: 'rgba(5, 46, 22, .87)',
+          focusColor: 'rgba(5, 46, 22, .87)',
+        },
+      },
+    },
+  },
+  extend: {
+    root: {
+      'theme-background-image': 'url("/assets/neon_1.png")',
+      'theme-header-background-image': 'none',
+      'theme-background-gradient':
+        'linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6))',
     },
   },
 });

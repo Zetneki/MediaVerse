@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @use "styles/variables" as *;
+@use "styles/mixins/background-img-mixin" as *;
 @import "primeicons/primeicons.css";
 
 html,
@@ -10,5 +11,9 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   color: var(--app-text-color);
-  background: var(--app-page-background);
+  background-color: var(--app-page-background);
+  @include background-img-mixin(
+    var(--p-theme-background-image, none),
+    var(--p-theme-background-gradient, none)
+  );
 }

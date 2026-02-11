@@ -45,7 +45,10 @@
   .title {
     margin: $spacing-xxl 0 $spacing-sm 0;
     font-size: $font-size-xl;
-
+    span {
+      backdrop-filter: blur(50px);
+      border-radius: $radius-sm;
+    }
     @include desktop-mobile-media-mixin {
       font-size: $font-size-lg;
     }

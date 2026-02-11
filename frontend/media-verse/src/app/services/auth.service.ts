@@ -10,6 +10,7 @@ import {
 } from 'rxjs';
 import { LoginResponse } from '../models/loginresponse';
 import { User } from '../models/user';
+import { ThemeService } from './theme.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,10 @@ export class AuthService {
 
   private accessToken: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private themeService: ThemeService,
+  ) {}
 
   register(username: string, password: string) {
     return this.http.post(`${this.baseUrl}/users/register`, {
@@ -44,6 +48,9 @@ export class AuthService {
         tap((res) => {
           this.accessToken = res.accessToken;
           this.currentUserSubject.next(res.user);
+
+          this.themeService.setMode(res.user.active_dark_light_mode);
+          this.themeService.applyTheme(res.user.active_theme);
         }),
       );
   }
@@ -92,6 +99,9 @@ export class AuthService {
       );
 
       this.currentUserSubject.next(user);
+
+      this.themeService.setMode(user.active_dark_light_mode);
+      this.themeService.applyTheme(user.active_theme);
     } catch (error) {
       this.clearAuth();
     }

@@ -4,7 +4,7 @@
     <p>Your gateway to endless entertainment.</p>
   </div>
 
-  <h1 class="title">Popular Movies</h1>
+  <h1 class="title"><span>Popular Movies</span></h1>
   @if (popularMovies$ | async; as data) {
     <div class="list" appDragscroll>
       @for (movie of data.results; track movie.id) {
@@ -19,7 +19,7 @@
     </div>
   }
 
-  <h1 class="title">Top Rated Movies</h1>
+  <h1 class="title"><span>Top Rated Movies</span></h1>
   @if (topRatedMovies$ | async; as data) {
     <div class="list" appDragscroll>
       @for (movie of data.results; track movie.id) {
@@ -36,7 +36,7 @@
 
   <div class="section-divider"></div>
 
-  <h1 class="title">Popular Series</h1>
+  <h1 class="title"><span>Popular Series</span></h1>
   @if (popularSeries$ | async; as data) {
     <div class="list" appDragscroll>
       @for (series of data.results; track series.id) {
@@ -51,7 +51,7 @@
     </div>
   }
 
-  <h1 class="title">Top Rated Series</h1>
+  <h1 class="title"><span>Top Rated Series</span></h1>
   @if (topRatedSeries$ | async; as data) {
     <div class="list" appDragscroll>
       @for (series of data.results; track series.id) {
@@ -67,12 +67,6 @@
   }
 
   <p>fgjihodfgij</p>
-  <p-button label="Submit" (onClick)="toggleTheme()" />
-  <p-toggleswitch
-    [ngModel]="themeService.isDarkMode()"
-    (onChange)="toggleDarkMode()"
-  />
-  <p>{{ themeService.isDarkMode() ? "Dark" : "Light" }}</p>
   <p-toggleswitch [(ngModel)]="checked" />
   <p>{{ checked ? "checked" : "unchecked" }}</p>
 

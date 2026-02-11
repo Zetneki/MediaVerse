@@ -9,6 +9,9 @@
   display: flex;
   justify-content: space-between;
   user-select: none;
+  backdrop-filter: blur(50px);
+  border-radius: $radius-sm;
+  z-index: 1;
 
   align-items: center;
   max-width: 16rem;
@@ -30,7 +33,6 @@
     top: calc(100%);
     background: var(--app-background-color);
     border: 1px solid var(--dropdown-border);
-    z-index: 10;
 
     .option {
       padding: $spacing-sm;

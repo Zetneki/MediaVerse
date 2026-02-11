@@ -1,0 +1,12 @@
+@mixin background-img-mixin(
+  $img,
+  $gradient,
+  $size: cover,
+  $repeat: repeat,
+  $position: fixed
+) {
+  background-image: $img, $gradient;
+  background-size: $size;
+  background-repeat: $repeat;
+  background-attachment: $position;
+}

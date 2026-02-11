@@ -27,6 +27,8 @@ import { SelectModule } from 'primeng/select';
 import { ThemeService } from '../../services/theme.service';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { shouldHandleError } from '../../utils/error-handler';
+import { ThemeName } from '../../utils/theme.registry';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -57,28 +59,6 @@ export class ProfileComponent {
   passwordErrors: string[] = [];
   closable: boolean = false;
 
-  themes: string[] = [
-    'indigo',
-    'green',
-    'emerald',
-    'blue',
-    'violet',
-    'rose',
-    'noir',
-    'lime',
-    'red',
-    'orange',
-    'amber',
-    'yellow',
-    'cyan',
-    'sky',
-    'purple',
-    'fuchsia',
-    'pink',
-  ];
-
-  currentTheme: string = 'indigo';
-
   openState = {
     username: false,
     password: false,
@@ -88,6 +68,10 @@ export class ProfileComponent {
     this.openState[key] = !this.openState[key];
   }
 
+  themes: ThemeName[] = [];
+
+  currentTheme: ThemeName = 'indigo';
+
   themeModes = [
     { label: 'Light', value: 'light' },
     { label: 'Dark', value: 'dark' },
@@ -95,10 +79,6 @@ export class ProfileComponent {
   ];
 
   selectedMode: 'light' | 'dark' | 'system' = 'system';
-
-  onThemeModeChange() {
-    this.themeService.setMode(this.selectedMode);
-  }
 
   constructor(
     private authService: AuthService,
@@ -109,9 +89,17 @@ export class ProfileComponent {
     private confirmationService: ConfirmationService,
     private themeService: ThemeService,
   ) {
-    this.authService.currentUser$.subscribe((user) => {
-      this.user = user!;
-    });
+    this.authService.currentUser$
+      .pipe(filter((user): user is User => !!user))
+      .subscribe((user) => {
+        this.user = user;
+        this.currentTheme = user.active_theme;
+        this.selectedMode = user.active_dark_light_mode;
+
+        this.userService.getUserThemes().then((themes) => {
+          this.themes = themes.map((t) => t.name);
+        });
+      });
 
     this.usernameChangeForm = this.fb.group({
       newUsername: [
@@ -150,8 +138,38 @@ export class ProfileComponent {
     this.selectedMode = this.themeService.getMode();
   }
 
-  onThemeChange() {
-    this.themeService.chooseTheme(this.currentTheme);
+  async onThemeChange() {
+    try {
+      this.themeService.applyTheme(this.currentTheme);
+
+      await this.userService.updateActiveTheme(this.currentTheme);
+
+      if (this.user) {
+        this.authService.updateCurrentUser({
+          ...this.user,
+          active_theme: this.currentTheme,
+        });
+      }
+    } catch (err) {
+      this.notificationService.error('Failed to save theme');
+    }
+  }
+
+  async onModeChange() {
+    try {
+      this.themeService.setMode(this.selectedMode);
+
+      await this.userService.updateActiveMode(this.selectedMode);
+
+      if (this.user) {
+        this.authService.updateCurrentUser({
+          ...this.user,
+          active_dark_light_mode: this.selectedMode,
+        });
+      }
+    } catch (err) {
+      this.notificationService.error('Failed to save dark-light mode');
+    }
   }
 
   get disabledUsernameChange() {

@@ -22,6 +22,20 @@ async function findById(id) {
   return res.rows[0];
 }
 
+async function activeMode(userId, modeName) {
+  await db.query(
+    `UPDATE user_profile SET active_dark_light_mode = $1 WHERE id = $2`,
+    [modeName, userId],
+  );
+}
+
+async function activeTheme(userId, themeName) {
+  await db.query(`UPDATE user_profile SET active_theme = $1 WHERE id = $2`, [
+    themeName,
+    userId,
+  ]);
+}
+
 async function updateUsername(userId, newUsername) {
   const res = await db.query(
     `UPDATE user_profile SET username = $1 where id = $2 RETURNING *`,
@@ -55,6 +69,8 @@ module.exports = {
   createUser,
   findByUsername,
   findById,
+  activeMode,
+  activeTheme,
   updateUsername,
   updatePassword,
   deleteUser,
