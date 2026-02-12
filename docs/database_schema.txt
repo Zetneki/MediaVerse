@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS public.user_movie_progress
 (
     user_id integer NOT NULL,
     movie_id bigint NOT NULL,
-    watched boolean DEFAULT false,
+    status text COLLATE pg_catalog."default",
     last_watched timestamp without time zone,
     CONSTRAINT user_movie_progress_pkey PRIMARY KEY (user_id, movie_id)
 );
@@ -99,9 +99,10 @@ CREATE TABLE IF NOT EXISTS public.user_series_progress
 (
     user_id integer NOT NULL,
     series_id bigint NOT NULL,
-    current_season integer DEFAULT 1,
-    current_episode integer DEFAULT 1,
+    current_season integer DEFAULT 0,
+    current_episode integer DEFAULT 0,
     last_watched timestamp without time zone,
+    status text COLLATE pg_catalog."default",
     CONSTRAINT user_series_progress_pkey PRIMARY KEY (user_id, series_id)
 );
 
@@ -119,6 +120,8 @@ ALTER TABLE IF EXISTS public.user_movie_progress
     REFERENCES public.movie_cache (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION;
+CREATE INDEX IF NOT EXISTS idx_user_movie_progress_movie_id
+    ON public.user_movie_progress(movie_id);
 
 
 ALTER TABLE IF EXISTS public.user_movie_progress
@@ -126,6 +129,8 @@ ALTER TABLE IF EXISTS public.user_movie_progress
     REFERENCES public.user_profile (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS idx_user_movie_progress_user_id
+    ON public.user_movie_progress(user_id);
 
 
 ALTER TABLE IF EXISTS public.user_series_progress
@@ -133,6 +138,8 @@ ALTER TABLE IF EXISTS public.user_series_progress
     REFERENCES public.series_cache (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION;
+CREATE INDEX IF NOT EXISTS idx_user_series_progress_series_id
+    ON public.user_series_progress(series_id);
 
 
 ALTER TABLE IF EXISTS public.user_series_progress
@@ -140,6 +147,8 @@ ALTER TABLE IF EXISTS public.user_series_progress
     REFERENCES public.user_profile (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS idx_user_series_progress_user_id
+    ON public.user_series_progress(user_id);
 
 
 ALTER TABLE IF EXISTS public.user_themes
@@ -147,9 +156,10 @@ ALTER TABLE IF EXISTS public.user_themes
     REFERENCES public.user_profile (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS idx_user_themes_user_id
+    ON public.user_themes(user_id);
 
-END; 
-
+END;
 
 
 CREATE OR REPLACE FUNCTION insert_default_theme()

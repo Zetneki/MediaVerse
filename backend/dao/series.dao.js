@@ -62,7 +62,7 @@ async function upsertSeriesPageCache(page, category, seriesIds, totalPages) {
           last_updated = NOW()
     RETURNING *;
   `,
-    [page, category, seriesIds, totalPages]
+    [page, category, seriesIds, totalPages],
   );
   return res.rows[0];
 }
@@ -70,7 +70,7 @@ async function upsertSeriesPageCache(page, category, seriesIds, totalPages) {
 async function getSeriesPageCache(page, category) {
   const res = await db.query(
     "SELECT * FROM series_page_cache WHERE page=$1 AND category=$2",
-    [page, category]
+    [page, category],
   );
   return res.rows[0];
 }
@@ -81,8 +81,25 @@ async function getSeriesByCategory(page, category) {
 
   const res = await db.query(
     "SELECT * FROM series_cache WHERE id = ANY($1) ORDER BY array_position($1::bigint[], id)",
-    [pageCache.series_ids]
+    [pageCache.series_ids],
   );
+  return res.rows;
+}
+
+async function getOutdatedTrackedSeries(limit = 20) {
+  const res = await db.query(
+    `
+    SELECT s.id
+    FROM series_cache s
+    JOIN user_series_progress p ON p.series_id = s.id
+    WHERE s.last_updated < NOW() - INTERVAL '12 hours'
+    GROUP BY s.id, s.last_updated  
+    ORDER BY s.last_updated ASC
+    LIMIT $1
+    `,
+    [limit],
+  );
+
   return res.rows;
 }
 
@@ -92,4 +109,5 @@ module.exports = {
   upsertSeriesPageCache,
   getSeriesPageCache,
   getSeriesByCategory,
+  getOutdatedTrackedSeries,
 };

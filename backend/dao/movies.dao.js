@@ -57,7 +57,7 @@ async function upsertMoviePageCache(page, category, movieIds, totalPages) {
           last_updated = NOW()
     RETURNING *;
   `,
-    [page, category, movieIds, totalPages]
+    [page, category, movieIds, totalPages],
   );
   return res.rows[0];
 }
@@ -65,7 +65,7 @@ async function upsertMoviePageCache(page, category, movieIds, totalPages) {
 async function getMoviePageCache(page, category) {
   const res = await db.query(
     "SELECT * FROM movie_page_cache WHERE page=$1 AND category=$2",
-    [page, category]
+    [page, category],
   );
   return res.rows[0];
 }
@@ -76,8 +76,25 @@ async function getMoviesByCategory(page, category) {
 
   const res = await db.query(
     "SELECT * FROM movie_cache WHERE id = ANY($1) ORDER BY array_position($1::bigint[], id)",
-    [pageCache.movie_ids]
+    [pageCache.movie_ids],
   );
+  return res.rows;
+}
+
+async function getOutdatedTrackedMovies(limit = 20) {
+  const res = await db.query(
+    `
+    SELECT m.id
+    FROM movie_cache m
+    JOIN user_movie_progress p ON p.movie_id = m.id
+    WHERE m.last_updated < NOW() - INTERVAL '24 hours'
+    GROUP BY m.id, m.last_updated  
+    ORDER BY m.last_updated ASC
+    LIMIT $1
+    `,
+    [limit],
+  );
+
   return res.rows;
 }
 
@@ -87,4 +104,5 @@ module.exports = {
   upsertMoviePageCache,
   getMoviePageCache,
   getMoviesByCategory,
+  getOutdatedTrackedMovies,
 };
