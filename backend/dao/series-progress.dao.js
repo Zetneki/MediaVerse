@@ -1,6 +1,14 @@
 const db = require("../config/db");
 
-async function getUserSeriesWithDetails(userId) {
+async function getProgressBySeriesId(userId, seriesId) {
+  const res = await db.query(
+    `SELECT * FROM user_series_progress WHERE user_id = $1 AND series_id = $2`,
+    [userId, seriesId],
+  );
+  return res.rows[0];
+}
+
+async function getSeriesWithDetails(userId) {
   const res = await db.query(
     `
     SELECT 
@@ -13,7 +21,8 @@ async function getUserSeriesWithDetails(userId) {
       p.current_episode,
       s.seasons,
       s.total_seasons,
-      s.total_episodes
+      s.total_episodes,
+      s.genres
     FROM user_series_progress p
     JOIN series_cache s ON s.id = p.series_id
     WHERE p.user_id = $1
@@ -53,7 +62,8 @@ async function deleteSeriesProgress(userId, seriesId) {
 }
 
 module.exports = {
-  getUserSeriesWithDetails,
+  getProgressBySeriesId,
+  getSeriesWithDetails,
   upsertSeriesProgress,
   deleteSeriesProgress,
 };

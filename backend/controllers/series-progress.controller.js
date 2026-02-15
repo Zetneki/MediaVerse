@@ -3,6 +3,25 @@ const { handleControllerError } = require("../utils/error-response.util");
 const seriesProgressService = require("../services/series-progress.service");
 const { MESSAGES } = require("../constants/series-messages");
 
+const getProgressBySeriesId = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    if (!userId) throw AppError.unauthorized("User not logged in");
+
+    const { seriesId } = req.body;
+    if (!seriesId) throw AppError.badRequest("Missing series id");
+
+    const seriesProgress = await seriesProgressService.getProgressBySeriesId(
+      userId,
+      seriesId,
+    );
+    res.status(200).json(seriesProgress);
+  } catch (err) {
+    //console.log(err);
+    handleControllerError(err, res);
+  }
+};
+
 const getSeriesProgress = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -62,6 +81,7 @@ const deleteSeriesProgress = async (req, res) => {
 };
 
 module.exports = {
+  getProgressBySeriesId,
   getSeriesProgress,
   setSeriesProgress,
   deleteSeriesProgress,

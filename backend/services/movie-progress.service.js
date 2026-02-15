@@ -4,6 +4,20 @@ const { VALID_MOVIE_STATUSES } = require("../constants/movie-status");
 const { AppError } = require("../middlewares/error-handler.middleware");
 
 /**
+ * Get progress by movie id
+ * @param {number} userId
+ * @param {string} movieId
+ * @returns {Promise<Object>} Movie progress
+ */
+
+const getProgressByMovieId = async (userId, movieId) => {
+  const user = await usersDao.findById(userId);
+  if (!user) throw AppError.notFound("User not found");
+
+  return await movieProgressDao.getProgressByMovieId(userId, movieId);
+};
+
+/**
  * Get all movie progresses
  * @param {number} userId
  * @returns {Promise<Array<Object>>} Movie progress
@@ -13,7 +27,7 @@ const getMoviesProgress = async (userId) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
 
-  return await movieProgressDao.getUserMoviesWithDetails(userId);
+  return await movieProgressDao.getMoviesWithDetails(userId);
 };
 
 /**
@@ -69,6 +83,7 @@ const deleteMovieProgress = async (userId, movieId) => {
 };
 
 module.exports = {
+  getProgressByMovieId,
   getMoviesProgress,
   setMovieProgress,
   deleteMovieProgress,

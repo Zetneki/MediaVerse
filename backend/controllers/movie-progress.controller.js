@@ -3,6 +3,25 @@ const { handleControllerError } = require("../utils/error-response.util");
 const movieProgressService = require("../services/movie-progress.service");
 const { MESSAGES } = require("../constants/movie-messages");
 
+const getProgressByMovieId = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    if (!userId) throw AppError.unauthorized("User not logged in");
+
+    const { movieId } = req.body;
+    if (!movieId) throw AppError.badRequest("Missing movie id");
+
+    const movieProgress = await movieProgressService.getProgressByMovieId(
+      userId,
+      movieId,
+    );
+    res.status(200).json(movieProgress);
+  } catch (err) {
+    //console.log(err);
+    handleControllerError(err, res);
+  }
+};
+
 const getMoviesProgress = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -55,6 +74,7 @@ const deleteMovieProgress = async (req, res) => {
 };
 
 module.exports = {
+  getProgressByMovieId,
   getMoviesProgress,
   setMovieProgress,
   deleteMovieProgress,

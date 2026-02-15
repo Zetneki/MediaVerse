@@ -1,6 +1,14 @@
 const db = require("../config/db");
 
-async function getUserMoviesWithDetails(userId) {
+async function getProgressByMovieId(userId, movieId) {
+  const res = await db.query(
+    `SELECT * FROM user_movie_progress WHERE user_id = $1 AND movie_id = $2`,
+    [userId, movieId],
+  );
+  return res.rows[0];
+}
+
+async function getMoviesWithDetails(userId) {
   const res = await db.query(
     `
     SELECT 
@@ -8,7 +16,8 @@ async function getUserMoviesWithDetails(userId) {
       m.title,
       m.poster_path,
       p.status,
-      p.last_watched
+      p.last_watched,
+      m.genres
     FROM user_movie_progress p
     JOIN movie_cache m ON m.id = p.movie_id
     WHERE p.user_id = $1
@@ -44,7 +53,8 @@ async function deleteMovieProgress(userId, movieId) {
 }
 
 module.exports = {
-  getUserMoviesWithDetails,
+  getProgressByMovieId,
+  getMoviesWithDetails,
   upsertMovieProgress,
   deleteMovieProgress,
 };

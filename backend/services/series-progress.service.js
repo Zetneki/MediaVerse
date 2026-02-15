@@ -5,6 +5,20 @@ const { VALID_SERIES_STATUSES } = require("../constants/series-status");
 const { AppError } = require("../middlewares/error-handler.middleware");
 
 /**
+ * Get progress by series id
+ * @param {number} userId
+ * @param {string} seriesId
+ * @returns {Promise<Object>} Series progress
+ */
+
+const getProgressBySeriesId = async (userId, seriesId) => {
+  const user = await usersDao.findById(userId);
+  if (!user) throw AppError.notFound("User not found");
+
+  return await seriesProgressDao.getProgressBySeriesId(userId, seriesId);
+};
+
+/**
  * Get all series progresses
  * @param {number} userId
  * @returns {Promise<Array<Object>>} Series progress
@@ -14,7 +28,7 @@ const getSeriesProgress = async (userId) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
 
-  return await seriesProgressDao.getUserSeriesWithDetails(userId);
+  return await seriesProgressDao.getSeriesWithDetails(userId);
 };
 
 /**
@@ -104,6 +118,7 @@ const deleteSeriesProgress = async (userId, seriesId) => {
 };
 
 module.exports = {
+  getProgressBySeriesId,
   getSeriesProgress,
   setSeriesProgress,
   deleteSeriesProgress,
