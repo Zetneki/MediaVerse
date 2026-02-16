@@ -15,6 +15,9 @@ const getProgressBySeriesId = async (userId, seriesId) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
 
+  const series = await seriesDao.getSeriesById(seriesId);
+  if (!series) throw AppError.notFound("Series not found");
+
   return await seriesProgressDao.getProgressBySeriesId(userId, seriesId);
 };
 

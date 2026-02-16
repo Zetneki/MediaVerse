@@ -1,5 +1,6 @@
 const movieProgressDao = require("../dao/movie-progress.dao");
 const usersDao = require("../dao/users.dao");
+const moviesDao = require("../dao/movies.dao");
 const { VALID_MOVIE_STATUSES } = require("../constants/movie-status");
 const { AppError } = require("../middlewares/error-handler.middleware");
 
@@ -13,6 +14,9 @@ const { AppError } = require("../middlewares/error-handler.middleware");
 const getProgressByMovieId = async (userId, movieId) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
+
+  const movie = await moviesDao.getMovieById(movieId);
+  if (!movie) throw AppError.notFound("Movie not found");
 
   return await movieProgressDao.getProgressByMovieId(userId, movieId);
 };
@@ -40,6 +44,9 @@ const getMoviesProgress = async (userId) => {
 const setMovieProgress = async (userId, movieId, status) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
+
+  const movie = await moviesDao.getMovieById(movieId);
+  if (!movie) throw AppError.notFound("Movie not found");
 
   if (!VALID_MOVIE_STATUSES.includes(status)) {
     throw AppError.badRequest(

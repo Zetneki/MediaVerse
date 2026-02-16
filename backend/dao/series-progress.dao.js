@@ -2,7 +2,19 @@ const db = require("../config/db");
 
 async function getProgressBySeriesId(userId, seriesId) {
   const res = await db.query(
-    `SELECT * FROM user_series_progress WHERE user_id = $1 AND series_id = $2`,
+    `
+    SELECT
+    s.id,
+    status,
+    p.last_watched,
+    p.current_season,
+    p.current_episode,
+    s.seasons,
+    s.total_seasons,
+    s.total_episodes
+    FROM user_series_progress p
+    JOIN series_cache s ON s.id = p.series_id
+    WHERE p.user_id = $1 AND p.series_id = $2`,
     [userId, seriesId],
   );
   return res.rows[0];

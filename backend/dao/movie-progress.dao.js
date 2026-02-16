@@ -2,7 +2,12 @@ const db = require("../config/db");
 
 async function getProgressByMovieId(userId, movieId) {
   const res = await db.query(
-    `SELECT * FROM user_movie_progress WHERE user_id = $1 AND movie_id = $2`,
+    `SELECT
+    movie_id as id,
+    status,
+    last_watched
+    FROM user_movie_progress 
+    WHERE user_id = $1 AND movie_id = $2`,
     [userId, movieId],
   );
   return res.rows[0];
