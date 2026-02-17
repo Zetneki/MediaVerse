@@ -8,7 +8,7 @@ const getProgressBySeriesId = async (req, res) => {
     const userId = req.user.id;
     if (!userId) throw AppError.unauthorized("User not logged in");
 
-    const { seriesId } = req.body;
+    const seriesId = req.params.id;
     if (!seriesId) throw AppError.badRequest("Missing series id");
 
     const seriesProgress = await seriesProgressService.getProgressBySeriesId(
@@ -57,7 +57,7 @@ const setSeriesProgress = async (req, res) => {
       episode,
     );
 
-    res.status(200).json(MESSAGES[action]);
+    res.status(200).json({ message: MESSAGES[action] });
   } catch (err) {
     //console.log(err);
     handleControllerError(err, res);
@@ -69,7 +69,7 @@ const deleteSeriesProgress = async (req, res) => {
     const userId = req.user.id;
     if (!userId) throw AppError.unauthorized("User not logged in");
 
-    const { seriesId } = req.body;
+    const seriesId = req.params.id;
     if (!seriesId) throw AppError.badRequest("Missing series id");
 
     await seriesProgressService.deleteSeriesProgress(userId, seriesId);

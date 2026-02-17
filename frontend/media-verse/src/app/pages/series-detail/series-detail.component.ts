@@ -20,8 +20,9 @@ import { Button } from 'primeng/button';
 import { TrailerComponent } from '../../components/trailer/trailer.component';
 import { GalleriaComponent } from '../../components/galleria/galleria.component';
 import { SeriesCardComponent } from '../../components/series-card/series-card.component';
-import { AddToLibraryComponent } from '../../components/add-to-library/add-to-library.component';
+import { AddMovieToLibrary } from '../../components/add-movie-to-library/add-movie-to-library';
 import { DragscrollDirective } from '../../directives/dragscroll.directive';
+import { AddSeriesToLibraryComponent } from '../../components/add-series-to-library/add-series-to-library.component';
 
 @Component({
   selector: 'app-series-detail',
@@ -34,8 +35,8 @@ import { DragscrollDirective } from '../../directives/dragscroll.directive';
     TrailerComponent,
     GalleriaComponent,
     SeriesCardComponent,
-    AddToLibraryComponent,
     DragscrollDirective,
+    AddSeriesToLibraryComponent,
   ],
   templateUrl: './series-detail.component.html',
   styleUrl: './series-detail.component.scss',
@@ -92,6 +93,14 @@ export class SeriesDetailComponent implements OnInit, OnDestroy {
     });
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  get sortedSeasons() {
+    return this.series.seasons.sort((a, b) => {
+      if (a.season_number === 0) return 1;
+      if (b.season_number === 0) return -1;
+      return a.season_number - b.season_number;
+    });
   }
 
   showDialog() {

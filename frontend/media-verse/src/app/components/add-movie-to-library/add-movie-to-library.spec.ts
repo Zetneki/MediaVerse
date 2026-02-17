@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddToLibraryComponent } from './add-to-library.component';
+import { AddMovieToLibrary } from './add-movie-to-library';
 
-describe('AddToLibraryComponent', () => {
-  let component: AddToLibraryComponent;
-  let fixture: ComponentFixture<AddToLibraryComponent>;
+describe('AddMovieToLibrary', () => {
+  let component: AddMovieToLibrary;
+  let fixture: ComponentFixture<AddMovieToLibrary>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddToLibraryComponent]
+      imports: [AddMovieToLibrary]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AddToLibraryComponent);
+    fixture = TestBed.createComponent(AddMovieToLibrary);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

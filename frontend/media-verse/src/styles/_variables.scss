@@ -27,9 +27,12 @@ $radius-xl: 2rem;
 
 $breakpoint-lg: 1024px;
 $breakpoint-discover-page-list: 783px;
+$breakpoint-discover-page: 500px;
 $breakpoint-content-details-galleria: 1440px;
 $breakpoint-login-content: 400px;
 $breakpoint-profile-settings: 400px;
+$breakpoint-add-movie-to-library: 500px;
+$breakpoint-add-series-to-library: 500px;
 
 :root {
   //system tokens
@@ -71,6 +74,7 @@ $breakpoint-profile-settings: 400px;
   --login-register-form-background: var(--app-background-color-light);
   --profile-page-background: var(--app-background-color);
   --profile-username-change: var(--app-background-color-lighter);
+  --dialog-header-padding: 1rem;
 }
 
 .p-dark {

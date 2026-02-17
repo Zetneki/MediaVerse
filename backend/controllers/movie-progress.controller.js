@@ -8,7 +8,7 @@ const getProgressByMovieId = async (req, res) => {
     const userId = req.user.id;
     if (!userId) throw AppError.unauthorized("User not logged in");
 
-    const { movieId } = req.body;
+    const movieId = req.params.id;
     if (!movieId) throw AppError.badRequest("Missing movie id");
 
     const movieProgress = await movieProgressService.getProgressByMovieId(
@@ -50,7 +50,7 @@ const setMovieProgress = async (req, res) => {
       status,
     );
 
-    res.status(200).json(MESSAGES[action]);
+    res.status(200).json({ message: MESSAGES[action] });
   } catch (err) {
     //console.log(err);
     handleControllerError(err, res);
@@ -62,7 +62,7 @@ const deleteMovieProgress = async (req, res) => {
     const userId = req.user.id;
     if (!userId) throw AppError.unauthorized("User not logged in");
 
-    const { movieId } = req.body;
+    const movieId = req.params.id;
     if (!movieId) throw AppError.badRequest("Missing movie id");
 
     await movieProgressService.deleteMovieProgress(userId, movieId);

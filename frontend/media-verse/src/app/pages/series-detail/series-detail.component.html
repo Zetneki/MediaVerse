@@ -1,131 +1,136 @@
 @if (isLoading) {
-<app-skeleton-details></app-skeleton-details>
+  <app-skeleton-details></app-skeleton-details>
 } @else if (series) {
-<div class="series-detail">
-  <div class="backdrop-container">
-    @if (this.series.backdrops.length > 0) {
-    <img [src]="series.backdrops[0]" alt="backdrop" class="backdrop" />
-    } @else {
-    <div class="backdrop"></div>
-    }
+  <div class="series-detail">
+    <div class="backdrop-container">
+      @if (this.series.backdrops.length > 0) {
+        <img [src]="series.backdrops[0]" alt="backdrop" class="backdrop" />
+      } @else {
+        <div class="backdrop"></div>
+      }
 
-    <div class="overlay-info">
-      <img [src]="series.poster_path" alt="poster" class="poster" />
+      <div class="overlay-info">
+        <img [src]="series.poster_path" alt="poster" class="poster" />
 
-      <div class="basic-info">
+        <div class="basic-info">
+          <h1>{{ series.name }}</h1>
+          <div class="rating">
+            <p>Rating:</p>
+            <p-knob
+              [(ngModel)]="ratingValue"
+              [min]="0"
+              [max]="10"
+              [step]="0.5"
+              [readonly]="true"
+              [strokeWidth]="10"
+              [size]="60"
+              [disabled]="true"
+              [textColor]="'white'"
+            ></p-knob>
+          </div>
+          <p>
+            <span class="release">Release:</span>
+            {{ series.first_air_date | date }}
+          </p>
+          <p><span class="overview">Overview:</span> {{ series.overview }}</p>
+        </div>
+        <div class="add-button">
+          <p-button label="Add to Library" (click)="showDialog()" />
+        </div>
+      </div>
+
+      <div class="mobile-info">
         <h1>{{ series.name }}</h1>
-        <div class="rating">
-          <p>Rating:</p>
-          <p-knob
-            [(ngModel)]="ratingValue"
-            [min]="0"
-            [max]="10"
-            [step]="0.5"
-            [readonly]="true"
-            [strokeWidth]="10"
-            [size]="60"
-            [disabled]="true"
-            [textColor]="'white'"
-          ></p-knob>
+        <div class="mobile-info__data">
+          <div class="rating">
+            <p>Rating:</p>
+            <p-knob
+              [(ngModel)]="ratingValue"
+              [min]="0"
+              [max]="10"
+              [step]="0.5"
+              [readonly]="true"
+              [strokeWidth]="10"
+              [size]="60"
+              [disabled]="true"
+              [textColor]="'white'"
+            ></p-knob>
+          </div>
+          <p>
+            <span class="release">Release:</span>
+            {{ series.first_air_date | date }}
+          </p>
+          <p><span class="overview">Overview:</span> {{ series.overview }}</p>
         </div>
-        <p>
-          <span class="release">Release:</span>
-          {{ series.first_air_date | date }}
-        </p>
-        <p><span class="overview">Overview:</span> {{ series.overview }}</p>
-      </div>
-      <div class="add-button">
-        <p-button label="Add to Library" (click)="showDialog()" />
-      </div>
-    </div>
-
-    <div class="mobile-info">
-      <h1>{{ series.name }}</h1>
-      <div class="mobile-info__data">
-        <div class="rating">
-          <p>Rating:</p>
-          <p-knob
-            [(ngModel)]="ratingValue"
-            [min]="0"
-            [max]="10"
-            [step]="0.5"
-            [readonly]="true"
-            [strokeWidth]="10"
-            [size]="60"
-            [disabled]="true"
-            [textColor]="'white'"
-          ></p-knob>
-        </div>
-        <p>
-          <span class="release">Release:</span>
-          {{ series.first_air_date | date }}
-        </p>
-        <p><span class="overview">Overview:</span> {{ series.overview }}</p>
-      </div>
-      <div class="mobile__add-button">
-        <p-button label="Add to Library" (click)="showDialog()" />
-      </div>
-    </div>
-  </div>
-
-  <div class="details">
-    <div class="details__genres">
-      <h2>Genres</h2>
-      @for (genre of series.genres; track genre) {
-      <p>{{ genre.name }}</p>
-      }
-    </div>
-    <div class="details__other-info">
-      <h2>Details</h2>
-      <p>Total Seasons: {{ series.total_seasons }}</p>
-      <p>Total Episodes: {{ series.total_episodes }}</p>
-      <p>Popularity: {{ series.popularity }}</p>
-      @if (series.homepage) {
-      <p><a [href]="series.homepage" target="_blank">Homepage</a></p>
-      }
-    </div>
-  </div>
-
-  <div class="seasons">
-    <h2>Seasons</h2>
-    <div class="seasons__list" appDragscroll #similarList>
-      @for (season of series.seasons; track season) {
-      <div class="season-details">
-        <img
-          [src]="season.poster_path"
-          alt="poster"
-          class="season-details__img"
-        />
-        <div class="season-details__info">
-          <p class="season">Season {{ season.season_number }}</p>
-          <p class="episode">Episodes: {{ season.episode_count }}</p>
+        <div class="mobile__add-button">
+          <p-button label="Add to Library" (click)="showDialog()" />
         </div>
       </div>
-      }
     </div>
+
+    <div class="details">
+      <div class="details__genres">
+        <h2>Genres</h2>
+        @for (genre of series.genres; track genre) {
+          <p>{{ genre.name }}</p>
+        }
+      </div>
+      <div class="details__other-info">
+        <h2>Details</h2>
+        <p>Total Seasons: {{ series.total_seasons }}</p>
+        <p>Total Episodes: {{ series.total_episodes }}</p>
+        <p>Popularity: {{ series.popularity }}</p>
+        @if (series.homepage) {
+          <p><a [href]="series.homepage" target="_blank">Homepage</a></p>
+        }
+      </div>
+    </div>
+
+    <div class="seasons">
+      <h2>Seasons</h2>
+      <div class="seasons__list" appDragscroll #similarList>
+        @for (season of sortedSeasons; track season) {
+          <div class="season-details">
+            <img
+              [src]="season.poster_path"
+              alt="poster"
+              class="season-details__img"
+            />
+            <div class="season-details__info">
+              <p class="season">
+                Season
+                {{
+                  season.season_number === 0 ? "Specials" : season.season_number
+                }}
+              </p>
+              <p class="episode">Episodes: {{ season.episode_count }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <app-trailer [originalTrailerUrl]="series.trailer ?? ''"></app-trailer>
+
+    <app-galleria [backDrops]="series.backdrops"></app-galleria>
+
+    @if (similarSeries.length > 0) {
+      <div class="similar-series">
+        <h2>Similar series</h2>
+        <div class="similar-series__list" appDragscroll #similarList>
+          @for (series of similarSeries; track series.id) {
+            <app-series-card [series]="series"></app-series-card>
+          }
+        </div>
+      </div>
+    }
   </div>
 
-  <app-trailer [originalTrailerUrl]="series.trailer ?? ''"></app-trailer>
-
-  <app-galleria [backDrops]="series.backdrops"></app-galleria>
-
-  @if (similarSeries.length > 0) {
-  <div class="similar-series">
-    <h2>Similar series</h2>
-    <div class="similar-series__list" appDragscroll #similarList>
-      @for (series of similarSeries; track series.id) {
-      <app-series-card [series]="series"></app-series-card>
-      }
-    </div>
-  </div>
-  }
-</div>
-
-<app-add-to-library
-  [visible]="addToLibraryVisible()"
-  (visibleChange)="addToLibraryVisible.set($event)"
-></app-add-to-library>
-
+  <app-add-series-to-library
+    [visible]="addToLibraryVisible()"
+    [seriesId]="series.id"
+    (visibleChange)="addToLibraryVisible.set($event)"
+  ></app-add-series-to-library>
 } @else {
-<p>There is no series to show.</p>
+  <p>There is no series to show.</p>
 }

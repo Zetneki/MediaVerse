@@ -22,7 +22,7 @@ import { DialogModule } from 'primeng/dialog';
 import { SkeletonDetailsComponent } from '../../components/skeleton-details/skeleton-details.component';
 import { TrailerComponent } from '../../components/trailer/trailer.component';
 import { GalleriaComponent } from '../../components/galleria/galleria.component';
-import { AddToLibraryComponent } from '../../components/add-to-library/add-to-library.component';
+import { AddMovieToLibrary } from '../../components/add-movie-to-library/add-movie-to-library';
 
 @Component({
   selector: 'app-movie-detail',
@@ -37,7 +37,7 @@ import { AddToLibraryComponent } from '../../components/add-to-library/add-to-li
     SkeletonDetailsComponent,
     TrailerComponent,
     GalleriaComponent,
-    AddToLibraryComponent,
+    AddMovieToLibrary,
   ],
   templateUrl: './movie-detail.component.html',
   styleUrl: './movie-detail.component.scss',

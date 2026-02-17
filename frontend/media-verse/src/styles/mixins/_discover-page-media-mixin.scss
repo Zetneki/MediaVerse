@@ -1,0 +1,7 @@
+@use "../variables" as *;
+
+@mixin discover-page-media-mixin {
+  @media (max-width: $breakpoint-discover-page) {
+    @content;
+  }
+}

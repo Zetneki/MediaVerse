@@ -1,6 +1,7 @@
 @use "../../../styles/variables" as *;
 @use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
 @use "../../../styles/mixins/discover-page-list-media-mixin" as *;
+@use "../../../styles/mixins/discover-page-media-mixin" as *;
 
 .tabs {
   display: flex;
@@ -123,7 +124,7 @@
     display: none;
   }
 
-  @media (max-width: 500px) {
+  @include discover-page-media-mixin {
     .desktop {
       display: none;
     }

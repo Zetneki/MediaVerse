@@ -1,5 +1,5 @@
 const MESSAGES = {
-  INSERTED: "Series progress successfully inserted",
+  INSERTED: "Series progress successfully saved",
   UPDATED: "Series progress successfully updated",
   UNCHANGED: "Series progress unchanged",
 };

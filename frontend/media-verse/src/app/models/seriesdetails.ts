@@ -1,3 +1,4 @@
+import { SeasonDetails } from './seasondetails';
 import { Series } from './series';
 
 export interface SeriesDetails {
@@ -13,11 +14,7 @@ export interface SeriesDetails {
   popularity: number;
   total_seasons: number;
   total_episodes: number;
-  seasons: {
-    season_number: number;
-    episode_count: number;
-    poster_path: string | null;
-  }[];
+  seasons: SeasonDetails[];
   homepage: string | null;
   similar_series: Series[];
 }

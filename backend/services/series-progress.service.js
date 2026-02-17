@@ -18,7 +18,17 @@ const getProgressBySeriesId = async (userId, seriesId) => {
   const series = await seriesDao.getSeriesById(seriesId);
   if (!series) throw AppError.notFound("Series not found");
 
-  return await seriesProgressDao.getProgressBySeriesId(userId, seriesId);
+  const res = await seriesProgressDao.getProgressBySeriesId(userId, seriesId);
+  if (!res) {
+    return {
+      status: "plan_to_watch",
+      seasons: series.seasons,
+      last_watched: null,
+      current_season: 0,
+      current_episode: 0,
+    };
+  }
+  return res;
 };
 
 /**
@@ -112,6 +122,12 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
 const deleteSeriesProgress = async (userId, seriesId) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
+
+  const series = await seriesProgressDao.getProgressBySeriesId(
+    userId,
+    seriesId,
+  );
+  if (!series) throw AppError.notFound("Series not found");
 
   try {
     await seriesProgressDao.deleteSeriesProgress(userId, seriesId);

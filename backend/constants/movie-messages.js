@@ -1,5 +1,5 @@
 const MESSAGES = {
-  INSERTED: "Movie progress successfully inserted",
+  INSERTED: "Movie progress successfully saved",
   UPDATED: "Movie progress successfully updated",
   UNCHANGED: "Movie progress unchanged",
 };

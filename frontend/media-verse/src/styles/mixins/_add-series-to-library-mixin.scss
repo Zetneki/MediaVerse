@@ -1,0 +1,7 @@
+@use "../variables" as *;
+
+@mixin add-series-to-library-mixin {
+  @media (max-width: $breakpoint-add-series-to-library) {
+    @content;
+  }
+}

@@ -4,12 +4,16 @@ const movieProgressController = require("../controllers/movie-progress.controlle
 const { authenticate } = require("../middlewares/auth.middleware");
 
 router.get(
-  "/details",
+  "/details/:id",
   authenticate,
   movieProgressController.getProgressByMovieId,
 );
 router.get("/", authenticate, movieProgressController.getMoviesProgress);
 router.post("/", authenticate, movieProgressController.setMovieProgress);
-router.delete("/", authenticate, movieProgressController.deleteMovieProgress);
+router.delete(
+  "/:id",
+  authenticate,
+  movieProgressController.deleteMovieProgress,
+);
 
 module.exports = router;

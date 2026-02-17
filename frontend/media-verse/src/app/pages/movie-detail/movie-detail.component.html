@@ -101,10 +101,11 @@
     }
   </div>
 
-  <app-add-to-library
+  <app-add-movie-to-library
     [visible]="addToLibraryVisible()"
+    [movieId]="movie.id"
     (visibleChange)="addToLibraryVisible.set($event)"
-  ></app-add-to-library>
+  ></app-add-movie-to-library>
 } @else {
   <p>There is no movie to show.</p>
 }

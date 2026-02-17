@@ -4,12 +4,16 @@ const seriesProgressController = require("../controllers/series-progress.control
 const { authenticate } = require("../middlewares/auth.middleware");
 
 router.get(
-  "/details",
+  "/details/:id",
   authenticate,
   seriesProgressController.getProgressBySeriesId,
 );
 router.get("/", authenticate, seriesProgressController.getSeriesProgress);
 router.post("/", authenticate, seriesProgressController.setSeriesProgress);
-router.delete("/", authenticate, seriesProgressController.deleteSeriesProgress);
+router.delete(
+  "/:id",
+  authenticate,
+  seriesProgressController.deleteSeriesProgress,
+);
 
 module.exports = router;

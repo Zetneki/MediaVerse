@@ -29,6 +29,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { shouldHandleError } from '../../utils/error-handler';
 import { ThemeName } from '../../utils/theme.registry';
 import { filter } from 'rxjs';
+import { ColorMode } from '../../utils/theme.type';
 
 @Component({
   selector: 'app-profile',
@@ -72,13 +73,13 @@ export class ProfileComponent {
 
   currentTheme: ThemeName = 'indigo';
 
-  themeModes = [
+  systemModes = [
     { label: 'Light', value: 'light' },
     { label: 'Dark', value: 'dark' },
     { label: 'System', value: 'system' },
   ];
 
-  selectedMode: 'light' | 'dark' | 'system' = 'system';
+  selectedMode: ColorMode = 'system';
 
   constructor(
     private authService: AuthService,

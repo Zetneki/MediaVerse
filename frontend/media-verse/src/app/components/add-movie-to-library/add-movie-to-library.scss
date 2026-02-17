@@ -1,0 +1,58 @@
+@use "../../../styles/variables.scss" as *;
+@use "../../../styles/mixins/add-movie-to-library-mixin" as *;
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: 0 $spacing-md $spacing-md $spacing-md;
+
+  p {
+    margin: 0;
+    text-align: left;
+  }
+
+  .selectbutton {
+    display: block;
+  }
+
+  .listbox {
+    display: none;
+  }
+
+  &__buttons {
+    display: inherit;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    align-content: space-between;
+
+    gap: $spacing-md;
+  }
+}
+
+@include add-movie-to-library-mixin {
+  .dialog {
+    --p-dialog-content-padding: 0;
+    --p-dialog-header-padding: var(--dialog-header-padding);
+    --p-dialog-footer-padding: 0;
+
+    ::ng-deep .p-dialog {
+      width: 95vw !important;
+    }
+
+    .content {
+      .selectbutton {
+        display: none;
+      }
+      .listbox {
+        display: block;
+
+        &__item {
+          display: flex;
+          gap: $spacing-sm;
+        }
+      }
+    }
+  }
+}

@@ -82,6 +82,9 @@ const deleteMovieProgress = async (userId, movieId) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
 
+  const movie = await movieProgressDao.getProgressByMovieId(userId, movieId);
+  if (!movie) throw AppError.notFound("Movie not found");
+
   try {
     await movieProgressDao.deleteMovieProgress(userId, movieId);
   } catch (err) {

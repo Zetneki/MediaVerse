@@ -1,0 +1,7 @@
+@use "../variables" as *;
+
+@mixin add-movie-to-library-mixin {
+  @media (max-width: $breakpoint-add-movie-to-library) {
+    @content;
+  }
+}
