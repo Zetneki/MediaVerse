@@ -33,6 +33,7 @@
 
 @include add-movie-to-library-mixin {
   .dialog {
+    font-size: $font-size-sm;
     --p-dialog-content-padding: 0;
     --p-dialog-header-padding: var(--dialog-header-padding);
     --p-dialog-footer-padding: 0;

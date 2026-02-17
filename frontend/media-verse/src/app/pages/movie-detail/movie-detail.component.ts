@@ -22,7 +22,9 @@ import { DialogModule } from 'primeng/dialog';
 import { SkeletonDetailsComponent } from '../../components/skeleton-details/skeleton-details.component';
 import { TrailerComponent } from '../../components/trailer/trailer.component';
 import { GalleriaComponent } from '../../components/galleria/galleria.component';
-import { AddMovieToLibrary } from '../../components/add-movie-to-library/add-movie-to-library';
+import { AddMovieToLibraryComponent } from '../../components/add-movie-to-library/add-movie-to-library.component';
+import { User } from '../../models/user';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-movie-detail',
@@ -37,7 +39,7 @@ import { AddMovieToLibrary } from '../../components/add-movie-to-library/add-mov
     SkeletonDetailsComponent,
     TrailerComponent,
     GalleriaComponent,
-    AddMovieToLibrary,
+    AddMovieToLibraryComponent,
   ],
   templateUrl: './movie-detail.component.html',
   styleUrl: './movie-detail.component.scss',
@@ -46,6 +48,7 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   @ViewChild('similarList') similarScroll!: ElementRef<HTMLDivElement>;
   route = inject(ActivatedRoute);
   contentService = inject(ContentService);
+  authService = inject(AuthService);
   movieId!: number;
   movie!: MovieDetails;
   ratingValue!: number;

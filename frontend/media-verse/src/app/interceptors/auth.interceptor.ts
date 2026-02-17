@@ -3,12 +3,11 @@ import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { catchError, switchMap, throwError } from 'rxjs';
+import { AUTH_ENDPOINTS } from '../utils/auth-endpoints';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-
-  const AUTH_ENDPOINTS = ['/users/login', '/users/register', '/users/refresh'];
 
   if (AUTH_ENDPOINTS.some((url) => req.url.includes(url))) {
     return next(req.clone({ withCredentials: true }));
@@ -16,8 +15,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const token = authService.getAccessToken();
   let modifiedReq = req;
+  let hadToken = false;
 
   if (token) {
+    hadToken = true;
     modifiedReq = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
@@ -44,7 +45,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
               refreshError.status === 401
             ) {
               authService.clearAuth();
-              router.navigate(['/login']);
+
+              if (hadToken) {
+                router.navigate(['/login']);
+              }
             }
             return throwError(() => refreshError);
           }),

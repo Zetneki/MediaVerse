@@ -20,9 +20,10 @@ import { Button } from 'primeng/button';
 import { TrailerComponent } from '../../components/trailer/trailer.component';
 import { GalleriaComponent } from '../../components/galleria/galleria.component';
 import { SeriesCardComponent } from '../../components/series-card/series-card.component';
-import { AddMovieToLibrary } from '../../components/add-movie-to-library/add-movie-to-library';
+import { AddMovieToLibraryComponent } from '../../components/add-movie-to-library/add-movie-to-library.component';
 import { DragscrollDirective } from '../../directives/dragscroll.directive';
 import { AddSeriesToLibraryComponent } from '../../components/add-series-to-library/add-series-to-library.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-series-detail',
@@ -45,6 +46,7 @@ export class SeriesDetailComponent implements OnInit, OnDestroy {
   @ViewChild('similarList') similarScroll!: ElementRef<HTMLDivElement>;
   route = inject(ActivatedRoute);
   contentService = inject(ContentService);
+  authService = inject(AuthService);
   seriesId!: number;
   series!: SeriesDetails;
   ratingValue!: number;
@@ -71,7 +73,6 @@ export class SeriesDetailComponent implements OnInit, OnDestroy {
       next: (series) => {
         this.series = series;
         this.ratingValue = Math.round(series.vote_average * 10) / 10;
-        //this.seasons
         this.similarSeries = series.similar_series ?? [];
 
         if (!this.series.overview || this.series.overview.length === 0) {

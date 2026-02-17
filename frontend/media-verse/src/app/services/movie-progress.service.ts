@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MovieStatus } from '../utils/movie-status.type';
+import { MovieProgress } from '../models/movieprogress';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class MovieProgressService {
   }
 
   getMoviesProgress() {
-    return this.http.get(`${this.baseUrl}/movie-progress`);
+    return this.http.get<MovieProgress[]>(`${this.baseUrl}/movie-progress`);
   }
 
   setMovieProgress(movieId: number, status: MovieStatus) {

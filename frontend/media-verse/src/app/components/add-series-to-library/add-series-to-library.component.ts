@@ -190,7 +190,7 @@ export class AddSeriesToLibraryComponent {
   }
 
   save() {
-    this.isSaving = true;
+    this.isLoading = true;
 
     this.seriesProgressService
       .setSeriesProgress(
@@ -217,7 +217,7 @@ export class AddSeriesToLibraryComponent {
           this.notificationService.error(err.error?.error ?? 'Save failed');
         },
         complete: () => {
-          this.isSaving = false;
+          this.isLoading = false;
         },
       });
   }

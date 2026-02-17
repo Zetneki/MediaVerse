@@ -1,1 +1,44 @@
-<p>library works!</p>
+@if (!authService.isLoggedIn()) {
+  <p>You need to be logged in to see your progress.</p>
+} @else {
+  <app-discover-dropdown
+    [selected]="selectedTypeSignal"
+  ></app-discover-dropdown>
+
+  @if (this.selectedTypeSignal().value == "movies") {
+    @for (movie of movies; track $index) {
+      <p>{{ movie.id }}</p>
+      <p>{{ movie.title }}</p>
+      <p>{{ movie.poster_path }}</p>
+      <p>{{ movie.status }}</p>
+      <p>{{ movie.last_watched }}</p>
+      @for (genre of movie.genres; track $index) {
+        <p>{{ genre.name }}</p>
+      }
+      <button (click)="onDeleteMovieProgress(movie.id)">Delete</button>
+      <br />
+    }
+  } @else if (this.selectedTypeSignal().value == "series") {
+    @for (series of series; track $index) {
+      <p>{{ series.id }}</p>
+      <p>{{ series.name }}</p>
+      <p>{{ series.poster_path }}</p>
+      <p>{{ series.status }}</p>
+      <p>{{ series.last_watched }}</p>
+      <p>{{ series.current_season }}</p>
+      <p>{{ series.current_episode }}</p>
+      @for (season of series.seasons; track $index) {
+        <p>{{ season.season_number }}</p>
+        <p>{{ season.episode_count }}</p>
+        <p>{{ season.poster_path }}</p>
+      }
+      <p>{{ series.total_seasons }}</p>
+      <p>{{ series.total_episodes }}</p>
+      @for (genre of series.genres; track $index) {
+        <p>{{ genre.name }}</p>
+      }
+      <button (click)="onDeleteSeriesProgress(series.id)">Delete</button>
+      <br />
+    }
+  }
+}

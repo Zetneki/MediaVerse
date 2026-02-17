@@ -35,7 +35,11 @@
           <p><span class="overview">Overview:</span> {{ movie.overview }}</p>
         </div>
         <div class="add-button">
-          <p-button label="Add to Library" (click)="showDialog()" />
+          <p-button
+            label="Add to Library"
+            (click)="showDialog()"
+            [disabled]="!authService.isLoggedIn()"
+          />
         </div>
       </div>
 
@@ -63,7 +67,11 @@
           <p><span class="overview">Overview:</span> {{ movie.overview }}</p>
         </div>
         <div class="mobile__add-button">
-          <p-button label="Add to Library" (click)="showDialog()" />
+          <p-button
+            label="Add to Library"
+            (click)="showDialog()"
+            [disabled]="!authService.isLoggedIn()"
+          />
         </div>
       </div>
     </div>

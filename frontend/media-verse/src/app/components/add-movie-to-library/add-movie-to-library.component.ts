@@ -30,15 +30,14 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ListboxModule,
     ProgressSpinnerModule,
   ],
-  templateUrl: './add-movie-to-library.html',
-  styleUrl: './add-movie-to-library.scss',
+  templateUrl: './add-movie-to-library.component.html',
+  styleUrl: './add-movie-to-library.component.scss',
 })
-export class AddMovieToLibrary {
+export class AddMovieToLibraryComponent {
   private destroyRef = inject(DestroyRef);
   visible = input<boolean>(false);
   movieId = input.required<number>();
   isLoading = false;
-  isSaving = false;
   lastWatched = null;
 
   visibleChange = output<boolean>();
@@ -86,7 +85,7 @@ export class AddMovieToLibrary {
   }
 
   save() {
-    this.isSaving = true;
+    this.isLoading = true;
 
     this.movieProgressService
       .setMovieProgress(this.movieId(), this.selectedMode)
@@ -108,7 +107,7 @@ export class AddMovieToLibrary {
           this.notificationService.error(err.error?.error ?? 'Save failed');
         },
         complete: () => {
-          this.isSaving = false;
+          this.isLoading = false;
         },
       });
   }
