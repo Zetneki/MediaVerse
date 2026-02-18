@@ -12,7 +12,9 @@ export class SeriesProgressService {
   constructor(private http: HttpClient) {}
 
   getProgressBySeriesId(id: number) {
-    return this.http.get(`${this.baseUrl}/series-progress/details/${id}`);
+    return this.http.get<SeriesProgress>(
+      `${this.baseUrl}/series-progress/details/${id}`,
+    );
   }
 
   getSeriesProgress() {

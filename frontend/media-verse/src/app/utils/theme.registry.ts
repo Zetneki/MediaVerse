@@ -20,7 +20,7 @@ import {
   HalloweenPreset,
   CyberpunkPreset,
   NeonPreset,
-} from './themePresets';
+} from './theme-presets';
 
 export const THEME_PRESETS = {
   indigo: IndigoPreset,

@@ -62,7 +62,7 @@
         showButtons="true"
         buttonLayout="horizontal"
         step="1"
-        [min]="0"
+        [min]="selectedMode === 'plan_to_watch' ? 0 : 1"
         [max]="maxEpisode()"
         [minFractionDigits]="0"
         [maxFractionDigits]="0"
@@ -99,6 +99,16 @@
         (click)="close()"
         [disabled]="isLoading"
       />
+
+      @if (lastWatched != null) {
+        <p-button
+          label="Remove"
+          severity="danger"
+          (click)="deleteProgress()"
+          [disabled]="isLoading"
+        />
+      }
+
       <p-button
         label="Save"
         severity="success"
@@ -108,3 +118,4 @@
     </div>
   </div>
 </p-dialog>
+<p-confirmDialog [style]="{ margin: '1rem' }"></p-confirmDialog>

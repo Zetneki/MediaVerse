@@ -12,7 +12,9 @@ export class MovieProgressService {
   constructor(private http: HttpClient) {}
 
   getProgressByMovieId(id: number) {
-    return this.http.get(`${this.baseUrl}/movie-progress/details/${id}`);
+    return this.http.get<MovieProgress>(
+      `${this.baseUrl}/movie-progress/details/${id}`,
+    );
   }
 
   getMoviesProgress() {

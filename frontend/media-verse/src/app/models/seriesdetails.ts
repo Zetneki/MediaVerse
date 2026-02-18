@@ -1,3 +1,4 @@
+import { Genre } from './genre';
 import { SeasonDetails } from './seasondetails';
 import { Series } from './series';
 
@@ -10,7 +11,7 @@ export interface SeriesDetails {
   backdrops: string[];
   trailer?: string | null;
   vote_average: number;
-  genres: { id: number; name: string }[];
+  genres: Genre[];
   popularity: number;
   total_seasons: number;
   total_episodes: number;

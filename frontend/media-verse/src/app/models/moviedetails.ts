@@ -1,3 +1,4 @@
+import { Genre } from './genre';
 import { Movie } from './movie';
 
 export interface MovieDetails {
@@ -9,7 +10,7 @@ export interface MovieDetails {
   backdrops: string[];
   trailer?: string | null;
   vote_average: number;
-  genres: { id: number; name: string }[];
+  genres: Genre[];
   popularity: number;
   runtime: number | null;
   homepage: string | null;

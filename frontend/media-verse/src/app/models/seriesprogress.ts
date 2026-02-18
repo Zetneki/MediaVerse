@@ -4,8 +4,8 @@ import { SeasonDetails } from './seasondetails';
 
 export interface SeriesProgress {
   id: number;
-  name: string;
-  poster_path: string | null;
+  name?: string;
+  poster_path?: string | null;
   status: SeriesStatus;
   last_watched?: string;
   current_season: number;

@@ -18,6 +18,9 @@ import { shouldHandleError } from '../../utils/error-handler';
 import { DatePipe } from '@angular/common';
 import { ListboxModule } from 'primeng/listbox';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MovieProgress } from '../../models/movieprogress';
 
 @Component({
   selector: 'app-add-movie-to-library',
@@ -29,7 +32,9 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     DatePipe,
     ListboxModule,
     ProgressSpinnerModule,
+    ConfirmDialogModule,
   ],
+  providers: [ConfirmationService],
   templateUrl: './add-movie-to-library.component.html',
   styleUrl: './add-movie-to-library.component.scss',
 })
@@ -37,20 +42,30 @@ export class AddMovieToLibraryComponent {
   private destroyRef = inject(DestroyRef);
   visible = input<boolean>(false);
   movieId = input.required<number>();
-  isLoading = false;
-  lastWatched = null;
+  existingProgress = input<MovieProgress | null>(null);
 
   visibleChange = output<boolean>();
+  saved = output<{ id: number; status: MovieStatus }>();
+  deleted = output<number>();
 
+  isLoading = false;
+  lastWatched: string | null = null;
   selectedMode: MovieStatus = 'plan_to_watch';
 
   constructor(
     private movieProgressService: MovieProgressService,
     private notificationService: NotificationService,
+    private confirmationService: ConfirmationService,
   ) {
     effect(() => {
       if (this.visible() && this.movieId()) {
-        this.loadProgress();
+        const existing = this.existingProgress();
+        if (existing) {
+          this.selectedMode = existing.status;
+          this.lastWatched = existing.last_watched ?? null;
+        } else {
+          this.loadProgress();
+        }
       }
     });
   }
@@ -71,7 +86,7 @@ export class AddMovieToLibraryComponent {
       .getProgressByMovieId(this.movieId())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (progress: any) => {
+        next: (progress: MovieProgress) => {
           this.selectedMode = progress?.status ?? 'plan_to_watch';
           this.lastWatched = progress?.last_watched ?? null;
         },
@@ -84,6 +99,45 @@ export class AddMovieToLibraryComponent {
       });
   }
 
+  deleteProgress() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to remove this movie from you library?',
+      header: 'Confirmation',
+      closeOnEscape: true,
+      dismissableMask: true,
+      rejectButtonProps: {
+        severity: 'secondary',
+        label: 'Cancel',
+      },
+      acceptButtonProps: {
+        severity: 'danger',
+        label: 'Delete',
+      },
+      accept: () => {
+        this.isLoading = true;
+        this.movieProgressService
+          .deleteMovieProgress(this.movieId())
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (res: any) => {
+              this.deleted.emit(this.movieId());
+              this.close();
+              this.notificationService.success(
+                res.message ?? 'Progress deleted successfully',
+              );
+            },
+            error: (err) => {
+              this.isLoading = false;
+              if (!shouldHandleError(err)) return;
+              this.notificationService.error(
+                err.error?.error ?? 'Delete failed',
+              );
+            },
+          });
+      },
+    });
+  }
+
   save() {
     this.isLoading = true;
 
@@ -92,6 +146,10 @@ export class AddMovieToLibraryComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res: any) => {
+          this.saved.emit({
+            id: this.movieId(),
+            status: this.selectedMode,
+          });
           this.close();
           if (res.message.includes('unchanged')) {
             this.notificationService.info(res.message ?? 'No changes');
@@ -102,7 +160,6 @@ export class AddMovieToLibraryComponent {
           }
         },
         error: (err) => {
-          this.close();
           if (!shouldHandleError(err)) return;
           this.notificationService.error(err.error?.error ?? 'Save failed');
         },

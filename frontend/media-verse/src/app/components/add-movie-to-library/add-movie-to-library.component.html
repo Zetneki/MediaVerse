@@ -41,24 +41,35 @@
     </p-listbox>
 
     @if (lastWatched != null) {
-    <p>Saved at: {{ lastWatched | date}}</p>
+      <p>Saved at: {{ lastWatched | date }}</p>
     }
 
     <div class="content__buttons">
       @if (isLoading) {
-      <p-progress-spinner
-        strokeWidth="8"
-        fill="transparent"
-        animationDuration=".5s"
-        [style]="{ width: '25px', height: '25px' }"
-      />
+        <p-progress-spinner
+          strokeWidth="8"
+          fill="transparent"
+          animationDuration=".5s"
+          [style]="{ width: '25px', height: '25px' }"
+        />
       }
+
       <p-button
         label="Cancel"
         severity="secondary"
         (click)="close()"
         [disabled]="isLoading"
       />
+
+      @if (lastWatched != null) {
+        <p-button
+          label="Remove"
+          severity="danger"
+          (click)="deleteProgress()"
+          [disabled]="isLoading"
+        />
+      }
+
       <p-button
         label="Save"
         severity="success"
@@ -68,3 +79,4 @@
     </div>
   </div>
 </p-dialog>
+<p-confirmDialog [style]="{ margin: '1rem' }"></p-confirmDialog>

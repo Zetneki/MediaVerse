@@ -15,9 +15,20 @@
       @for (genre of movie.genres; track $index) {
         <p>{{ genre.name }}</p>
       }
-      <button (click)="onDeleteMovieProgress(movie.id)">Delete</button>
+
+      <button (click)="editMovie(movie)">Edit</button>
+
       <br />
     }
+
+    <app-add-movie-to-library
+      [visible]="editDialogVisibleMovie"
+      [movieId]="selectedMovie?.id!"
+      [existingProgress]="selectedMovie"
+      (visibleChange)="editDialogVisibleMovie = $event"
+      (saved)="onMovieSaved($event)"
+      (deleted)="onMovieDeleted($event)"
+    ></app-add-movie-to-library>
   } @else if (this.selectedTypeSignal().value == "series") {
     @for (series of series; track $index) {
       <p>{{ series.id }}</p>
@@ -27,18 +38,30 @@
       <p>{{ series.last_watched }}</p>
       <p>{{ series.current_season }}</p>
       <p>{{ series.current_episode }}</p>
-      @for (season of series.seasons; track $index) {
+      <!-- @for (season of series.seasons; track $index) {
         <p>{{ season.season_number }}</p>
         <p>{{ season.episode_count }}</p>
         <p>{{ season.poster_path }}</p>
-      }
+      } -->
       <p>{{ series.total_seasons }}</p>
       <p>{{ series.total_episodes }}</p>
-      @for (genre of series.genres; track $index) {
+      <!-- @for (genre of series.genres; track $index) {
         <p>{{ genre.name }}</p>
-      }
-      <button (click)="onDeleteSeriesProgress(series.id)">Delete</button>
+      } -->
+
+      <button (click)="editSeries(series)">Edit</button>
+
+      <!-- <button (click)="onDeleteSeriesProgress(series.id)">Delete</button> -->
       <br />
     }
+
+    <app-add-series-to-library
+      [visible]="editDialogVisibleSeries"
+      [seriesId]="selectedSeries?.id!"
+      [existingProgress]="selectedSeries"
+      (visibleChange)="editDialogVisibleSeries = $event"
+      (saved)="onSeriesSaved($event)"
+      (deleted)="onSeriesDeleted($event)"
+    ></app-add-series-to-library>
   }
 }
