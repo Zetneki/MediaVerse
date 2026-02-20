@@ -122,7 +122,11 @@ $breakpoint-add-series-to-library: 500px;
   --profile-username-change: var(--app-background-color);
   --library-page-background: #{layer(5%, white)};
   --library-page-components-background: var(--app-background-color-dark);
-  --library-page-list-items-background: #{layer(5%, black)};
+  --library-page-list-items-background: #{layer(
+      5%,
+      white,
+      var(--app-background-color-dark)
+    )};
 }
 
 .p-drawer {
