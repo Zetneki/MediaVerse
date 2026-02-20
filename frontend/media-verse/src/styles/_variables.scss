@@ -75,6 +75,9 @@ $breakpoint-add-series-to-library: 500px;
   --profile-page-background: var(--app-background-color);
   --profile-username-change: var(--app-background-color-lighter);
   --dialog-header-padding: 1rem;
+  --library-page-background: #{layer(5%, black)};
+  --library-page-components-background: var(--app-background-color-light);
+  --library-page-list-items-background: var(--app-background-color);
 }
 
 .p-dark {
@@ -117,6 +120,9 @@ $breakpoint-add-series-to-library: 500px;
   --login-register-form-background: var(--app-background-color-dark);
   --profile-page-background: #{layer(5%, white)};
   --profile-username-change: var(--app-background-color);
+  --library-page-background: #{layer(5%, white)};
+  --library-page-components-background: var(--app-background-color-dark);
+  --library-page-list-items-background: #{layer(5%, black)};
 }
 
 .p-drawer {
@@ -125,4 +131,8 @@ $breakpoint-add-series-to-library: 500px;
 
 .p-knob.p-disabled {
   opacity: 1;
+}
+
+.p-progressbar {
+  --p-progressbar-height: 0.5rem;
 }

@@ -203,7 +203,7 @@ export class AddSeriesToLibraryComponent {
   onSeasonChange(seasonNumber: number) {
     const season = this.seasons.find((s) => s.season_number === seasonNumber);
     this.maxEpisode.set(season?.episode_count ?? 0);
-    if (seasonNumber === 1) {
+    if (seasonNumber === 1 && this.selectedMode === 'plan_to_watch') {
       this.episodeNumber = 0;
     } else {
       this.episodeNumber = 1;

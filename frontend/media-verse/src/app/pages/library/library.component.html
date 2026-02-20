@@ -1,67 +1,190 @@
 @if (!authService.isLoggedIn()) {
-  <p>You need to be logged in to see your progress.</p>
+  <div class="not-logged-in">
+    <p>You need to be logged in to see your progress.</p>
+    <!-- 
+    <img/>
+    click here to login 
+    -->
+  </div>
 } @else {
   <app-discover-dropdown
     [selected]="selectedTypeSignal"
   ></app-discover-dropdown>
 
-  @if (this.selectedTypeSignal().value == "movies") {
-    @for (movie of movies; track $index) {
-      <p>{{ movie.id }}</p>
-      <p>{{ movie.title }}</p>
-      <p>{{ movie.poster_path }}</p>
-      <p>{{ movie.status }}</p>
-      <p>{{ movie.last_watched }}</p>
-      @for (genre of movie.genres; track $index) {
-        <p>{{ genre.name }}</p>
-      }
+  <div class="library">
+    @if (this.selectedTypeSignal().value == "movies") {
+      <div class="library__filter">
+        @for (item of filterMovieStatus; track $index) {
+          <button
+            (click)="toggleStatus(item.value)"
+            [class.active]="selectedStatus === item.value"
+            class="item-btn"
+          >
+            {{ item.label }}
+          </button>
+        }
+      </div>
+      <div class="library__search">
+        <input type="text" placeholder="Search" />
+      </div>
+      <div class="library__movies">
+        @for (movie of movies; track $index) {
+          <div
+            class="movie"
+            (click)="!isLargeScreen() && navigateToMovie(movie.id)"
+          >
+            <img [src]="movie.poster_path" alt="poster" class="movie__img" />
+            <div class="movie__info">
+              <p
+                class="title"
+                [routerLink]="
+                  isLargeScreen() ? ['/discover/movie', movie.id] : null
+                "
+              >
+                {{ movie.title }}
+              </p>
+              <p>{{ movie.last_watched | date: "medium" }}</p>
+              <p class="status-badge">
+                {{ getMovieStatusLabel(movie.status) }}
+              </p>
+            </div>
+            <div class="movie__btns">
+              <p-button
+                (onClick)="editMovie(movie); $event.stopPropagation()"
+                severity="secondary"
+                icon="pi pi-file-edit"
+                size="large"
+              />
+            </div>
+          </div>
+        } @empty {
+          <p>There are no movies to show.</p>
+        }
+      </div>
 
-      <button (click)="editMovie(movie)">Edit</button>
+      <app-add-movie-to-library
+        [visible]="editDialogVisibleMovie"
+        [movieId]="selectedMovie?.id!"
+        [existingProgress]="selectedMovie"
+        (visibleChange)="editDialogVisibleMovie = $event"
+        (saved)="onMovieSaved($event)"
+        (deleted)="onMovieDeleted($event)"
+      ></app-add-movie-to-library>
+    } @else if (this.selectedTypeSignal().value == "series") {
+      <div class="library__filter">
+        @for (item of filterSeriesStatus; track $index) {
+          <button
+            (click)="toggleStatus(item.value)"
+            [class.active]="selectedStatus === item.value"
+            class="item-btn"
+          >
+            {{ item.label }}
+          </button>
+        }
+      </div>
+      <div class="library__search">
+        <input type="text" placeholder="Search" />
+      </div>
+      <div class="library__series">
+        @for (series of series; track $index) {
+          <div
+            class="series"
+            (click)="!isLargeScreen() && navigateToSeries(series.id)"
+          >
+            <img [src]="series.poster_path" alt="poster" class="series__img" />
+            <div class="series__info">
+              <p
+                class="title"
+                [routerLink]="
+                  isLargeScreen() ? ['/discover/series', series.id] : null
+                "
+              >
+                {{ series.name }}
+              </p>
+              <p>{{ series.last_watched | date: "medium" }}</p>
+              <p class="status-badge">
+                {{ getSeriesStatusLabel(series.status) }}
+                @if (
+                  series.current_season > 0 &&
+                  series.current_episode > 0 &&
+                  series.status === "watching"
+                ) {
+                  S {{ series.current_season }} E {{ series.current_episode }}
+                }
+              </p>
+              @if (
+                series.current_season === 0 && series.status === "watching"
+              ) {
+                <p-progressbar
+                  [value]="
+                    (series.current_episode / series.seasons[0].episode_count) *
+                    100
+                  "
+                  [showValue]="false"
+                />
+                <p class="episode-watched">
+                  {{ series.current_episode }} /
+                  {{ series.seasons[series.seasons.length - 1].episode_count }}
+                  Ep
+                </p>
+              } @else {
+                <p-progressbar
+                  [value]="
+                    (episodesWatched(
+                      series.seasons,
+                      series.current_season,
+                      series.current_episode
+                    ) /
+                      totalEpisodesWithoutSpecials(
+                        series.seasons,
+                        series.total_episodes
+                      )) *
+                    100
+                  "
+                  [showValue]="false"
+                />
+                <p class="episode-watched">
+                  {{
+                    episodesWatched(
+                      series.seasons,
+                      series.current_season,
+                      series.current_episode
+                    )
+                  }}
+                  /
+                  {{
+                    totalEpisodesWithoutSpecials(
+                      series.seasons,
+                      series.total_episodes
+                    )
+                  }}
+                  Ep
+                </p>
+              }
+            </div>
 
-      <br />
+            <div class="series__btns">
+              <p-button
+                (click)="editSeries(series); $event.stopPropagation()"
+                severity="secondary"
+                icon="pi pi-file-edit"
+                size="large"
+              />
+            </div>
+          </div>
+        } @empty {
+          <p>There are no series to show.</p>
+        }
+      </div>
+
+      <app-add-series-to-library
+        [visible]="editDialogVisibleSeries"
+        [seriesId]="selectedSeries?.id!"
+        [existingProgress]="selectedSeries"
+        (visibleChange)="editDialogVisibleSeries = $event"
+        (saved)="onSeriesSaved($event)"
+        (deleted)="onSeriesDeleted($event)"
+      ></app-add-series-to-library>
     }
-
-    <app-add-movie-to-library
-      [visible]="editDialogVisibleMovie"
-      [movieId]="selectedMovie?.id!"
-      [existingProgress]="selectedMovie"
-      (visibleChange)="editDialogVisibleMovie = $event"
-      (saved)="onMovieSaved($event)"
-      (deleted)="onMovieDeleted($event)"
-    ></app-add-movie-to-library>
-  } @else if (this.selectedTypeSignal().value == "series") {
-    @for (series of series; track $index) {
-      <p>{{ series.id }}</p>
-      <p>{{ series.name }}</p>
-      <p>{{ series.poster_path }}</p>
-      <p>{{ series.status }}</p>
-      <p>{{ series.last_watched }}</p>
-      <p>{{ series.current_season }}</p>
-      <p>{{ series.current_episode }}</p>
-      <!-- @for (season of series.seasons; track $index) {
-        <p>{{ season.season_number }}</p>
-        <p>{{ season.episode_count }}</p>
-        <p>{{ season.poster_path }}</p>
-      } -->
-      <p>{{ series.total_seasons }}</p>
-      <p>{{ series.total_episodes }}</p>
-      <!-- @for (genre of series.genres; track $index) {
-        <p>{{ genre.name }}</p>
-      } -->
-
-      <button (click)="editSeries(series)">Edit</button>
-
-      <!-- <button (click)="onDeleteSeriesProgress(series.id)">Delete</button> -->
-      <br />
-    }
-
-    <app-add-series-to-library
-      [visible]="editDialogVisibleSeries"
-      [seriesId]="selectedSeries?.id!"
-      [existingProgress]="selectedSeries"
-      (visibleChange)="editDialogVisibleSeries = $event"
-      (saved)="onSeriesSaved($event)"
-      (deleted)="onSeriesDeleted($event)"
-    ></app-add-series-to-library>
-  }
+  </div>
 }

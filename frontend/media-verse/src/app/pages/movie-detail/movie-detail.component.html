@@ -36,7 +36,8 @@
         </div>
         <div class="add-button">
           <p-button
-            label="Add to Library"
+            label="Manage Status"
+            icon="pi pi-bookmark"
             (click)="showDialog()"
             [disabled]="!authService.isLoggedIn()"
           />
@@ -66,11 +67,13 @@
           </p>
           <p><span class="overview">Overview:</span> {{ movie.overview }}</p>
         </div>
-        <div class="mobile__add-button">
+        <div class="mobile-info__add-button">
           <p-button
-            label="Add to Library"
+            label="Manage Status"
+            icon="pi pi-bookmark"
             (click)="showDialog()"
             [disabled]="!authService.isLoggedIn()"
+            size="small"
           />
         </div>
       </div>

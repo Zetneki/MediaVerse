@@ -74,6 +74,10 @@
     color: var(--app-text-color);
     border: 1px solid var(--border-color);
 
+    &::placeholder {
+      color: var(--app-text-color);
+    }
+
     &:focus {
       outline: none;
       border-color: var(--app-primary-color);

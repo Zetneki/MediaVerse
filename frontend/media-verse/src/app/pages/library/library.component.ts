@@ -2,8 +2,6 @@ import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { MovieProgressService } from '../../services/movie-progress.service';
 import { SeriesProgressService } from '../../services/series-progress.service';
 import { MovieProgress } from '../../models/movieprogress';
-import { NotificationService } from '../../services/notification.service';
-import { shouldHandleError } from '../../utils/error-handler';
 import { AuthService } from '../../services/auth.service';
 import { DiscoverDropdownComponent } from '../../components/discover-dropdown/discover-dropdown.component';
 import { SelectOption } from '../../models/selectoption';
@@ -13,6 +11,12 @@ import { AddMovieToLibraryComponent } from '../../components/add-movie-to-librar
 import { MovieStatus } from '../../utils/movie-status.type';
 import { AddSeriesToLibraryComponent } from '../../components/add-series-to-library/add-series-to-library.component';
 import { SeriesStatus } from '../../utils/series-status.type';
+import { ChipModule } from 'primeng/chip';
+import { Router, RouterModule } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { SeasonDetails } from '../../models/seasondetails';
 
 @Component({
   selector: 'app-library',
@@ -20,6 +24,11 @@ import { SeriesStatus } from '../../utils/series-status.type';
     DiscoverDropdownComponent,
     AddMovieToLibraryComponent,
     AddSeriesToLibraryComponent,
+    ChipModule,
+    RouterModule,
+    DatePipe,
+    ButtonModule,
+    ProgressBarModule,
   ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss',
@@ -31,20 +40,56 @@ export class LibraryComponent {
   movies: MovieProgress[] = [];
   editDialogVisibleMovie = false;
   selectedMovie: MovieProgress | null = null;
+  filterMovieStatus = [
+    {
+      label: 'All',
+      value: 'all',
+    },
+    {
+      label: 'Plan to watch',
+      value: 'plan_to_watch',
+    },
+    {
+      label: 'Completed',
+      value: 'completed',
+    },
+  ];
 
   series: SeriesProgress[] = [];
   editDialogVisibleSeries = false;
   selectedSeries: SeriesProgress | null = null;
+  filterSeriesStatus = [
+    {
+      label: 'All',
+      value: 'all',
+    },
+    {
+      label: 'Plan to watch',
+      value: 'plan_to_watch',
+    },
+    {
+      label: 'Watching',
+      value: 'watching',
+    },
+    {
+      label: 'Completed',
+      value: 'completed',
+    },
+  ];
 
   selectedTypeSignal = signal<SelectOption<'movies' | 'series'>>({
     label: 'Movies',
     value: 'movies',
   });
 
+  selectedStatus: string = 'all';
+
+  isLargeScreen = signal<boolean>(window.innerWidth > 1024);
+
   constructor(
     private movieProgressService: MovieProgressService,
     private seriesProgressService: SeriesProgressService,
-    private notificationService: NotificationService,
+    private router: Router,
   ) {
     const saved = localStorage.getItem('library-selected-type');
     if (saved) {
@@ -60,14 +105,92 @@ export class LibraryComponent {
       .getMoviesProgress()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
-        this.movies = res;
+        this.movies = res.map((m) => ({
+          ...m,
+          poster_path: m.poster_path
+            ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
+            : '/assets/tmdb_no_img.png',
+        }));
       });
     this.seriesProgressService
       .getSeriesProgress()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
-        this.series = res;
+        this.series = res.map((s) => ({
+          ...s,
+          poster_path: s.poster_path
+            ? `https://image.tmdb.org/t/p/w500${s.poster_path}`
+            : '/assets/tmdb_no_img.png',
+          seasons: s.seasons.sort((a, b) => {
+            if (a.season_number === 0) return 1;
+            if (b.season_number === 0) return -1;
+            return a.season_number - b.season_number;
+          }),
+        }));
       });
+
+    this.setupResizeListener();
+  }
+
+  totalEpisodesWithoutSpecials(
+    seasons: SeasonDetails[],
+    total_episodes: number,
+  ) {
+    const val = seasons.find((s) => s.season_number === 0)?.episode_count;
+    return total_episodes - (val ?? 0);
+  }
+
+  episodesWatched(
+    seasons: SeasonDetails[],
+    current_season: number,
+    current_episode: number,
+  ) {
+    let episodesWatched = 0;
+
+    if (!seasons || !current_season || !current_episode) return 0;
+
+    for (const season of seasons) {
+      if (season.season_number === current_season) {
+        episodesWatched += current_episode;
+        break;
+      }
+      episodesWatched += season.episode_count;
+    }
+    return episodesWatched;
+  }
+
+  private setupResizeListener() {
+    const handleResize = () => {
+      this.isLargeScreen.set(window.innerWidth > 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    effect(() => {
+      return () => window.removeEventListener('resize', handleResize);
+    });
+  }
+
+  navigateToMovie(id: number) {
+    this.router.navigate(['/discover/movie', id]);
+  }
+
+  navigateToSeries(id: number) {
+    this.router.navigate(['/discover/series', id]);
+  }
+
+  getMovieStatusLabel(status: string): string {
+    return this.filterMovieStatus.find((s) => s.value === status)?.label ?? '';
+  }
+
+  getSeriesStatusLabel(status: string): string {
+    return this.filterSeriesStatus.find((s) => s.value === status)?.label ?? '';
+  }
+
+  toggleStatus(value: string) {
+    if (this.selectedStatus !== value) {
+      this.selectedStatus = value;
+    }
   }
 
   editMovie(movie: MovieProgress) {
@@ -128,24 +251,4 @@ export class LibraryComponent {
   onSeriesDeleted(seriesId: number) {
     this.series = this.series.filter((s) => s.id !== seriesId);
   }
-
-  // onDeleteSeriesProgress(id: number) {
-  //   this.seriesProgressService
-  //     .deleteSeriesProgress(id)
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe({
-  //       next: (res: any) => {
-  //         this.series = this.series.filter((s) => s.id !== id);
-  //         this.notificationService.success(
-  //           res.message ?? 'Series progress successfully deleted',
-  //         );
-  //       },
-  //       error: (err) => {
-  //         if (!shouldHandleError(err)) return;
-  //         this.notificationService.error(
-  //           err.error?.error ?? 'Series progress delete failed',
-  //         );
-  //       },
-  //     });
-  // }
 }

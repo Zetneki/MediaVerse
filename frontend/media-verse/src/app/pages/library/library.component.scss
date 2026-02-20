@@ -1,0 +1,321 @@
+@use "../../../styles/variables.scss" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin.scss" as *;
+
+.not-logged-in {
+}
+
+.library {
+  background: color-mix(
+    in srgb,
+    var(--library-page-background) 90%,
+    transparent
+  );
+  margin: $spacing-md;
+  margin: 0 auto;
+  padding: $spacing-lg;
+  //border-radius: $radius-md;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__filter {
+    background: var(--library-page-components-background);
+    display: inherit;
+    gap: $spacing-md;
+    padding: $spacing-md;
+    border-radius: $radius-sm;
+    flex-wrap: wrap;
+    width: 60%;
+    margin: 0 auto;
+
+    .item-btn {
+      padding: $spacing-xs $spacing-md;
+      border-radius: $radius-md;
+      border: 1px solid var(--app-primary-color);
+      background: transparent;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: $font-size-md;
+      user-select: none;
+
+      &.active {
+        background: var(--app-primary-color);
+      }
+    }
+  }
+
+  &__search {
+    display: inherit;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    margin: 0 auto;
+
+    input {
+      height: 3rem;
+      width: 100%;
+      padding: $spacing-sm;
+      border: none;
+      border-radius: $radius-sm;
+      background: var(--library-page-components-background);
+      font-size: $font-size-lg;
+      color: var(--app-text-color);
+      border: 1px solid var(--border-color);
+
+      &::placeholder {
+        color: var(--app-text-color);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--app-primary-color);
+      }
+    }
+  }
+
+  &__movies,
+  &__series {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    background: var(--library-page-components-background);
+    width: 60%;
+    margin: 0 auto;
+
+    opacity: 0;
+    will-change: opacity, transform;
+    transform: translateY(20px);
+    animation: fadeSlideIn 0.6s ease 0.05s forwards;
+
+    @keyframes fadeSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .movie,
+    .series {
+      display: grid;
+      gap: $spacing-md;
+      align-items: center;
+      background: var(--library-page-list-items-background);
+      border-radius: $radius-sm;
+      padding: $spacing-md;
+
+      cursor: default;
+      user-select: default;
+
+      &__info {
+        .title {
+          @media (min-width: 1025px) {
+            cursor: pointer;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+
+      @media (max-width: 1024px) {
+        cursor: pointer;
+        user-select: none;
+      }
+    }
+  }
+
+  &__movies {
+    .movie {
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas: "movie__img movie__info movie__btns";
+
+      &__img {
+        grid-area: movie__img;
+        width: 6rem;
+        height: 9rem;
+        object-fit: cover;
+        border-radius: $radius-sm;
+        align-self: flex-start;
+      }
+
+      &__info {
+        grid-area: movie__info;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-sm;
+        align-self: flex-start;
+
+        .title {
+          font-size: $font-size-xl;
+          font-weight: bold;
+          width: fit-content;
+          overflow-wrap: break-word;
+          word-break: break-word;
+        }
+
+        .status-badge {
+          width: fit-content;
+          font-weight: bold;
+          padding: 0.3rem $spacing-sm;
+          border-radius: $radius-md;
+          background: var(--app-primary-color);
+          color: white;
+        }
+
+        p {
+          margin: 0;
+          font-size: $font-size-sm;
+        }
+
+        p:nth-of-type(2) {
+          opacity: 0.8;
+        }
+      }
+
+      &__btns {
+        grid-area: movie__btns;
+        display: flex;
+        flex-direction: column;
+
+        align-self: flex-end;
+        gap: $spacing-sm;
+      }
+    }
+  }
+
+  &__series {
+    .series {
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas: "series__img series__info series__btns";
+
+      &__img {
+        grid-area: series__img;
+        width: 6rem;
+        height: 9rem;
+        object-fit: cover;
+        border-radius: $radius-sm;
+        align-self: flex-start;
+      }
+
+      &__info {
+        grid-area: series__info;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-sm;
+        align-self: flex-start;
+
+        .title {
+          font-size: $font-size-xl;
+          font-weight: bold;
+          width: fit-content;
+          overflow-wrap: break-word;
+          word-break: break-word;
+        }
+
+        .status-badge {
+          width: fit-content;
+          font-weight: bold;
+          padding: 0.3rem $spacing-sm;
+          border-radius: $radius-md;
+          background: var(--app-primary-color);
+          color: white;
+        }
+
+        p {
+          margin: 0;
+          font-size: $font-size-sm;
+        }
+
+        p:nth-of-type(2) {
+          opacity: 0.8;
+        }
+
+        .p-progressbar {
+          --p-progressbar-height: 1rem;
+        }
+
+        .episode-watched {
+          opacity: 0.8;
+          align-self: flex-end;
+        }
+      }
+
+      &__btns {
+        grid-area: series__btns;
+        display: flex;
+        flex-direction: column;
+        align-self: flex-end;
+        gap: $spacing-sm;
+      }
+    }
+  }
+
+  @include desktop-mobile-media-mixin {
+    &__filter,
+    &__search,
+    &__movies,
+    &__series {
+      width: 100%;
+    }
+
+    &__search {
+      input {
+        height: 2rem;
+        font-size: $font-size-md;
+      }
+    }
+
+    &__movies,
+    &__series {
+      .movie,
+      .series {
+        font-size: $font-size-sm;
+      }
+    }
+  }
+
+  @media (max-width: 500px) {
+    padding-inline: 0;
+    &__filter,
+    &__movies,
+    &__series {
+      border-radius: 0;
+    }
+
+    &__movies {
+      .movie {
+        grid-template-columns: auto 1fr;
+        grid-template-areas:
+          "movie__img movie__info"
+          "movie__img movie__btns";
+
+        &__btns {
+          align-items: flex-end;
+        }
+      }
+    }
+
+    &__series {
+      .series {
+        grid-template-columns: auto 1fr;
+        grid-template-areas:
+          "series__img series__info"
+          "series__img series__btns";
+
+        &__btns {
+          flex-direction: row;
+          justify-content: flex-end;
+        }
+      }
+    }
+
+    &__search {
+      input {
+        border-radius: 0;
+      }
+    }
+  }
+}
