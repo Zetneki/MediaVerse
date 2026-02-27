@@ -2,6 +2,8 @@ const seriesProgressDao = require("../dao/series-progress.dao");
 const usersDao = require("../dao/users.dao");
 const seriesDao = require("../dao/series.dao");
 const { VALID_SERIES_STATUSES } = require("../constants/series-status");
+const { VALID_SERIES_ORDERS } = require("../constants/series-order");
+const { VALID_SERIES_SORTBYS } = require("../constants/series-sortby");
 const { AppError } = require("../middlewares/error-handler.middleware");
 
 /**
@@ -32,16 +34,49 @@ const getProgressBySeriesId = async (userId, seriesId) => {
 };
 
 /**
- * Get all series progresses
+ * Get paginated series progresses
  * @param {number} userId
+ * @param {number} page
+ * @param {number} limit
+ * @param {status, search, sortBy, sortOrder} filters
  * @returns {Promise<Array<Object>>} Series progress
  */
 
-const getSeriesProgress = async (userId) => {
+const getSeriesProgress = async (
+  userId,
+  page = 1,
+  limit = 20,
+  filters = {},
+) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
 
-  return await seriesProgressDao.getSeriesWithDetails(userId);
+  if (page < 1) throw AppError.badRequest("Page must be >= 1");
+  if (limit < 1 || limit > 100)
+    throw AppError.badRequest("Limit must be between 1 and 100");
+  if (
+    filters.status !== "" &&
+    !VALID_SERIES_STATUSES.includes(filters.status)
+  ) {
+    throw AppError.badRequest(
+      `Invalid status. Must be one of: ${VALID_SERIES_STATUSES.join(", ")}`,
+    );
+  }
+  if (!VALID_SERIES_ORDERS.includes(filters.sortOrder))
+    throw AppError.badRequest(
+      `Invalid sort order. Must be one of: ${VALID_SERIES_ORDERS.join(", ")}`,
+    );
+  if (!VALID_SERIES_SORTBYS.includes(filters.sortBy))
+    throw AppError.badRequest(
+      `Invalid sort field. Must be one of: ${VALID_SERIES_SORTBYS.join(", ")}`,
+    );
+
+  return await seriesProgressDao.getSeriesWithDetails(
+    userId,
+    page,
+    limit,
+    filters,
+  );
 };
 
 /**
@@ -82,8 +117,14 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
     if (episode > seasonData.episode_count || episode < 0)
       throw AppError.badRequest("Invalid episode number");
 
+    const regularSeasons = series.seasons.filter((s) => s.season_number > 0);
+
+    const maxRegularSeason = Math.max(
+      ...regularSeasons.map((s) => s.season_number),
+    );
+
     const isLastEpisode =
-      Number(season) === series.total_seasons &&
+      Number(season) === maxRegularSeason &&
       Number(episode) === seasonData.episode_count;
 
     if (isLastEpisode) {
@@ -106,6 +147,12 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
 
     return {
       action: result.inserted ? "INSERTED" : "UPDATED",
+      progress: {
+        status: result.status,
+        current_season: result.current_season,
+        current_episode: result.current_episode,
+        last_watched: result.last_watched,
+      },
     };
   } catch (err) {
     throw err;

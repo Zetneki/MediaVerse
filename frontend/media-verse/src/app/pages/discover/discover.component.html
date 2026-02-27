@@ -13,7 +13,7 @@
 <div class="discover-page">
   @if (this.selectedTypeSignal().value == "movies") {
     @if (tabs[activeTab()] == "Popular") {
-      <div class="list">
+      <div class="list" @fadeSlideIn>
         @if (popularMovies.length === 0) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card discover></app-skeleton-card>
@@ -27,7 +27,7 @@
         }
       </div>
     } @else if (tabs[activeTab()] == "Top Rated") {
-      <div class="list">
+      <div class="list" @fadeSlideIn>
         @if (popularMovies.length === 0) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card discover></app-skeleton-card>
@@ -45,7 +45,7 @@
         <input type="text" placeholder="Search" [formControl]="searchControl" />
       </div>
 
-      <div class="list">
+      <div class="list" @fadeSlideIn>
         @if (isSearching()) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card discover></app-skeleton-card>
@@ -64,7 +64,7 @@
         (apply)="onApplyFilters($event)"
       ></app-filter>
 
-      <div class="list">
+      <div class="list" @fadeSlideIn>
         @if (isFiltering()) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card discover></app-skeleton-card>
@@ -80,7 +80,7 @@
     }
   } @else if (this.selectedTypeSignal().value == "series") {
     @if (tabs[activeTab()] == "Popular") {
-      <div class="list">
+      <div class="list" @fadeSlideIn>
         @if (popularSeries.length === 0) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card discover></app-skeleton-card>
@@ -92,7 +92,7 @@
         }
       </div>
     } @else if (tabs[activeTab()] == "Top Rated") {
-      <div class="list">
+      <div class="list" @fadeSlideIn>
         @if (popularSeries.length === 0) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card discover></app-skeleton-card>
@@ -108,7 +108,7 @@
         <input type="text" placeholder="Search" [formControl]="searchControl" />
       </div>
 
-      <div class="list">
+      <div class="list" @fadeSlideIn>
         @if (isSearching()) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card discover></app-skeleton-card>
@@ -127,7 +127,7 @@
         (apply)="onApplyFilters($event)"
       ></app-filter>
 
-      <div class="list">
+      <div class="list" @fadeSlideIn>
         @if (isFiltering()) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card discover></app-skeleton-card>

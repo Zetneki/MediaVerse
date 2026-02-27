@@ -26,6 +26,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { SeriesProgress } from '../../models/seriesprogress';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-add-series-to-library',
@@ -58,6 +59,7 @@ export class AddSeriesToLibraryComponent {
     status: SeriesStatus;
     current_season: number;
     current_episode: number;
+    last_watched: string;
   }>();
   deleted = output<number>();
 
@@ -127,7 +129,12 @@ export class AddSeriesToLibraryComponent {
     this.isLoading = true;
     this.seriesProgressService
       .getProgressBySeriesId(this.seriesId())
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.isLoading = false;
+        }),
+      )
       .subscribe({
         next: (progress: SeriesProgress) => {
           this.selectedMode = progress?.status ?? 'plan_to_watch';
@@ -160,9 +167,6 @@ export class AddSeriesToLibraryComponent {
         },
         error: () => {
           this.selectedMode = 'plan_to_watch';
-        },
-        complete: () => {
-          this.isLoading = false;
         },
       });
   }
@@ -278,7 +282,12 @@ export class AddSeriesToLibraryComponent {
         this.isLoading = true;
         this.seriesProgressService
           .deleteSeriesProgress(this.seriesId())
-          .pipe(takeUntilDestroyed(this.destroyRef))
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            finalize(() => {
+              this.isLoading = false;
+            }),
+          )
           .subscribe({
             next: (res: any) => {
               this.deleted.emit(this.seriesId());
@@ -309,15 +318,23 @@ export class AddSeriesToLibraryComponent {
         this.selectedSeason,
         this.episodeNumber,
       )
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.isLoading = false;
+        }),
+      )
       .subscribe({
         next: (res: any) => {
-          this.saved.emit({
-            id: this.seriesId(),
-            status: this.selectedMode,
-            current_season: this.selectedSeason,
-            current_episode: this.episodeNumber,
-          });
+          if (res.progress) {
+            this.saved.emit({
+              id: this.seriesId(),
+              status: res.progress.status,
+              current_season: res.progress.current_season,
+              current_episode: res.progress.current_episode,
+              last_watched: res.progress.last_watched,
+            });
+          }
           this.close();
           if (res.message.includes('unchanged')) {
             this.notificationService.info(res.message ?? 'No changes');
@@ -330,9 +347,6 @@ export class AddSeriesToLibraryComponent {
         error: (err) => {
           if (!shouldHandleError(err)) return;
           this.notificationService.error(err.error?.error ?? 'Save failed');
-        },
-        complete: () => {
-          this.isLoading = false;
         },
       });
   }

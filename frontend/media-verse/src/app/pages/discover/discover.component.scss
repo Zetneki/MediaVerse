@@ -103,38 +103,28 @@
 
     background: var(--discover-page-list-background);
 
-    opacity: 0;
-    will-change: opacity, transform;
-    transform: translateY(20px);
-    animation: fadeSlideIn 0.6s ease 0.05s forwards;
-
-    @keyframes fadeSlideIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
     @include discover-page-list-media-mixin {
       display: flex;
       flex-direction: column;
     }
   }
 
-  .desktop {
-    display: block;
-  }
-
-  .mobile {
-    display: none;
-  }
-
-  @include discover-page-media-mixin {
+  .paginator {
     .desktop {
+      display: block;
+    }
+
+    .mobile {
       display: none;
     }
-    .mobile {
-      display: block;
+
+    @include discover-page-media-mixin {
+      .desktop {
+        display: none;
+      }
+      .mobile {
+        display: block;
+      }
     }
   }
 }

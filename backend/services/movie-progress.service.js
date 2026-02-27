@@ -2,6 +2,8 @@ const movieProgressDao = require("../dao/movie-progress.dao");
 const usersDao = require("../dao/users.dao");
 const moviesDao = require("../dao/movies.dao");
 const { VALID_MOVIE_STATUSES } = require("../constants/movie-status");
+const { VALID_MOVIE_ORDERS } = require("../constants/movie-order");
+const { VALID_MOVIE_SORTBYS } = require("../constants/movie-sortby");
 const { AppError } = require("../middlewares/error-handler.middleware");
 
 /**
@@ -22,16 +24,46 @@ const getProgressByMovieId = async (userId, movieId) => {
 };
 
 /**
- * Get all movie progresses
+ * Get paginated movie progresses
  * @param {number} userId
+ * @param {number} page
+ * @param {number} limit
+ * @param {status, search, sortBy, sortOrder} filters
  * @returns {Promise<Array<Object>>} Movie progress
  */
 
-const getMoviesProgress = async (userId) => {
+const getMoviesProgress = async (
+  userId,
+  page = 1,
+  limit = 20,
+  filters = {},
+) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
 
-  return await movieProgressDao.getMoviesWithDetails(userId);
+  if (page < 1) throw AppError.badRequest("Page must be >= 1");
+  if (limit < 1 || limit > 100)
+    throw AppError.badRequest("Limit must be between 1 and 100");
+  if (filters.status !== "" && !VALID_MOVIE_STATUSES.includes(filters.status)) {
+    throw AppError.badRequest(
+      `Invalid status. Must be one of: ${VALID_MOVIE_STATUSES.join(", ")}`,
+    );
+  }
+  if (!VALID_MOVIE_ORDERS.includes(filters.sortOrder))
+    throw AppError.badRequest(
+      `Invalid sort order. Must be one of: ${VALID_MOVIE_ORDERS.join(", ")}`,
+    );
+  if (!VALID_MOVIE_SORTBYS.includes(filters.sortBy))
+    throw AppError.badRequest(
+      `Invalid sort field. Must be one of: ${VALID_MOVIE_SORTBYS.join(", ")}`,
+    );
+
+  return await movieProgressDao.getMoviesWithDetails(
+    userId,
+    page,
+    limit,
+    filters,
+  );
 };
 
 /**
@@ -65,6 +97,10 @@ const setMovieProgress = async (userId, movieId, status) => {
 
     return {
       action: result.inserted ? "INSERTED" : "UPDATED",
+      progress: {
+        status: result.status,
+        last_watched: result.last_watched,
+      },
     };
   } catch (err) {
     throw err;

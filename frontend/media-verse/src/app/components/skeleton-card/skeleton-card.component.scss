@@ -44,3 +44,12 @@
     }
   }
 }
+
+:host[library] {
+  .skeleton-mobile {
+    display: flex;
+  }
+  .skeleton-desktop {
+    display: none;
+  }
+}

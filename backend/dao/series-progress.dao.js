@@ -20,7 +20,47 @@ async function getProgressBySeriesId(userId, seriesId) {
   return res.rows[0];
 }
 
-async function getSeriesWithDetails(userId) {
+async function getSeriesWithDetails(
+  userId,
+  page = 1,
+  limit = 20,
+  filters = {},
+) {
+  const offset = (page - 1) * limit;
+  const conditions = ["p.user_id = $1"];
+  const params = [userId];
+  let paramIndex = 2;
+
+  if (filters.status) {
+    conditions.push(`p.status = $${paramIndex}`);
+    params.push(filters.status);
+    paramIndex++;
+  }
+
+  if (filters.search && filters.search.trim() !== "") {
+    conditions.push(`s.name ILIKE $${paramIndex}`);
+    params.push(`%${filters.search.trim()}%`);
+    paramIndex++;
+  }
+
+  const whereClause = conditions.join(" AND ");
+
+  let orderByClause = "p.last_watched DESC";
+
+  if (filters.sortBy) {
+    const sortColumn =
+      {
+        last_watched: "p.last_watched",
+        name: "s.name",
+        status: "p.status",
+      }[filters.sortBy] || "p.last_watched";
+
+    const sortDirection = filters.sortOrder === "asc" ? "ASC" : "DESC";
+    orderByClause = `${sortColumn} ${sortDirection}`;
+  }
+
+  params.push(limit, offset);
+
   const res = await db.query(
     `
     SELECT 
@@ -34,16 +74,27 @@ async function getSeriesWithDetails(userId) {
       s.seasons,
       s.total_seasons,
       s.total_episodes,
-      s.genres
+      s.genres,
+      COUNT(*) OVER() as total_count
     FROM user_series_progress p
     JOIN series_cache s ON s.id = p.series_id
-    WHERE p.user_id = $1
-    ORDER BY p.last_watched DESC
+    WHERE ${whereClause}
+    ORDER BY ${orderByClause}
+    LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `,
-    [userId],
+    params,
   );
 
-  return res.rows;
+  const items = res.rows;
+  const totalCount = items.length > 0 ? parseInt(items[0].total_count) : 0;
+
+  return {
+    items: items.map((item) => {
+      const { total_count, ...rest } = item;
+      return rest;
+    }),
+    total: totalCount,
+  };
 }
 
 async function upsertSeriesProgress(userId, seriesId, status, season, episode) {

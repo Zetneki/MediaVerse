@@ -1,10 +1,13 @@
 @if (!authService.isLoggedIn()) {
   <div class="not-logged-in">
-    <p>You need to be logged in to see your progress.</p>
-    <!-- 
-    <img/>
-    click here to login 
-    -->
+    <div class="auth-card">
+      <img src="/assets/library-login-required.png" alt="Login required" />
+
+      <h2>Login required</h2>
+      <p>You need to be logged in to see your progress.</p>
+
+      <p-button label="Click here to login" routerLink="/login"></p-button>
+    </div>
   </div>
 } @else {
   <app-discover-dropdown
@@ -17,7 +20,7 @@
         @for (item of filterMovieStatus; track $index) {
           <button
             (click)="toggleStatus(item.value)"
-            [class.active]="selectedStatus === item.value"
+            [class.active]="selectedStatus() === item.value"
             class="item-btn"
           >
             {{ item.label }}
@@ -25,40 +28,77 @@
         }
       </div>
       <div class="library__search">
-        <input type="text" placeholder="Search" />
+        <input
+          type="text"
+          placeholder="Search"
+          [ngModel]="searchTerm"
+          (ngModelChange)="onSearchChange($event)"
+        />
       </div>
-      <div class="library__movies">
-        @for (movie of movies; track $index) {
-          <div
-            class="movie"
-            (click)="!isLargeScreen() && navigateToMovie(movie.id)"
-          >
-            <img [src]="movie.poster_path" alt="poster" class="movie__img" />
-            <div class="movie__info">
-              <p
-                class="title"
-                [routerLink]="
-                  isLargeScreen() ? ['/discover/movie', movie.id] : null
-                "
-              >
-                {{ movie.title }}
-              </p>
-              <p>{{ movie.last_watched | date: "medium" }}</p>
-              <p class="status-badge">
-                {{ getMovieStatusLabel(movie.status) }}
-              </p>
+      <div class="library__sort">
+        <p-select
+          [options]="sortOptionsMoviesComputed()"
+          placeholder="Sort by"
+          [(ngModel)]="selectedSortBy"
+          (onChange)="onSortByChange()"
+          [disabled]="isLoading"
+          (onHide)="isSelectOpen = false"
+          (onShow)="isSelectOpen = true"
+          fluid="true"
+          id="sort-by"
+        >
+          <ng-template #dropdownicon>
+            <i
+              [class]="isSelectOpen ? 'pi pi-filter-fill' : 'pi pi-filter'"
+            ></i>
+          </ng-template>
+        </p-select>
+
+        <p-button
+          (onClick)="onSortOrder()"
+          [icon]="sortOrderIcon"
+          [disabled]="isLoading"
+          severity="secondary"
+        ></p-button>
+      </div>
+      <div class="library__movies" @fadeSlideIn>
+        @if (isLoading) {
+          @for (i of skeletonArray; let idx = $index; track idx) {
+            <app-skeleton-card library></app-skeleton-card>
+          }
+        } @else {
+          @for (movie of movies; track movie.id) {
+            <div
+              class="movie"
+              (click)="!isLargeScreen() && navigateToMovie(movie.id)"
+            >
+              <img [src]="movie.poster_path" alt="poster" class="movie__img" />
+              <div class="movie__info">
+                <p
+                  class="title"
+                  [routerLink]="
+                    isLargeScreen() ? ['/discover/movie', movie.id] : null
+                  "
+                >
+                  {{ movie.title }}
+                </p>
+                <p>{{ movie.last_watched | date: "medium" }}</p>
+                <p class="status-badge">
+                  {{ getMovieStatusLabel(movie.status) }}
+                </p>
+              </div>
+              <div class="movie__btns">
+                <p-button
+                  (onClick)="editMovie(movie); $event.stopPropagation()"
+                  severity="secondary"
+                  icon="pi pi-file-edit"
+                  [size]="buttonSize"
+                />
+              </div>
             </div>
-            <div class="movie__btns">
-              <p-button
-                (onClick)="editMovie(movie); $event.stopPropagation()"
-                severity="secondary"
-                icon="pi pi-file-edit"
-                size="large"
-              />
-            </div>
-          </div>
-        } @empty {
-          <p>There are no movies to show.</p>
+          } @empty {
+            <p>There are no movies to show.</p>
+          }
         }
       </div>
 
@@ -75,7 +115,7 @@
         @for (item of filterSeriesStatus; track $index) {
           <button
             (click)="toggleStatus(item.value)"
-            [class.active]="selectedStatus === item.value"
+            [class.active]="selectedStatus() === item.value"
             class="item-btn"
           >
             {{ item.label }}
@@ -83,97 +123,142 @@
         }
       </div>
       <div class="library__search">
-        <input type="text" placeholder="Search" />
+        <input
+          type="text"
+          placeholder="Search"
+          [ngModel]="searchTerm"
+          (ngModelChange)="onSearchChange($event)"
+        />
       </div>
-      <div class="library__series">
-        @for (series of series; track $index) {
-          <div
-            class="series"
-            (click)="!isLargeScreen() && navigateToSeries(series.id)"
-          >
-            <img [src]="series.poster_path" alt="poster" class="series__img" />
-            <div class="series__info">
-              <p
-                class="title"
-                [routerLink]="
-                  isLargeScreen() ? ['/discover/series', series.id] : null
-                "
-              >
-                {{ series.name }}
-              </p>
-              <p>{{ series.last_watched | date: "medium" }}</p>
-              <p class="status-badge">
-                {{ getSeriesStatusLabel(series.status) }}
-                @if (
-                  series.current_season > 0 &&
-                  series.current_episode > 0 &&
-                  series.status === "watching"
-                ) {
-                  S {{ series.current_season }} E {{ series.current_episode }}
-                }
-              </p>
-              @if (
-                series.current_season === 0 && series.status === "watching"
-              ) {
-                <p-progressbar
-                  [value]="
-                    (series.current_episode / series.seasons[0].episode_count) *
-                    100
-                  "
-                  [showValue]="false"
-                />
-                <p class="episode-watched">
-                  {{ series.current_episode }} /
-                  {{ series.seasons[series.seasons.length - 1].episode_count }}
-                  Ep
-                </p>
-              } @else {
-                <p-progressbar
-                  [value]="
-                    (episodesWatched(
-                      series.seasons,
-                      series.current_season,
-                      series.current_episode
-                    ) /
-                      totalEpisodesWithoutSpecials(
-                        series.seasons,
-                        series.total_episodes
-                      )) *
-                    100
-                  "
-                  [showValue]="false"
-                />
-                <p class="episode-watched">
-                  {{
-                    episodesWatched(
-                      series.seasons,
-                      series.current_season,
-                      series.current_episode
-                    )
-                  }}
-                  /
-                  {{
-                    totalEpisodesWithoutSpecials(
-                      series.seasons,
-                      series.total_episodes
-                    )
-                  }}
-                  Ep
-                </p>
-              }
-            </div>
+      <div class="library__sort">
+        <p-select
+          [options]="sortOptionsSeriesComputed()"
+          placeholder="Sort by"
+          [(ngModel)]="selectedSortBy"
+          (onChange)="onSortByChange()"
+          [disabled]="isLoading"
+          (onHide)="isSelectOpen = false"
+          (onShow)="isSelectOpen = true"
+          id="sort-by"
+        >
+          <ng-template #dropdownicon>
+            <i
+              [class]="isSelectOpen ? 'pi pi-filter-fill' : 'pi pi-filter'"
+            ></i>
+          </ng-template>
+        </p-select>
 
-            <div class="series__btns">
-              <p-button
-                (click)="editSeries(series); $event.stopPropagation()"
-                severity="secondary"
-                icon="pi pi-file-edit"
-                size="large"
-              />
+        <p-button
+          (onClick)="onSortOrder()"
+          [icon]="sortOrderIcon"
+          [disabled]="isLoading"
+          severity="secondary"
+        ></p-button>
+      </div>
+      <div class="library__series" @fadeSlideIn>
+        @if (isLoading) {
+          @for (i of skeletonArray; let idx = $index; track idx) {
+            <app-skeleton-card library></app-skeleton-card>
+          }
+        } @else {
+          @for (item of series; track item.id) {
+            <div
+              class="series"
+              (click)="!isLargeScreen() && navigateToSeries(item.id)"
+            >
+              <img [src]="item.poster_path" alt="poster" class="series__img" />
+              <div class="series__info">
+                <p
+                  class="title"
+                  [routerLink]="
+                    isLargeScreen() ? ['/discover/series', item.id] : null
+                  "
+                >
+                  {{ item.name }}
+                </p>
+                <p>{{ item.last_watched | date: "medium" }}</p>
+                <p class="status-badge">
+                  {{
+                    getSeriesStatusLabel(item.status) +
+                      (item.status === "watching" ? "," : "")
+                  }}
+                  @if (
+                    item.current_season > 0 &&
+                    item.current_episode > 0 &&
+                    item.status === "watching"
+                  ) {
+                    S {{ item.current_season }} E {{ item.current_episode }}
+                  } @else if (item.status === "watching") {
+                    Special E {{ item.current_episode }}
+                  }
+                </p>
+              </div>
+              <div class="series__progress">
+                @if (item.current_season === 0 && item.status === "watching") {
+                  <p-progressbar
+                    [value]="
+                      (item.current_episode /
+                        item.seasons[item.seasons.length - 1].episode_count) *
+                      100
+                    "
+                    [showValue]="false"
+                  />
+                  <p class="episode-watched">
+                    {{ item.current_episode }} /
+                    {{ item.seasons[item.seasons.length - 1].episode_count }}
+                    Ep
+                  </p>
+                } @else {
+                  <p-progressbar
+                    [value]="
+                      (episodesWatched(
+                        item.seasons,
+                        item.current_season,
+                        item.current_episode
+                      ) /
+                        totalEpisodesWithoutSpecials(
+                          item.seasons,
+                          item.total_episodes
+                        )) *
+                      100
+                    "
+                    [showValue]="false"
+                  />
+                  <p class="episode-watched">
+                    {{
+                      episodesWatched(
+                        item.seasons,
+                        item.current_season,
+                        item.current_episode
+                      )
+                    }}
+                    /
+                    {{
+                      totalEpisodesWithoutSpecials(
+                        item.seasons,
+                        item.total_episodes
+                      )
+                    }}
+                    Ep
+                  </p>
+                }
+              </div>
+              <div class="series__btns">
+                <p-button
+                  (onClick)="editSeries(item); $event.stopPropagation()"
+                  severity="secondary"
+                  icon="pi pi-file-edit"
+                  [size]="buttonSize"
+                />
+                <app-plus-episode-button
+                  [series]="item"
+                  (saved)="onSeriesSaved($event)"
+                ></app-plus-episode-button>
+              </div>
             </div>
-          </div>
-        } @empty {
-          <p>There are no series to show.</p>
+          } @empty {
+            <p>There are no series to show.</p>
+          }
         }
       </div>
 
@@ -187,4 +272,26 @@
       ></app-add-series-to-library>
     }
   </div>
+  @if (totalItems > 20) {
+    <div class="paginator">
+      <div class="desktop">
+        <p-paginator
+          (onPageChange)="onPageChange($event)"
+          [first]="first"
+          [rows]="itemsPerPage"
+          [totalRecords]="totalItems"
+        />
+      </div>
+
+      <div class="mobile">
+        <p-paginator
+          (onPageChange)="onPageChange($event)"
+          [first]="first"
+          [rows]="itemsPerPage"
+          [totalRecords]="totalItems"
+          [pageLinkSize]="1"
+        />
+      </div>
+    </div>
+  }
 }

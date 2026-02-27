@@ -8,6 +8,7 @@ import { DragscrollDirective } from '../../directives/dragscroll.directive';
 import { SkeletonCardComponent } from '../../components/skeleton-card/skeleton-card.component';
 import { CommonModule } from '@angular/common';
 import { ContentService } from '../../services/content.service';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,17 @@ import { ContentService } from '../../services/content.service';
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
+  animations: [
+    trigger('fadeSlideIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate(
+          '600ms 50ms ease',
+          style({ opacity: 1, transform: 'translateY(0)' }),
+        ),
+      ]),
+    ]),
+  ],
 })
 export class HomeComponent {
   contentService = inject(ContentService);

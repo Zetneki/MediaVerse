@@ -34,6 +34,7 @@ import { SkeletonCardComponent } from '../../components/skeleton-card/skeleton-c
 import { DiscoverListComponent } from '../../components/discover-list/discover-list.component';
 import { ContentService } from '../../services/content.service';
 import { RouterLink } from '@angular/router';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-discover',
@@ -51,6 +52,17 @@ import { RouterLink } from '@angular/router';
   ],
   templateUrl: './discover.component.html',
   styleUrl: './discover.component.scss',
+  animations: [
+    trigger('fadeSlideIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate(
+          '600ms 50ms ease',
+          style({ opacity: 1, transform: 'translateY(0)' }),
+        ),
+      ]),
+    ]),
+  ],
 })
 export class DiscoverComponent implements OnInit, OnDestroy {
   skeletonArray = Array(20);
@@ -178,6 +190,8 @@ export class DiscoverComponent implements OnInit, OnDestroy {
         this.onApplyFilters(this.lastFilter, page);
         break;
     }
+
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   setActiveTab(index: number) {

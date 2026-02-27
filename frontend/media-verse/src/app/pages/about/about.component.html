@@ -1,1 +1,20 @@
-<p>about works!</p>
+<div class="about">
+  <div class="about__content">
+    <h1>About MediaVerse</h1>
+    <p>Your movie and series tracking app...</p>
+    <p>Lorem ipsum dolor sit amet...</p>
+
+    <!-- További leírás -->
+  </div>
+
+  <div class="about__model">
+    @if (!isModelLoaded()) {
+      <div class="loading">
+        <p-progressSpinner />
+        <p>Loading 3D model... {{ loadingProgress() | number: "1.0-0" }}%</p>
+      </div>
+    }
+
+    <canvas #canvas></canvas>
+  </div>
+</div>

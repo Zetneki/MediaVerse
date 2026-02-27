@@ -24,6 +24,18 @@ const registerLimiter = rateLimit({
   message: { error: "Too many registration attempts, please try again later" },
 });
 
+const accountLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { error: "Too many account modifications, please wait" },
+});
+
+const progressLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 50,
+  message: { error: "Too many progress modifications, please wait" },
+});
+
 const apiLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
   max: 100,
@@ -45,6 +57,8 @@ const refreshLimiter = rateLimit({
 module.exports = {
   loginLimiter,
   registerLimiter,
+  accountLimiter,
+  progressLimiter,
   apiLimiter,
   refreshLimiter,
 };

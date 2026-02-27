@@ -55,10 +55,16 @@
   }
 
   .list {
-    @include card-scrollable-list-mixin();
+    &__data {
+      @include card-scrollable-list-mixin();
 
-    @include desktop-mobile-media-mixin {
-      grid-auto-columns: 12rem;
+      @include desktop-mobile-media-mixin {
+        grid-auto-columns: 12rem;
+      }
+    }
+
+    &__data.skeleton {
+      grid-template-rows: auto;
     }
   }
 
@@ -73,10 +79,6 @@
       border-radius: 0;
       margin-inline: calc(#{$spacing-lg} * -1);
     }
-  }
-
-  .list.skeleton {
-    grid-template-rows: auto;
   }
 
   #p-1 {

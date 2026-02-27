@@ -1,0 +1,59 @@
+// about.component.scss
+
+.about {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  min-height: 100vh;
+  flex-direction: column;
+
+  &__content {
+    flex: 1;
+    max-width: 800px;
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__model {
+    position: relative; // ⬅️ Mobile-on normál flow
+    bottom: auto;
+    right: auto;
+    width: 100%;
+    height: 300px;
+    pointer-events: auto;
+
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+
+    &__model {
+      position: relative; // ⬅️ Mobile-on normál flow
+      bottom: auto;
+      right: auto;
+      width: 100%;
+      height: 300px;
+    }
+  }
+}

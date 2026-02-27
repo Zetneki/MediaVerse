@@ -21,6 +21,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MovieProgress } from '../../models/movieprogress';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-add-movie-to-library',
@@ -45,7 +46,7 @@ export class AddMovieToLibraryComponent {
   existingProgress = input<MovieProgress | null>(null);
 
   visibleChange = output<boolean>();
-  saved = output<{ id: number; status: MovieStatus }>();
+  saved = output<{ id: number; status: MovieStatus; last_watched: string }>();
   deleted = output<number>();
 
   isLoading = false;
@@ -84,7 +85,12 @@ export class AddMovieToLibraryComponent {
 
     this.movieProgressService
       .getProgressByMovieId(this.movieId())
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.isLoading = false;
+        }),
+      )
       .subscribe({
         next: (progress: MovieProgress) => {
           this.selectedMode = progress?.status ?? 'plan_to_watch';
@@ -92,9 +98,6 @@ export class AddMovieToLibraryComponent {
         },
         error: () => {
           this.selectedMode = 'plan_to_watch';
-        },
-        complete: () => {
-          this.isLoading = false;
         },
       });
   }
@@ -117,7 +120,12 @@ export class AddMovieToLibraryComponent {
         this.isLoading = true;
         this.movieProgressService
           .deleteMovieProgress(this.movieId())
-          .pipe(takeUntilDestroyed(this.destroyRef))
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            finalize(() => {
+              this.isLoading = false;
+            }),
+          )
           .subscribe({
             next: (res: any) => {
               this.deleted.emit(this.movieId());
@@ -127,7 +135,6 @@ export class AddMovieToLibraryComponent {
               );
             },
             error: (err) => {
-              this.isLoading = false;
               if (!shouldHandleError(err)) return;
               this.notificationService.error(
                 err.error?.error ?? 'Delete failed',
@@ -143,13 +150,21 @@ export class AddMovieToLibraryComponent {
 
     this.movieProgressService
       .setMovieProgress(this.movieId(), this.selectedMode)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.isLoading = false;
+        }),
+      )
       .subscribe({
         next: (res: any) => {
-          this.saved.emit({
-            id: this.movieId(),
-            status: this.selectedMode,
-          });
+          if (res.progress) {
+            this.saved.emit({
+              id: this.movieId(),
+              status: res.progress.status,
+              last_watched: res.progress.last_watched,
+            });
+          }
           this.close();
           if (res.message.includes('unchanged')) {
             this.notificationService.info(res.message ?? 'No changes');
@@ -162,9 +177,6 @@ export class AddMovieToLibraryComponent {
         error: (err) => {
           if (!shouldHandleError(err)) return;
           this.notificationService.error(err.error?.error ?? 'Save failed');
-        },
-        complete: () => {
-          this.isLoading = false;
         },
       });
   }

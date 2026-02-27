@@ -27,11 +27,24 @@ const getSeriesProgress = async (req, res) => {
     const userId = req.user.id;
     if (!userId) throw AppError.unauthorized("User not logged in");
 
-    const seriesProgress =
-      await seriesProgressService.getSeriesProgress(userId);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const status = req.query.status || "";
+    const search = req.query.search || "";
+    const sortBy = req.query.sortBy || "last_watched";
+    const sortOrder = req.query.sortOrder || "desc";
+
+    const filters = { status, search, sortBy, sortOrder };
+
+    const seriesProgress = await seriesProgressService.getSeriesProgress(
+      userId,
+      page,
+      limit,
+      filters,
+    );
     res.status(200).json(seriesProgress);
   } catch (err) {
-    //console.log(err);
+    console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -49,7 +62,7 @@ const setSeriesProgress = async (req, res) => {
     if (episode === null || episode === undefined || episode === "")
       throw AppError.badRequest("Missing episode");
 
-    const { action } = await seriesProgressService.setSeriesProgress(
+    const result = await seriesProgressService.setSeriesProgress(
       userId,
       seriesId,
       status,
@@ -57,9 +70,12 @@ const setSeriesProgress = async (req, res) => {
       episode,
     );
 
-    res.status(200).json({ message: MESSAGES[action] });
+    res.status(200).json({
+      message: MESSAGES[result.action],
+      progress: result.progress ?? null,
+    });
   } catch (err) {
-    //console.log(err);
+    console.log(err);
     handleControllerError(err, res);
   }
 };

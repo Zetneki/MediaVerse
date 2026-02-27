@@ -27,7 +27,21 @@ const getMoviesProgress = async (req, res) => {
     const userId = req.user.id;
     if (!userId) throw AppError.unauthorized("User not logged in");
 
-    const movieProgress = await movieProgressService.getMoviesProgress(userId);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const status = req.query.status || "";
+    const search = req.query.search || "";
+    const sortBy = req.query.sortBy || "last_watched";
+    const sortOrder = req.query.sortOrder || "desc";
+
+    const filters = { status, search, sortBy, sortOrder };
+
+    const movieProgress = await movieProgressService.getMoviesProgress(
+      userId,
+      page,
+      limit,
+      filters,
+    );
     res.status(200).json(movieProgress);
   } catch (err) {
     //console.log(err);
@@ -44,13 +58,16 @@ const setMovieProgress = async (req, res) => {
     if (!movieId) throw AppError.badRequest("Missing movie id");
     if (!status) throw AppError.badRequest("Missing status");
 
-    const { action } = await movieProgressService.setMovieProgress(
+    const result = await movieProgressService.setMovieProgress(
       userId,
       movieId,
       status,
     );
 
-    res.status(200).json({ message: MESSAGES[action] });
+    res.status(200).json({
+      message: MESSAGES[result.action],
+      progress: result.progress ?? null,
+    });
   } catch (err) {
     //console.log(err);
     handleControllerError(err, res);

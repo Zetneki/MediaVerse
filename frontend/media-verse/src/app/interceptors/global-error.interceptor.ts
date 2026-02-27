@@ -32,7 +32,12 @@ export const globalErrorInterceptor: HttpInterceptorFn = (req, next) => {
         errorHandledByInterceptor = true;
       }
 
-      if (err.status >= 500 || err.status === 0) {
+      if (err.status === 0) {
+        notificationService.error('Cannot connect to server.');
+        errorHandledByInterceptor = true;
+      }
+
+      if (err.status >= 500) {
         notificationService.error(err.error?.error ?? 'Server error');
         errorHandledByInterceptor = true;
       }

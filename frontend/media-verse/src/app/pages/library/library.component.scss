@@ -2,6 +2,42 @@
 @use "../../../styles/mixins/desktop-mobile-media-mixin.scss" as *;
 
 .not-logged-in {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xxl $spacing-md;
+  background: var(--library-page-background);
+
+  .auth-card {
+    background: var(--library-page-components-background);
+    border-radius: $radius-lg;
+    padding: $spacing-xxl $spacing-xl;
+    text-align: center;
+    max-width: 28rem;
+    width: 100%;
+
+    border: 1px solid var(--border-color);
+
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 12rem;
+      opacity: 0.85;
+    }
+
+    h2 {
+      font-size: $font-size-xl;
+      margin-block: $spacing-sm;
+      color: var(--app-text-color-dark);
+    }
+
+    p {
+      font-size: $font-size-sm;
+      color: var(--app-text-color);
+      margin-bottom: $spacing-xl;
+    }
+  }
 }
 
 .library {
@@ -10,10 +46,8 @@
     var(--library-page-background) 90%,
     transparent
   );
-  margin: $spacing-md;
   margin: 0 auto;
-  padding: $spacing-lg;
-  //border-radius: $radius-md;
+  padding: $spacing-lg $spacing-lg 0 $spacing-lg;
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
@@ -73,6 +107,28 @@
     }
   }
 
+  &__sort {
+    display: inherit;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+    margin: 0 auto;
+    gap: $spacing-sm;
+
+    .p-select {
+      display: inherit;
+      flex-grow: 1;
+    }
+
+    .p-floatlabel:first-child {
+      flex-grow: 1;
+    }
+
+    .p-button {
+      height: 100%;
+    }
+  }
+
   &__movies,
   &__series {
     display: flex;
@@ -83,18 +139,6 @@
     background: var(--library-page-components-background);
     width: 60%;
     margin: 0 auto;
-
-    opacity: 0;
-    will-change: opacity, transform;
-    transform: translateY(20px);
-    animation: fadeSlideIn 0.6s ease 0.05s forwards;
-
-    @keyframes fadeSlideIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
 
     .movie,
     .series {
@@ -188,8 +232,11 @@
 
   &__series {
     .series {
+      row-gap: $spacing-sm;
       grid-template-columns: auto 1fr auto;
-      grid-template-areas: "series__img series__info series__btns";
+      grid-template-areas:
+        "series__img series__info series__btns"
+        "series__img series__progress series__btns";
 
       &__img {
         grid-area: series__img;
@@ -206,6 +253,7 @@
         flex-direction: column;
         gap: $spacing-sm;
         align-self: flex-start;
+        height: 100%;
 
         .title {
           font-size: $font-size-xl;
@@ -232,10 +280,19 @@
         p:nth-of-type(2) {
           opacity: 0.8;
         }
+      }
 
+      &__progress {
+        grid-area: series__progress;
+        display: flex;
+        flex-direction: column;
+        font-size: $font-size-sm;
+        gap: $spacing-sm;
+        align-self: flex-end;
         .episode-watched {
           opacity: 0.8;
-          align-self: flex-end;
+          text-align: end;
+          margin: 0;
         }
       }
 
@@ -252,6 +309,7 @@
   @include desktop-mobile-media-mixin {
     &__filter,
     &__search,
+    &__sort,
     &__movies,
     &__series {
       width: 100%;
@@ -262,6 +320,17 @@
         height: 2rem;
         font-size: $font-size-md;
       }
+    }
+
+    &__filter {
+      .item-btn {
+        font-size: $font-size-sm;
+      }
+    }
+
+    &__sort {
+      justify-content: flex-end;
+      flex-wrap: wrap;
     }
 
     &__movies,
@@ -279,6 +348,11 @@
     &__movies,
     &__series {
       border-radius: 0;
+    }
+
+    &__search,
+    &__sort {
+      padding-inline: $spacing-sm;
     }
 
     &__movies {
@@ -299,6 +373,7 @@
         grid-template-columns: auto 1fr;
         grid-template-areas:
           "series__img series__info"
+          "series__img series__progress"
           "series__img series__btns";
 
         &__btns {
@@ -308,10 +383,43 @@
       }
     }
 
-    &__search {
-      input {
-        border-radius: 0;
+    &__movies,
+    &__series {
+      .movie,
+      .series {
+        &__info {
+          .title {
+            font-size: $font-size-md;
+          }
+
+          .status-badge {
+            padding: 0.2rem $spacing-sm;
+          }
+
+          p {
+            font-size: $font-size-sm;
+          }
+        }
       }
+    }
+  }
+}
+
+.paginator {
+  .desktop {
+    display: block;
+  }
+
+  .mobile {
+    display: none;
+  }
+
+  @media (max-width: 500px) {
+    .desktop {
+      display: none;
+    }
+    .mobile {
+      display: block;
     }
   }
 }
