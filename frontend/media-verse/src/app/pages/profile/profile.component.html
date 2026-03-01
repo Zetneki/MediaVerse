@@ -5,7 +5,11 @@
   <div class="profile__component">
     <div class="header">
       <h1>Profile</h1>
-      <p-button (onClick)="onLogout()" label="Logout"></p-button>
+      <p-button
+        (onClick)="onLogout()"
+        label="Logout"
+        [size]="buttonSize"
+      ></p-button>
     </div>
 
     <p class="details">
@@ -37,6 +41,7 @@
         optionLabel="label"
         optionValue="value"
         (onChange)="onModeChange()"
+        size="small"
       />
       <p-select
         [options]="themes"
@@ -59,6 +64,7 @@
           class="open-btn"
           fluid="true"
           severity="secondary"
+          [size]="buttonSize"
         ></p-button>
 
         <form
@@ -102,6 +108,7 @@
               type="submit"
               label="Save"
               [disabled]="disabledUsernameChange"
+              [size]="buttonSize"
             ></p-button>
           </div>
         </form>
@@ -113,6 +120,7 @@
           (onClick)="toggle('password')"
           fluid="true"
           severity="secondary"
+          [size]="buttonSize"
         ></p-button>
         <form
           [formGroup]="passwordChangeForm"
@@ -197,6 +205,7 @@
           label="Delete account"
           severity="danger"
           fluid="true"
+          [size]="buttonSize"
         ></p-button>
       </div>
     </div>

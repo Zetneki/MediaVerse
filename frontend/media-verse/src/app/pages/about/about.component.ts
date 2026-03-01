@@ -5,21 +5,25 @@ import {
   ViewChild,
   OnInit,
   OnDestroy,
+  inject,
 } from '@angular/core';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { DecimalPipe } from '@angular/common';
+import { AccordionModule } from 'primeng/accordion';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-about',
-  imports: [ProgressSpinner, DecimalPipe],
+  imports: [ProgressSpinner, DecimalPipe, AccordionModule],
   templateUrl: './about.component.html',
   styleUrl: './about.component.scss',
 })
 export class AboutComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true })
   private canvasRef!: ElementRef<HTMLCanvasElement>;
+  private themeService = inject(ThemeService);
 
   private renderer!: THREE.WebGLRenderer;
   private scene!: THREE.Scene;
@@ -46,9 +50,9 @@ export class AboutComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initThreeJS();
-    this.setupPerformanceOptimization();
     this.loadModel();
     this.setupMouseEvents();
+    this.setupPerformanceOptimization();
     this.animate();
   }
 
@@ -83,6 +87,14 @@ export class AboutComponent implements OnInit, OnDestroy {
     this.scene = new THREE.Scene();
     this.scene.background = null; //Transparent
 
+    //DEBUG: Grid helper
+    //const gridHelper = new THREE.GridHelper(10, 10);
+    //this.scene.add(gridHelper);
+
+    //DEBUG: World axes
+    //const worldAxes = new THREE.AxesHelper(5);
+    //this.scene.add(worldAxes);
+
     //Camera
     this.camera = new THREE.PerspectiveCamera(
       45,
@@ -107,10 +119,10 @@ export class AboutComponent implements OnInit, OnDestroy {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     //Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     this.scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(5, 5, 5);
     this.scene.add(directionalLight);
 
@@ -122,7 +134,7 @@ export class AboutComponent implements OnInit, OnDestroy {
     const canvas = this.canvasRef.nativeElement;
 
     //Detect low-end devices
-    const gl = canvas.getContext('webgl') || canvas.getContext('webgl2');
+    const gl = this.renderer.getContext();
 
     if (gl) {
       const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
@@ -163,17 +175,35 @@ export class AboutComponent implements OnInit, OnDestroy {
   private loadModel() {
     const loader = new GLTFLoader();
 
+    const modelPath = this.getModelPathByTheme();
+
     loader.load(
-      '/assets/tv.glb',
+      modelPath,
       (gltf) => {
         const loadedModel = gltf.scene;
 
         //Center the model (fix pivot point)
         const box = new THREE.Box3().setFromObject(loadedModel);
         const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+
+        //console.log('Model size:', size);
+        //console.log('Model center:', center);
+        //console.log('Max dimension:', Math.max(size.x, size.y, size.z));
 
         //Move model so pivot is at center
         loadedModel.position.sub(center);
+
+        //Auto scale the model
+        const maxDimension = Math.max(size.x, size.y, size.z);
+        const targetSize = 2;
+        const autoScale = targetSize / maxDimension;
+
+        //Theme-specific scale
+        const themeScale = this.getScaleByTheme();
+        const finalScale = autoScale * themeScale;
+
+        loadedModel.scale.set(finalScale, finalScale, finalScale);
 
         //Create wrapper group (rotation happens around center)
         const group = new THREE.Group();
@@ -183,7 +213,6 @@ export class AboutComponent implements OnInit, OnDestroy {
         //Rotate the group, not the model itself
         this.model = group;
 
-        this.model.scale.set(1, 1, 1);
         this.isModelLoaded.set(true);
       },
       (progress) => {
@@ -197,6 +226,40 @@ export class AboutComponent implements OnInit, OnDestroy {
         console.error('Model loading error:', error);
       },
     );
+  }
+
+  private getModelPathByTheme(): string {
+    const theme = this.themeService.getCurrentTheme();
+
+    switch (theme) {
+      case 'christmas':
+        return '/assets/models/christmas.glb';
+      case 'halloween':
+        return '/assets/models/halloween.glb';
+      case 'neon':
+        return '/assets/models/neon.glb';
+      case 'cyberpunk':
+        return '/assets/models/cyberpunk.glb';
+      default:
+        return '/assets/models/tv.glb';
+    }
+  }
+
+  private getScaleByTheme(): number {
+    const theme = this.themeService.getCurrentTheme();
+
+    switch (theme) {
+      case 'christmas':
+        return 1.5; // ⬅️ 10% nagyobb
+      case 'halloween':
+        return 0.9; // ⬅️ 10% kisebb
+      case 'neon':
+        return 1.5;
+      case 'cyberpunk':
+        return 1.2; // ⬅️ 20% nagyobb
+      default:
+        return 1.0;
+    }
   }
 
   private setupMouseEvents() {

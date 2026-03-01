@@ -1,59 +1,183 @@
-// about.component.scss
+@use "../../../styles/variables.scss" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin.scss" as *;
 
 .about {
   display: flex;
-  gap: 2rem;
-  padding: 2rem;
-  min-height: 100vh;
   flex-direction: column;
+  justify-content: center;
+  padding: $spacing-xxl;
+  margin: $spacing-md auto;
+  background: var(--about-page-background);
+  max-width: 70vw;
+  border-radius: $radius-md;
+  border: 1px solid var(--border-color);
 
-  &__content {
-    flex: 1;
-    max-width: 800px;
+  .card {
+    &__content {
+      .title {
+        margin-top: 0;
+        font-size: $font-size-xl;
+      }
 
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+      a {
+        color: var(--app-primary-color);
+        text-decoration: none;
+        transition: color 0.2s;
+
+        &:hover {
+          color: var(--app-primary-color-light);
+        }
+      }
+
+      .features,
+      .roadmap {
+        margin-block: $spacing-xl;
+      }
+
+      .features {
+        h2 {
+          font-size: $font-size-lg;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: $spacing-sm;
+        }
+
+        li {
+          position: relative;
+          padding-left: $spacing-lg;
+
+          color: var(--app-text-color);
+
+          &::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--app-primary-color);
+            font-weight: bold;
+          }
+        }
+      }
+
+      .roadmap {
+        h2 {
+          font-size: $font-size-lg;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: $spacing-sm;
+        }
+
+        li {
+          padding-left: $spacing-lg;
+          position: relative;
+
+          color: var(--app-text-color);
+
+          &::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--app-primary-color);
+          }
+        }
+      }
     }
 
-    p {
-      font-size: 1.2rem;
-      line-height: 1.8;
-      margin-bottom: 1rem;
+    &__rights {
+      .terms-of-service,
+      .privacy-policy,
+      .data-source {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-lg;
+        position: relative;
+        padding: $spacing-sm;
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 4px;
+          background: var(--app-primary-color);
+        }
+
+        .title {
+          margin: 0 0 $spacing-sm 0;
+          color: var(--app-text-color-darker);
+        }
+
+        .content {
+          margin: 0;
+          line-height: 1.6;
+        }
+      }
     }
-  }
-
-  &__model {
-    position: relative; // ⬅️ Mobile-on normál flow
-    bottom: auto;
-    right: auto;
-    width: 100%;
-    height: 300px;
-    pointer-events: auto;
-
-    canvas {
-      width: 100%;
-      height: 100%;
-    }
-
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
 
     &__model {
-      position: relative; // ⬅️ Mobile-on normál flow
-      bottom: auto;
-      right: auto;
-      width: 100%;
-      height: 300px;
+      position: relative;
+
+      canvas {
+        position: absolute;
+        top: -3rem;
+        right: -7rem;
+        width: 20rem;
+        height: 10rem;
+      }
+
+      .loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+
+        p {
+          margin-top: $spacing-xs;
+          color: var(--app-text-color-dark);
+          font-size: $font-size-sm;
+        }
+      }
+    }
+  }
+
+  @include desktop-mobile-media-mixin {
+    max-width: 100%;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    padding: $spacing-md;
+    .card {
+      &__content {
+        .title,
+        .subtitle {
+          margin-right: 7rem;
+        }
+      }
+
+      &__model {
+        position: relative;
+
+        canvas {
+          position: absolute;
+          top: -1rem;
+          right: -1rem;
+          width: 7rem;
+          height: 7rem;
+        }
+      }
     }
   }
 }

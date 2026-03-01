@@ -37,6 +37,10 @@ export class ThemeService {
     });
   }
 
+  getCurrentTheme(): ThemeName {
+    return this.currentTheme;
+  }
+
   setMode(mode: ColorMode) {
     this.mode = mode;
     this.applyMode();

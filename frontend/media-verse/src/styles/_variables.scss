@@ -78,6 +78,8 @@ $breakpoint-add-series-to-library: 500px;
   --library-page-background: #{layer(5%, black)};
   --library-page-components-background: var(--app-background-color-light);
   --library-page-list-items-background: var(--app-background-color);
+  --about-page-background: #{layer(10%, black, var(--app-background-color))};
+  --about-page-rights-background: var(--app-background-color-light);
 }
 
 .p-dark {
@@ -127,6 +129,8 @@ $breakpoint-add-series-to-library: 500px;
       white,
       var(--app-background-color-dark)
     )};
+  --about-page-background: #{layer(5%, white)};
+  --about-page-rights-background: var(--app-background-color-dark);
 }
 
 .p-drawer {
@@ -143,4 +147,16 @@ $breakpoint-add-series-to-library: 500px;
 
 .p-paginator {
   --p-paginator-border-radius: 0;
+}
+
+.p-accordion {
+  --p-accordion-header-background: rgba(0, 0, 0, 0);
+  --p-accordion-header-hover-background: rgba(0, 0, 0, 0);
+  --p-accordion-header-active-background: var(--about-page-rights-background);
+  --p-accordion-header-active-hover-background: var(
+    --about-page-rights-background
+  );
+  --p-accordion-content-background: var(--about-page-rights-background);
+  --p-accordion-header-padding: 1rem 0.5rem;
+  --p-accordion-content-padding: 0;
 }

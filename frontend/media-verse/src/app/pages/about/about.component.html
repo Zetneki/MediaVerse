@@ -1,20 +1,162 @@
 <div class="about">
-  <div class="about__content">
-    <h1>About MediaVerse</h1>
-    <p>Your movie and series tracking app...</p>
-    <p>Lorem ipsum dolor sit amet...</p>
+  <div class="card">
+    <div class="card__model">
+      @if (!isModelLoaded()) {
+        <div class="loading">
+          <p-progressSpinner />
+          <p>Loading 3D model... {{ loadingProgress() | number: "1.0-0" }}%</p>
+        </div>
+      }
 
-    <!-- További leírás -->
+      <canvas #canvas></canvas>
+    </div>
+  </div>
+  <div class="card__content">
+    <h1 class="title">About MediaVerse</h1>
+    <p class="subtitle">Explore movies and series like never before.</p>
+
+    <p>
+      MediaVerse is your personal companion to discover and track your favorite
+      movies and series. Powered by TMDB API, it provides accurate and updated
+      information for film enthusiasts.
+    </p>
+
+    <p>
+      This project was developed by Zoltai Zeteny Csongor as a way to learn web
+      software development and to gain experience in modern web technologies.
+    </p>
+
+    <p>
+      GitHub:
+      <a href="https://github.com/Zetneki">https://github.com/Zetneki</a>
+    </p>
+
+    <div class="features">
+      <h2>Key Features</h2>
+      <ul>
+        <li>Personal movie and series tracking</li>
+        <li>Custom library management</li>
+        <li>Search and discovery powered by TMDB API</li>
+        <li>Modern responsive UI with PrimeNG</li>
+      </ul>
+    </div>
+
+    <div class="roadmap">
+      <h2>Planned Improvements</h2>
+      <ul>
+        <li>Comments and ratings</li>
+        <li>Data statistics on profile</li>
+        <li>Book tracking powered by Goodreads API</li>
+        <li>Video game tracking powered by RAWG API</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="about__model">
-    @if (!isModelLoaded()) {
-      <div class="loading">
-        <p-progressSpinner />
-        <p>Loading 3D model... {{ loadingProgress() | number: "1.0-0" }}%</p>
-      </div>
-    }
+  <div class="card__rights">
+    <p-accordion [multiple]="true">
+      <p-accordion-panel value="0">
+        <p-accordion-header>Terms of Service</p-accordion-header>
+        <p-accordion-content>
+          <div class="terms-of-service">
+            By using this application, you agree to the following terms:
+            <div class="terms-of-service__section">
+              <h3 class="title">1. Educational Purpose</h3>
+              <p class="content">
+                MediaVerse was created for educational and portfolio purposes.
+                It is not intended for commercial use.
+              </p>
+            </div>
 
-    <canvas #canvas></canvas>
+            <div class="terms-of-service__section">
+              <h3 class="title">2. User Accounts</h3>
+              <p class="content">
+                Users are responsible for maintaining the confidentiality of
+                their account credentials. The application may suspend or remove
+                accounts in case of misuse.
+              </p>
+            </div>
+
+            <div class="terms-of-service__section">
+              <h3 class="title">3. Limitation of Liability</h3>
+              <p class="content">
+                MediaVerse is provided "as is" without warranties of any kind.
+                The developer shall not be liable for any damages arising from
+                the use of this application.
+              </p>
+            </div>
+          </div>
+        </p-accordion-content>
+      </p-accordion-panel>
+      <p-accordion-panel value="1">
+        <p-accordion-header>Privacy Policy</p-accordion-header>
+        <p-accordion-content>
+          <div class="privacy-policy">
+            MediaVerse respects your privacy.
+            <div class="privacy-policy__section">
+              <h3 class="title">1. Personal Data</h3>
+              <p class="content">
+                The application only collects data necessary for account
+                authentication, such as username and email address. Passwords
+                are securely hashed and are never stored in plain text.
+              </p>
+            </div>
+            <div class="privacy-policy__section">
+              <h3 class="title">2. Cookies & Tracking</h3>
+              <div class="content">
+                MediaVerse does not use tracking cookies, analytics tools, or
+                marketing technologies.
+              </div>
+            </div>
+            <div class="privacy-policy__section">
+              <h3 class="title">3. Data Usage</h3>
+              <div class="content">
+                Collected data is used solely for authentication and providing
+                core application functionality.
+              </div>
+            </div>
+            <div class="privacy-policy__section">
+              <h3 class="title">4. Third-Party Services</h3>
+              <div class="content">
+                Movie and series data are provided by the TMDB API. No personal
+                user data is shared with TMDB.
+              </div>
+            </div>
+            <div class="privacy-policy__section">
+              <h3 class="title">5. Data Security</h3>
+              <div class="content">
+                Reasonable technical measures are implemented to protect user
+                data.
+              </div>
+            </div>
+          </div>
+        </p-accordion-content>
+      </p-accordion-panel>
+      <p-accordion-panel value="2">
+        <p-accordion-header>Data Source & Attribution</p-accordion-header>
+        <p-accordion-content>
+          <div class="data-source">
+            <div class="data-source__section">
+              <h3 class="title">TMDB API</h3>
+              <p class="content">
+                Movie and series data are provided by the TMDB API and may be
+                subject to change.
+              </p>
+              <p class="content">
+                This product uses the TMDB API but is not endorsed or certified
+                by TMDB.
+              </p>
+            </div>
+
+            <div class="data-source__section">
+              <h3 class="title">Third-Party Content</h3>
+              <p class="content">
+                MediaVerse does not guarantee the accuracy or completeness of
+                third-party content.
+              </p>
+            </div>
+          </div>
+        </p-accordion-content>
+      </p-accordion-panel>
+    </p-accordion>
   </div>
 </div>

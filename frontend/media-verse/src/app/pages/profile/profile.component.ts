@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -81,6 +81,8 @@ export class ProfileComponent {
 
   selectedMode: ColorMode = 'system';
 
+  isLargeScreen = signal<boolean>(window.innerWidth > 1024);
+
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -137,6 +139,23 @@ export class ProfileComponent {
     });
 
     this.selectedMode = this.themeService.getMode();
+    this.setupResizeListener();
+  }
+
+  private setupResizeListener() {
+    const handleResize = () => {
+      this.isLargeScreen.set(window.innerWidth > 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    effect(() => {
+      return () => window.removeEventListener('resize', handleResize);
+    });
+  }
+
+  get buttonSize() {
+    return this.isLargeScreen() ? undefined : 'small';
   }
 
   async onThemeChange() {

@@ -7,10 +7,9 @@
   align-items: center;
   justify-content: center;
   padding: $spacing-xxl $spacing-md;
-  background: var(--library-page-background);
 
   .auth-card {
-    background: var(--library-page-components-background);
+    background: var(--library-page-background);
     border-radius: $radius-lg;
     padding: $spacing-xxl $spacing-xl;
     text-align: center;

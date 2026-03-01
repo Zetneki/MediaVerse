@@ -11,6 +11,7 @@
     padding: $spacing-md;
     margin: $spacing-md;
     border-radius: $radius-md;
+    border: 1px solid var(--border-color);
 
     .details {
       margin-inline: $spacing-sm;
@@ -185,5 +186,15 @@
     --p-progressbar-border-radius: 0 0 3px 3px;
     --p-progressbar-height: 3px;
     --p-progressbar-background: transparent;
+  }
+
+  @include desktop-mobile-media-mixin {
+    font-size: $font-size-sm;
+
+    &__component {
+      .settings {
+        gap: $spacing-md;
+      }
+    }
   }
 }

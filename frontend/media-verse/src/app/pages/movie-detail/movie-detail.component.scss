@@ -179,6 +179,9 @@
     h2 {
       margin-top: 0;
       margin-bottom: $spacing-sm;
+      backdrop-filter: blur(50px);
+      border-radius: $radius-sm;
+      width: fit-content;
     }
 
     &__list {
