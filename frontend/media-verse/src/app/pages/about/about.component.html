@@ -3,8 +3,13 @@
     <div class="card__model">
       @if (!isModelLoaded()) {
         <div class="loading">
-          <p-progressSpinner />
           <p>Loading 3D model... {{ loadingProgress() | number: "1.0-0" }}%</p>
+          <p-progressSpinner
+            strokeWidth="8"
+            fill="transparent"
+            animationDuration=".5s"
+            [style]="{ width: '25px', height: '25px' }"
+          />
         </div>
       }
 

@@ -139,13 +139,14 @@
 
       .loading {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-end;
         height: 100%;
+        gap: $spacing-sm;
 
         p {
-          margin-top: $spacing-xs;
+          margin: 0;
           color: var(--app-text-color-dark);
           font-size: $font-size-sm;
         }
@@ -168,8 +169,6 @@
       }
 
       &__model {
-        position: relative;
-
         canvas {
           position: absolute;
           top: -1rem;

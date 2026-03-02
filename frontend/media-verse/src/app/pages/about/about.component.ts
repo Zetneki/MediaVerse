@@ -42,6 +42,11 @@ export class AboutComponent implements OnInit, OnDestroy {
   private autoRotate = true;
   private autoRotateTimeout: any;
 
+  //Mobile view
+  private isMobileView = false;
+  private lastWindowWidth = window.innerWidth;
+  private resizeTimeout: any;
+
   //Performance optimization
   private lastFrameTime = 0;
   private targetFPS = 60;
@@ -77,7 +82,11 @@ export class AboutComponent implements OnInit, OnDestroy {
       this.intersectionObserver.disconnect();
     }
 
-    window.removeEventListener('resize', this.onWindowResize.bind(this));
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
+
+    window.removeEventListener('resize', this.onWindowResize);
   }
 
   private initThreeJS() {
@@ -109,14 +118,12 @@ export class AboutComponent implements OnInit, OnDestroy {
     this.renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true, //Transparent background
-      antialias: window.devicePixelRatio <= 1, //Only on low DPR
+      antialias: window.innerWidth >= 1024,
       powerPreference: 'high-performance', //GPU priority
     });
 
     this.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-    //Pixel ratio cap (max 2)
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.updatePixelRatio();
 
     //Lights
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
@@ -127,7 +134,7 @@ export class AboutComponent implements OnInit, OnDestroy {
     this.scene.add(directionalLight);
 
     //Resize handler
-    window.addEventListener('resize', this.onWindowResize.bind(this));
+    window.addEventListener('resize', this.onWindowResize);
   }
 
   private setupPerformanceOptimization() {
@@ -170,6 +177,23 @@ export class AboutComponent implements OnInit, OnDestroy {
     );
 
     this.intersectionObserver.observe(canvas);
+  }
+
+  private updatePixelRatio() {
+    const currentWidth = window.innerWidth;
+    const wasMobile = this.isMobileView;
+
+    this.isMobileView = currentWidth < 1024;
+
+    if (this.isMobileView) {
+      this.renderer.setPixelRatio(1);
+      this.targetFPS = 30;
+      this.frameInterval = 1000 / this.targetFPS;
+    } else {
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      this.targetFPS = 60;
+      this.frameInterval = 1000 / this.targetFPS;
+    }
   }
 
   private loadModel() {
@@ -250,13 +274,13 @@ export class AboutComponent implements OnInit, OnDestroy {
 
     switch (theme) {
       case 'christmas':
-        return 1.5; // ⬅️ 10% nagyobb
+        return 1.5;
       case 'halloween':
-        return 0.9; // ⬅️ 10% kisebb
+        return 1.2;
       case 'neon':
         return 1.5;
       case 'cyberpunk':
-        return 1.2; // ⬅️ 20% nagyobb
+        return 1.2;
       default:
         return 1.0;
     }
@@ -371,12 +395,35 @@ export class AboutComponent implements OnInit, OnDestroy {
     this.renderer.render(this.scene, this.camera);
   }
 
-  private onWindowResize() {
+  private onWindowResize = () => {
     const canvas = this.canvasRef.nativeElement;
+    const currentWidth = window.innerWidth;
+
+    if (currentWidth < 1024) {
+      // Mobile
+      canvas.style.width = '7rem';
+      canvas.style.height = '7rem';
+    } else {
+      // Desktop
+      canvas.style.width = '20rem';
+      canvas.style.height = '10rem';
+    }
+
+    const crossedThreshold =
+      (this.lastWindowWidth >= 1024 && currentWidth < 1024) ||
+      (this.lastWindowWidth < 1024 && currentWidth >= 1024);
+
+    if (crossedThreshold) {
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(() => {
+        this.updatePixelRatio();
+      }, 300);
+    }
+
+    this.lastWindowWidth = currentWidth;
 
     this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
     this.camera.updateProjectionMatrix();
-
     this.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-  }
+  };
 }

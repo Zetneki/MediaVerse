@@ -1,0 +1,39 @@
+@use "../../../styles/variables.scss" as *;
+
+.not-logged-in {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xxl $spacing-md;
+
+  .auth-card {
+    background: var(--library-page-background);
+    border-radius: $radius-lg;
+    padding: $spacing-xxl $spacing-xl;
+    text-align: center;
+    max-width: 28rem;
+    width: 100%;
+
+    border: 1px solid var(--border-color);
+
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 14rem;
+      opacity: 0.85;
+    }
+
+    h2 {
+      font-size: $font-size-xl;
+      margin-block: $spacing-sm;
+      color: var(--app-text-color-dark);
+    }
+
+    p {
+      font-size: $font-size-sm;
+      color: var(--app-text-color);
+      margin-bottom: $spacing-xl;
+    }
+  }
+}

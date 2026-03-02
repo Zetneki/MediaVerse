@@ -32,7 +32,9 @@
   &__genres {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.4s ease;
+    transition:
+      max-height 0.3s ease,
+      padding 0.4s ease;
     display: flex;
     flex-wrap: wrap;
     gap: $spacing-sm;
@@ -58,6 +60,7 @@
 
       &.active {
         background: var(--app-primary-color);
+        color: white;
       }
     }
   }
