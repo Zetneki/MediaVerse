@@ -1,4 +1,4 @@
-import { MovieStatus } from '../utils/movie-status.type';
+import { MovieStatus } from '../types/movie-status.type';
 import { Genre } from './genre';
 
 export interface MovieProgress {

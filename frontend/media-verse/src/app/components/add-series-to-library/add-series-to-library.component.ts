@@ -15,7 +15,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { SeriesStatus } from '../../utils/series-status.type';
+import { SeriesStatus } from '../../types/series-status.type';
 import { SeriesProgressService } from '../../services/series-progress.service';
 import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';

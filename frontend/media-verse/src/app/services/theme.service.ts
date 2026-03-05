@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { useTheme } from '@primeng/themes';
 import { THEME_PRESETS, ThemeName } from '../utils/theme.registry';
-import { ColorMode } from '../utils/theme.type';
+import { ColorMode } from '../types/theme.type';
 
 @Injectable({
   providedIn: 'root',

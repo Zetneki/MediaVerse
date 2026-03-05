@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ThemeName } from '../utils/theme.registry';
-import { ColorMode } from '../utils/theme.type';
+import { ColorMode } from '../types/theme.type';
 import { UserTheme } from '../models/usertheme';
 
 @Injectable({

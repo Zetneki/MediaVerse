@@ -11,7 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { MovieProgressService } from '../../services/movie-progress.service';
-import { MovieStatus } from '../../utils/movie-status.type';
+import { MovieStatus } from '../../types/movie-status.type';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from '../../services/notification.service';
 import { shouldHandleError } from '../../utils/error-handler';
@@ -176,6 +176,7 @@ export class AddMovieToLibraryComponent {
         },
         error: (err) => {
           if (!shouldHandleError(err)) return;
+
           this.notificationService.error(err.error?.error ?? 'Save failed');
         },
       });

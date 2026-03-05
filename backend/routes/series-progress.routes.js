@@ -4,6 +4,9 @@ const seriesProgressController = require("../controllers/series-progress.control
 const { authenticate } = require("../middlewares/auth.middleware");
 const { progressLimiter } = require("../middlewares/rate-limit.middleware");
 const { apiLimiter } = require("../middlewares/rate-limit.middleware");
+const {
+  checkWalletExpiry,
+} = require("../middlewares/verify-wallet.middleware");
 
 router.use(authenticate);
 
@@ -13,7 +16,12 @@ router.get(
   seriesProgressController.getProgressBySeriesId,
 );
 router.get("/", apiLimiter, seriesProgressController.getSeriesProgress);
-router.post("/", progressLimiter, seriesProgressController.setSeriesProgress);
+router.post(
+  "/",
+  progressLimiter,
+  checkWalletExpiry,
+  seriesProgressController.setSeriesProgress,
+);
 router.delete(
   "/:id",
   progressLimiter,

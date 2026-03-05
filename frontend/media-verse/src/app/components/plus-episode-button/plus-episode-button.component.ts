@@ -14,7 +14,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SeasonDetails } from '../../models/seasondetails';
 import { NotificationService } from '../../services/notification.service';
 import { shouldHandleError } from '../../utils/error-handler';
-import { SeriesStatus } from '../../utils/series-status.type';
+import { SeriesStatus } from '../../types/series-status.type';
 import { finalize } from 'rxjs';
 
 @Component({

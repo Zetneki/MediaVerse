@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SeriesStatus } from '../utils/series-status.type';
+import { SeriesStatus } from '../types/series-status.type';
 import { SeriesProgress } from '../models/seriesprogress';
 import { SeriesProgressResponse } from '../models/seriesprogressresponse';
 import { ProgressFilters } from '../models/progressfilters';

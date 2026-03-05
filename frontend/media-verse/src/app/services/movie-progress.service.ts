@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MovieStatus } from '../utils/movie-status.type';
+import { MovieStatus } from '../types/movie-status.type';
 import { MovieProgress } from '../models/movieprogress';
 import { MovieProgressResponse } from '../models/movieprogressresponse';
 import { ProgressFilters } from '../models/progressfilters';

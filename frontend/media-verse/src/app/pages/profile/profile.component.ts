@@ -29,7 +29,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { shouldHandleError } from '../../utils/error-handler';
 import { ThemeName } from '../../utils/theme.registry';
 import { filter } from 'rxjs';
-import { ColorMode } from '../../utils/theme.type';
+import { ColorMode } from '../../types/theme.type';
 
 @Component({
   selector: 'app-profile',
@@ -156,6 +156,20 @@ export class ProfileComponent {
 
   get buttonSize() {
     return this.isLargeScreen() ? undefined : 'small';
+  }
+
+  get daysLeft(): number | null {
+    if (!this.user.wallet_last_verified) return null;
+
+    const lastVerified = new Date(this.user.wallet_last_verified);
+    const today = new Date();
+
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const daysSince = Math.floor(
+      (today.getTime() - lastVerified.getTime()) / msPerDay,
+    );
+
+    return Math.max(0, 30 - daysSince);
   }
 
   async onThemeChange() {

@@ -27,6 +27,13 @@
       <span class="details__title">Created at:</span>
       {{ user.created_at | date }}
     </p>
+    <p class="details">
+      @if (user.wallet_verified) {
+        <span class="details__title">Wallet verification lasts for:</span>
+        {{ daysLeft }}
+        day(s)
+      }
+    </p>
 
     <div class="theme-changer-title">
       <hr />

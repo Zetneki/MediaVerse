@@ -1,1 +1,32 @@
 <p>quests works!</p>
+<div class="wallet">
+  <h2>Profile</h2>
+
+  @if (user) {
+    <div class="user-info">
+      <p><strong>Username:</strong> {{ user.username }}</p>
+      <p><strong>Created:</strong> {{ user.created_at | date }}</p>
+    </div>
+
+    <div class="wallet-section">
+      <h3>Wallet</h3>
+
+      @if (walletConnected()) {
+        <div class="wallet-connected">
+          <p><strong>Address:</strong> {{ walletAddress() }}</p>
+          <p><strong>Status:</strong> Connected</p>
+          <button (click)="onDisconnectWallet()">Disconnect Wallet</button>
+        </div>
+      } @else {
+        <div class="wallet-disconnected">
+          <p>No wallet connected</p>
+          <button (click)="onConnectWallet()" [disabled]="isConnecting()">
+            {{ isConnecting() ? "Connecting..." : "Connect MetaMask" }}
+          </button>
+        </div>
+      }
+
+      <button (click)="onGetWalletInfo()">Get wallet info</button>
+    </div>
+  }
+</div>

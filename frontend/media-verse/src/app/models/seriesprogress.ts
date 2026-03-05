@@ -1,4 +1,4 @@
-import { SeriesStatus } from '../utils/series-status.type';
+import { SeriesStatus } from '../types/series-status.type';
 import { Genre } from './genre';
 import { SeasonDetails } from './seasondetails';
 

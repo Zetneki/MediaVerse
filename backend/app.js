@@ -14,6 +14,7 @@ const genresRouter = require("./routes/genre.routes");
 const userThemesRouter = require("./routes/user-themes.routes");
 const movieProgressRouter = require("./routes/movie-progress.routes");
 const seriesProgressRouter = require("./routes/series-progress.routes");
+const walletRouter = require("./routes/wallet.routes");
 
 require("./cron/movie-refresh.cron");
 require("./cron/series-refresh.cron");
@@ -48,6 +49,7 @@ app.use("/api/genres", genresRouter);
 app.use("/user-themes", userThemesRouter);
 app.use("/movie-progress", movieProgressRouter);
 app.use("/series-progress", seriesProgressRouter);
+app.use("/wallet", walletRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
