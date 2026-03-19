@@ -27,9 +27,9 @@ const checkWalletExpiry = async (req, res, next) => {
           walletLastVerified: null,
         });
 
-        console.log(
-          `Wallet expired for user ${userId} after ${daysSince} days`,
-        );
+        // console.log(
+        //   `Wallet expired for user ${userId} after ${daysSince} days`,
+        // );
         return res.status(401).json({
           error: "Wallet expired. Please connect your wallet again.",
           code: "WALLET_EXPIRED",

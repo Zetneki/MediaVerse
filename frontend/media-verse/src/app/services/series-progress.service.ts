@@ -4,12 +4,13 @@ import { SeriesStatus } from '../types/series-status.type';
 import { SeriesProgress } from '../models/seriesprogress';
 import { SeriesProgressResponse } from '../models/seriesprogressresponse';
 import { ProgressFilters } from '../models/progressfilters';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SeriesProgressService {
-  private readonly baseUrl = 'http://localhost:3000';
+  private readonly baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) {}
 

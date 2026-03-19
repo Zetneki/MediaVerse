@@ -30,6 +30,8 @@ header {
       align-self: center;
       height: 3rem;
       width: auto;
+      background-color: var(--header-img-background);
+      border-radius: 100%;
     }
 
     &__link {

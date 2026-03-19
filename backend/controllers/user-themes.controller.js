@@ -20,14 +20,29 @@ const buyTheme = async (req, res) => {
     const userId = req.user.id;
     if (!userId) throw AppError.unauthorized("User not logged in");
 
-    //const theme = req.params.theme;
-    const { theme } = req.body;
-    if (!theme) throw AppError.badRequest("Missing theme");
+    const { theme, deadline, v, r, s } = req.body;
 
-    await userThemesService.buyTheme(userId, theme);
-    res.status(200).json({ message: "Theme bought successfully" });
+    if (!theme || !deadline || !v || !r || !s) {
+      throw AppError.badRequest("Missing required fields");
+    }
+
+    const receipt = await userThemesService.buyTheme(
+      userId,
+      theme,
+      deadline,
+      v,
+      r,
+      s,
+    );
+
+    const response = {
+      message: "Theme bought successfully",
+      txHash: receipt.hash,
+    };
+
+    res.status(200).json(response);
   } catch (err) {
-    //console.log(err);
+    console.log(err);
     handleControllerError(err, res);
   }
 };

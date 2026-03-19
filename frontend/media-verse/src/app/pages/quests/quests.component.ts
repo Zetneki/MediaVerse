@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { WalletService } from '../../services/wallet.service';
 import { UserService } from '../../services/user.service';
@@ -7,6 +7,8 @@ import { AuthService } from '../../services/auth.service';
 import { filter } from 'rxjs';
 import { User } from '../../models/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BlockchainService } from '../../services/blockchain.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-quests',
@@ -20,10 +22,14 @@ export class QuestsComponent {
   walletConnected = signal<boolean>(false);
   walletAddress = signal<string>('');
   isConnecting = signal<boolean>(false);
+  isLoading = signal<boolean>(false);
+  tokenBalance = signal<string>('');
 
   constructor(
     private walletService: WalletService,
     private authService: AuthService,
+    private blockchainService: BlockchainService,
+    private notificationService: NotificationService,
   ) {
     this.authService.currentUser$
       .pipe(
@@ -41,6 +47,26 @@ export class QuestsComponent {
           this.walletAddress.set('');
         }
       });
+
+    effect(() => {
+      const address = this.walletAddress();
+
+      if (!address) return;
+
+      this.loadTokenBalance(address);
+    });
+  }
+
+  async loadTokenBalance(address: string) {
+    try {
+      const balance = await this.blockchainService.getTokenBalance(address);
+      this.tokenBalance.set(balance);
+    } catch (err: any) {
+      console.error('Failed to get token balance:', err);
+      this.notificationService.error(
+        err.error?.error ?? 'Failed to get token balance',
+      );
+    }
   }
 
   async onConnectWallet() {
@@ -93,9 +119,39 @@ export class QuestsComponent {
     }
   }
 
-  onGetWalletInfo() {
-    this.walletService.getWalletInfo().then((res) => {
-      console.log(res);
-    });
+  async onGetWalletInfo() {
+    try {
+      this.isLoading.set(true);
+      await this.walletService.getWalletInfo();
+      this.loadTokenBalance(this.walletAddress());
+
+      this.notificationService.success('Got token successfully!');
+    } catch (err: any) {
+      console.error('Purchase failed:', err);
+      this.notificationService.error(err.error?.error ?? 'Purchase failed');
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async testThemePurchase() {
+    try {
+      this.isLoading.set(true);
+
+      const txHash = await this.blockchainService.purchaseThemeGasless('neon');
+
+      console.log('Theme purchased! TX:', txHash);
+      this.notificationService.success(
+        'Christmas theme purchased successfully!',
+      );
+
+      // Reload user
+      await this.authService.loadUserFromToken();
+    } catch (err: any) {
+      console.error('Purchase failed:', err);
+      this.notificationService.error(err.error?.error ?? 'Purchase failed');
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 }

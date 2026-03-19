@@ -1,5 +1,6 @@
 const userThemesDao = require("../dao/user-themes.dao");
 const usersDao = require("../dao/users.dao");
+const blockchainService = require("../services/blockchain.service");
 const { VALID_THEME_NAMES } = require("../constants/themes");
 const { AppError } = require("../middlewares/error-handler.middleware");
 
@@ -31,12 +32,12 @@ const getUserThemes = async (userId) => {
  * @returns {Promise<void>}
  */
 
-const buyTheme = async (userId, theme) => {
+const buyTheme = async (userId, theme, deadline, v, r, s) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
 
   if (user.wallet_verified === false || user.wallet_address === null)
-    throw AppError.unauthorized("User wallet not verified");
+    throw AppError.badRequest("User wallet not verified");
 
   if (!VALID_THEME_NAMES.includes(theme)) {
     throw AppError.badRequest(
@@ -51,7 +52,19 @@ const buyTheme = async (userId, theme) => {
   }
 
   try {
+    //Backend calls permit purchase
+    const receipt = await blockchainService.purchaseThemeForUser(
+      user.wallet_address,
+      theme,
+      deadline,
+      v,
+      r,
+      s,
+    );
+
     await userThemesDao.buyTheme(userId, theme);
+
+    return receipt;
   } catch (err) {
     if (err.code === "23505") {
       throw AppError.conflict("Theme already owned");

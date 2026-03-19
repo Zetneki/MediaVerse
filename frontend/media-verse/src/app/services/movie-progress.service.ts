@@ -4,12 +4,13 @@ import { MovieStatus } from '../types/movie-status.type';
 import { MovieProgress } from '../models/movieprogress';
 import { MovieProgressResponse } from '../models/movieprogressresponse';
 import { ProgressFilters } from '../models/progressfilters';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MovieProgressService {
-  private readonly baseUrl = 'http://localhost:3000';
+  private readonly baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) {}
 

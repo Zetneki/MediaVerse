@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 import { MoviesResponse } from '../models/moviesresponse';
 import { Genre } from '../models/genre';
 import { MovieDetails } from '../models/moviedetails';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MovieService {
-  private readonly baseUrl = 'http://localhost:3000';
+  private readonly baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) {}
 

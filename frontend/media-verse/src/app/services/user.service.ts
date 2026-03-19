@@ -4,12 +4,13 @@ import { firstValueFrom } from 'rxjs';
 import { ThemeName } from '../utils/theme.registry';
 import { ColorMode } from '../types/theme.type';
 import { UserTheme } from '../models/usertheme';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private readonly baseUrl = 'http://localhost:3000';
+  private readonly baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) {}
 

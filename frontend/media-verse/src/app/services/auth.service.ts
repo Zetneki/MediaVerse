@@ -11,12 +11,13 @@ import {
 import { LoginResponse } from '../models/loginresponse';
 import { User } from '../models/user';
 import { ThemeService } from './theme.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly baseUrl = 'http://localhost:3000';
+  private readonly baseUrl = environment.baseUrl;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 

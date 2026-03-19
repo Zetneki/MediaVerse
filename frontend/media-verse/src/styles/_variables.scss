@@ -56,6 +56,7 @@ $breakpoint-add-series-to-library: 500px;
 
   //component tokens
   --error-color: #dc2626;
+  --header-img-background: #{layer(10%, black, var(--app-background-color))};
   --discover-page-list-background: #{layer(5%, black)};
   --discover-page-genres-background: #{layer(5%, black)};
   --details-page-items-background: #{layer(5%, black)};
@@ -104,6 +105,7 @@ $breakpoint-add-series-to-library: 500px;
 
   //component tokens
   --error-color: #f87171;
+  --header-img-background: #{layer(10%, white, var(--app-background-color))};
   --discover-page-list-background: #{layer(5%, white)};
   --discover-page-genres-background: #{layer(10%, black)};
   --details-page-items-background: #{layer(5%, white)};

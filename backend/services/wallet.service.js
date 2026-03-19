@@ -15,7 +15,7 @@ const connectWallet = async (userId, walletAddress, signature) => {
   if (!user) throw AppError.notFound("User not found");
 
   const isValid = await verifyWalletOwnership(walletAddress, signature, userId);
-  if (!isValid) throw AppError.unauthorized("Invalid wallet signature");
+  if (!isValid) throw AppError.badRequest("Invalid wallet signature");
 
   const existingUser = await walletDao.getUserByWallet(walletAddress);
   if (existingUser && existingUser.id !== userId) {
@@ -65,6 +65,9 @@ const verifyWalletOwnership = async (walletAddress, signature, userId) => {
   }
 };
 
+const blockchainService = require("./blockchain.service");
+const { get } = require("http");
+
 /**
  * Get user connected wallet info
  * @param {*} userId
@@ -73,6 +76,13 @@ const verifyWalletOwnership = async (walletAddress, signature, userId) => {
 const getWalletInfo = async (userId) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
+
+  const userWallet = user.wallet_address;
+  await blockchainService.rewardUser(userWallet, 50);
+  // const balance = await blockchainService.getTokenBalance(user.wallet_address);
+  // console.log("User token balance:", balance);
+  const hasTheme = await blockchainService.hasTheme(user.wallet_address, "asd");
+  console.log("User has theme:", hasTheme);
 
   return {
     walletAddress: user.wallet_address,
