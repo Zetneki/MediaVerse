@@ -60,7 +60,7 @@ export class QuestsComponent {
   async loadTokenBalance(address: string) {
     try {
       const balance = await this.blockchainService.getTokenBalance(address);
-      this.tokenBalance.set(balance);
+      this.tokenBalance.set(balance.substring(0, balance.length - 2));
     } catch (err: any) {
       console.error('Failed to get token balance:', err);
       this.notificationService.error(
@@ -138,7 +138,8 @@ export class QuestsComponent {
     try {
       this.isLoading.set(true);
 
-      const txHash = await this.blockchainService.purchaseThemeGasless('neon');
+      const txHash =
+        await this.blockchainService.purchaseThemeGasless('halloween');
 
       console.log('Theme purchased! TX:', txHash);
       this.notificationService.success(
@@ -146,6 +147,7 @@ export class QuestsComponent {
       );
 
       // Reload user
+      this.loadTokenBalance(this.walletAddress());
       await this.authService.loadUserFromToken();
     } catch (err: any) {
       console.error('Purchase failed:', err);

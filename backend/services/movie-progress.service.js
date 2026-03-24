@@ -1,6 +1,7 @@
 const movieProgressDao = require("../dao/movie-progress.dao");
 const usersDao = require("../dao/users.dao");
 const moviesDao = require("../dao/movies.dao");
+const questsService = require("../services/quests.service");
 const { VALID_MOVIE_STATUSES } = require("../constants/movie-status");
 const { VALID_MOVIE_ORDERS } = require("../constants/movie-order");
 const { VALID_MOVIE_SORTBYS } = require("../constants/movie-sortby");
@@ -69,6 +70,7 @@ const getMoviesProgress = async (
 /**
  * Set movie progress
  * @param {number} userId
+ * @param {string} movieId
  * @param {string} status
  * @returns {Promise<{action: string}>} - action: INSERTED, UPDATED, UNCHANGED
  */
@@ -94,6 +96,28 @@ const setMovieProgress = async (userId, movieId, status) => {
     );
 
     if (!result) return { action: "UNCHANGED" };
+
+    if (user.wallet_address && user.wallet_verified) {
+      //Add to plan quest
+      if (status === "plan_to_watch") {
+        await questsService.checkAndIncrementQuests(
+          userId,
+          "add_to_plan",
+          "movie",
+          movieId,
+        );
+      }
+
+      //Complete movie quest
+      if (status === "completed") {
+        await questsService.checkAndIncrementQuests(
+          userId,
+          "complete_movie",
+          "movie",
+          movieId,
+        );
+      }
+    }
 
     return {
       action: result.inserted ? "INSERTED" : "UPDATED",

@@ -80,26 +80,4 @@
       margin-inline: calc(#{$spacing-lg} * -1);
     }
   }
-
-  #p-1 {
-    color: var(--app-text-color);
-  }
-  #p-2 {
-    color: var(--app-text-color-dark);
-  }
-  #p-3 {
-    color: var(--app-text-color-darker);
-  }
-  #p-4 {
-    color: var(--app-primary-color-dark);
-  }
-  #p-5 {
-    color: var(--app-primary-color);
-  }
-  #p-6 {
-    color: var(--app-primary-color-light);
-  }
-  #p-7 {
-    color: var(--app-primary-color-lighter);
-  }
 }

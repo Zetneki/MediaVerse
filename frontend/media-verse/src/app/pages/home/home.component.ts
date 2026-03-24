@@ -41,8 +41,6 @@ export class HomeComponent {
 
   skeletonArray = Array(20);
 
-  checked: boolean = false;
-
   popularMovies$ = this.contentService.getPopularMovies$();
   topRatedMovies$ = this.contentService.getTopRatedMovies$();
 

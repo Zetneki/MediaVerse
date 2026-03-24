@@ -1,3 +1,16 @@
-.token {
-  width: 20px;
+@use "../../../styles/variables" as *;
+
+span {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  gap: $spacing-xs;
+  .token {
+    height: 1.5rem;
+    width: auto;
+    background-color: rgba($color: #000000, $alpha: 0.1);
+    border: rgba($color: #ffffff, $alpha: 0.5) 1px solid;
+    backdrop-filter: blur(10px);
+    border-radius: 100%;
+  }
 }

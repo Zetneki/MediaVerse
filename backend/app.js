@@ -2,6 +2,7 @@ require("dotenv").config();
 
 var createError = require("http-errors");
 var express = require("express");
+const helmet = require("helmet");
 var path = require("path");
 const cookieParser = require("cookie-parser");
 var logger = require("morgan");
@@ -15,6 +16,7 @@ const userThemesRouter = require("./routes/user-themes.routes");
 const movieProgressRouter = require("./routes/movie-progress.routes");
 const seriesProgressRouter = require("./routes/series-progress.routes");
 const walletRouter = require("./routes/wallet.routes");
+const questsRouter = require("./routes/quests.routes");
 
 require("./cron/movie-refresh.cron");
 require("./cron/series-refresh.cron");
@@ -27,6 +29,30 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  }),
+);
+
+//Production mode
+// app.use(helmet({
+//   contentSecurityPolicy: {
+//     directives: {
+//       defaultSrc: ["'self'"],
+//       scriptSrc: ["'self'"],  // NO unsafe-inline!
+//       styleSrc: ["'self'"],
+//       connectSrc: [
+//         "'self'",
+//         "https://your-frontend.com",
+//         "https://rpc.sepolia.org",
+//       ],
+//     },
+//   },
+// }));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -50,6 +76,7 @@ app.use("/user-themes", userThemesRouter);
 app.use("/movie-progress", movieProgressRouter);
 app.use("/series-progress", seriesProgressRouter);
 app.use("/wallet", walletRouter);
+app.use("/quests", questsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

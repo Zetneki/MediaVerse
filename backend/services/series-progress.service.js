@@ -1,6 +1,7 @@
 const seriesProgressDao = require("../dao/series-progress.dao");
 const usersDao = require("../dao/users.dao");
 const seriesDao = require("../dao/series.dao");
+const questsService = require("../services/quests.service");
 const { VALID_SERIES_STATUSES } = require("../constants/series-status");
 const { VALID_SERIES_ORDERS } = require("../constants/series-order");
 const { VALID_SERIES_SORTBYS } = require("../constants/series-sortby");
@@ -82,6 +83,7 @@ const getSeriesProgress = async (
 /**
  * Set series progress
  * @param {number} userId
+ * @param {number} seriesId
  * @param {string} status
  * @param {number} season
  * @param {number} episode
@@ -135,6 +137,11 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
   }
 
   try {
+    const oldProgress = await seriesProgressDao.getProgressBySeriesId(
+      userId,
+      seriesId,
+    );
+
     const result = await seriesProgressDao.upsertSeriesProgress(
       userId,
       seriesId,
@@ -144,6 +151,117 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
     );
 
     if (!result) return { action: "UNCHANGED" };
+
+    if (user.wallet_address && user.wallet_verified) {
+      //Add to plan quest (first time only)
+      if (status === "plan_to_watch" && !oldProgress) {
+        await questsService.checkAndIncrementQuests(
+          userId,
+          "add_to_plan",
+          "series",
+          seriesId,
+        );
+      }
+
+      const episodeIds = [];
+
+      //Watch episode quest (episode incremented)
+      if (oldProgress) {
+        //Existing progress - check increment
+        const seasonIncremented = season > oldProgress.current_season;
+        const sameSeasonEpisodeIncremented =
+          season === oldProgress.current_season &&
+          episode > oldProgress.current_episode;
+
+        if (seasonIncremented) {
+          //Season jump: count all episodes between old and new
+          series.seasons.forEach((seasonData) => {
+            if (seasonData.season_number === oldProgress.current_season) {
+              //Old season: remaining episodes
+              for (
+                let e = oldProgress.current_episode + 1;
+                e <= seasonData.episode_count;
+                e++
+              ) {
+                episodeIds.push(
+                  `${seriesId}_S${seasonData.season_number}E${e}`,
+                );
+              }
+            } else if (
+              seasonData.season_number > oldProgress.current_season &&
+              seasonData.season_number < season
+            ) {
+              //Middle seasons: all episodes
+              for (let e = 1; e <= seasonData.episode_count; e++) {
+                episodeIds.push(
+                  `${seriesId}_S${seasonData.season_number}E${e}`,
+                );
+              }
+            } else if (seasonData.season_number === season) {
+              //New season: episodes up to current
+              for (let e = 1; e <= episode; e++) {
+                episodeIds.push(
+                  `${seriesId}_S${seasonData.season_number}E${e}`,
+                );
+              }
+            }
+          });
+        } else if (sameSeasonEpisodeIncremented) {
+          //Same season: simple delta
+          for (let e = oldProgress.current_episode + 1; e <= episode; e++) {
+            episodeIds.push(`${seriesId}_S${season}E${e}`);
+          }
+        }
+
+        if (seasonIncremented || sameSeasonEpisodeIncremented) {
+          await questsService.checkAndIncrementQuests(
+            userId,
+            "watch_episode",
+            "series",
+            seriesId,
+            episodeIds,
+          );
+        }
+      } else if (status === "watching" && season > 0 && episode > 0) {
+        for (let s = 1; s <= season; s++) {
+          const seasonData = series.seasons.find(
+            (sd) => sd.season_number === s,
+          );
+          if (!seasonData) continue;
+
+          if (s < season) {
+            //All episodes in previous seasons
+            for (let e = 1; e <= seasonData.episode_count; e++) {
+              episodeIds.push(`${seriesId}_S${s}E${e}`);
+            }
+          } else {
+            //Episodes up to current in current season
+            for (let e = 1; e <= episode; e++) {
+              episodeIds.push(`${seriesId}_S${s}E${e}`);
+            }
+          }
+        }
+
+        //First time watching (no previous progress)
+        await questsService.checkAndIncrementQuests(
+          userId,
+          "watch_episode",
+          "series",
+          seriesId,
+          episodeIds,
+        );
+      }
+
+      //Complete series quest
+      if (status === "completed") {
+        await questsService.checkAndIncrementQuests(
+          userId,
+          "complete_series",
+          "series",
+          seriesId,
+        );
+      }
+    }
 
     return {
       action: result.inserted ? "INSERTED" : "UPDATED",

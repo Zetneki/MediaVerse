@@ -11,8 +11,8 @@
     <div class="wallet-section">
       <h3>Wallet</h3>
       <span
-        >Token balance: {{ tokenBalance() }}
-        <img class="token" src="assets/logo-8.png" alt="logo"
+        >Token balance: {{ tokenBalance() || 0 }}
+        <img class="token" src="assets/logo-10.png" alt="logo"
       /></span>
 
       @if (walletConnected()) {

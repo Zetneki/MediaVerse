@@ -39,6 +39,21 @@ CREATE TABLE IF NOT EXISTS public.movie_page_cache
     CONSTRAINT movie_page_cache_pkey PRIMARY KEY (page, category)
 );
 
+CREATE TABLE IF NOT EXISTS public.quest_definitions
+(
+    id serial NOT NULL,
+    title character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    description text COLLATE pg_catalog."default",
+    requirement_type character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    requirement_count integer NOT NULL,
+    content_type character varying(20) COLLATE pg_catalog."default",
+    genre_filter jsonb,
+    reward_tokens integer NOT NULL,
+    is_active boolean DEFAULT true,
+    created_at timestamp without time zone DEFAULT now(),
+    CONSTRAINT quest_definitions_pkey PRIMARY KEY (id)
+);
+
 CREATE TABLE IF NOT EXISTS public.series_cache
 (
     id bigint NOT NULL,
@@ -90,9 +105,47 @@ CREATE TABLE IF NOT EXISTS public.user_profile
     token_version integer DEFAULT 0,
     active_theme text COLLATE pg_catalog."default" DEFAULT 'indigo'::text,
     active_dark_light_mode text COLLATE pg_catalog."default" DEFAULT 'system'::text,
+    wallet_last_verified timestamp without time zone,
     CONSTRAINT user_profile_pkey PRIMARY KEY (id),
     CONSTRAINT user_profile_username_key UNIQUE (username),
     CONSTRAINT user_profile_wallet_address_key UNIQUE (wallet_address)
+);
+
+CREATE TABLE IF NOT EXISTS public.user_quest_content
+(
+    id serial NOT NULL,
+    user_id integer NOT NULL,
+    quest_slot_id integer NOT NULL,
+    content_type character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    content_id character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    counted_at timestamp without time zone DEFAULT now(),
+    CONSTRAINT user_quest_content_pkey PRIMARY KEY (id),
+    CONSTRAINT unique_quest_content UNIQUE (quest_slot_id, content_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.user_quest_reroll_cooldown
+(
+    user_id integer NOT NULL,
+    last_reroll_at timestamp without time zone NOT NULL,
+    next_reroll_available_at timestamp without time zone NOT NULL,
+    CONSTRAINT user_quest_reroll_cooldown_pkey PRIMARY KEY (user_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.user_quest_slots
+(
+    id serial NOT NULL,
+    user_id integer NOT NULL,
+    slot_number integer NOT NULL,
+    quest_id integer NOT NULL,
+    current_progress integer DEFAULT 0,
+    required_progress integer NOT NULL,
+    is_completed boolean DEFAULT false,
+    is_claimed boolean DEFAULT false,
+    started_at timestamp without time zone DEFAULT now(),
+    completed_at timestamp without time zone,
+    claimed_at timestamp without time zone,
+    CONSTRAINT user_quest_slots_pkey PRIMARY KEY (id),
+    CONSTRAINT unique_user_quest_slot UNIQUE (user_id, slot_number)
 );
 
 CREATE TABLE IF NOT EXISTS public.user_series_progress
@@ -133,6 +186,49 @@ CREATE INDEX IF NOT EXISTS idx_user_movie_progress_user_id
     ON public.user_movie_progress(user_id);
 
 
+ALTER TABLE IF EXISTS public.user_quest_content
+    ADD CONSTRAINT user_quest_content_quest_slot_id_fkey FOREIGN KEY (quest_slot_id)
+    REFERENCES public.user_quest_slots (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS idx_user_quest_content_quest_slot_id
+    ON public.user_quest_content(quest_slot_id);
+
+
+ALTER TABLE IF EXISTS public.user_quest_content
+    ADD CONSTRAINT user_quest_content_user_id_fkey FOREIGN KEY (user_id)
+    REFERENCES public.user_profile (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS idx_user_quest_content_user_id
+    ON public.user_quest_content(user_id);
+
+
+ALTER TABLE IF EXISTS public.user_quest_reroll_cooldown
+    ADD CONSTRAINT user_quest_reroll_cooldown_user_id_fkey FOREIGN KEY (user_id)
+    REFERENCES public.user_profile (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS user_quest_reroll_cooldown_pkey
+    ON public.user_quest_reroll_cooldown(user_id);
+
+
+ALTER TABLE IF EXISTS public.user_quest_slots
+    ADD CONSTRAINT user_quest_slots_quest_id_fkey FOREIGN KEY (quest_id)
+    REFERENCES public.quest_definitions (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.user_quest_slots
+    ADD CONSTRAINT user_quest_slots_user_id_fkey FOREIGN KEY (user_id)
+    REFERENCES public.user_profile (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS idx_user_quest_slots_user_id
+    ON public.user_quest_slots(user_id);
+
+
 ALTER TABLE IF EXISTS public.user_series_progress
     ADD CONSTRAINT user_series_progress_series_id_fkey FOREIGN KEY (series_id)
     REFERENCES public.series_cache (id) MATCH SIMPLE
@@ -160,7 +256,6 @@ CREATE INDEX IF NOT EXISTS idx_user_themes_user_id
     ON public.user_themes(user_id);
 
 END;
-
 
 CREATE OR REPLACE FUNCTION insert_default_theme()
 RETURNS trigger AS $$

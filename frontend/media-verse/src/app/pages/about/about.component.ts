@@ -349,14 +349,3 @@ export class AboutComponent implements OnInit, OnDestroy {
     this.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
   };
 }
-// import { Component } from '@angular/core';
-
-// import { AccordionModule } from 'primeng/accordion';
-
-// @Component({
-//   selector: 'app-about',
-//   imports: [AccordionModule],
-//   templateUrl: './about.component.html',
-//   styleUrl: './about.component.scss',
-// })
-// export class AboutComponent {}

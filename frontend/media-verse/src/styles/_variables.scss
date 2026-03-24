@@ -152,8 +152,8 @@ $breakpoint-add-series-to-library: 500px;
 }
 
 .p-accordion {
-  --p-accordion-header-background: rgba(0, 0, 0, 0);
-  --p-accordion-header-hover-background: rgba(0, 0, 0, 0);
+  --p-accordion-header-background: rgba($color: #000000, $alpha: 0);
+  --p-accordion-header-hover-background: rgba($color: #000000, $alpha: 0);
   --p-accordion-header-active-background: var(--about-page-rights-background);
   --p-accordion-header-active-hover-background: var(
     --about-page-rights-background

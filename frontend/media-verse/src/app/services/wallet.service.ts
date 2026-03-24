@@ -128,7 +128,7 @@ export class WalletService {
     if (!window.ethereum) return;
 
     try {
-      const wasAdded = await window.ethereum.request({
+      await window.ethereum.request({
         method: 'wallet_watchAsset',
         params: {
           type: 'ERC20',
