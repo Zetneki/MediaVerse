@@ -15,6 +15,7 @@
 
     .details {
       margin-inline: $spacing-sm;
+      word-break: break-word;
 
       &__title {
         font-weight: bold;

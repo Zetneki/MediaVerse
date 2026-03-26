@@ -1,5 +1,6 @@
 @use "../../../styles/variables.scss" as *;
 @use "../../../styles/mixins/desktop-mobile-media-mixin.scss" as *;
+@use "../../../styles/mixins/mobile-width-mixin.scss" as *;
 
 .not-logged-in {
   min-height: 70vh;
@@ -385,6 +386,9 @@
 
     &__movies,
     &__series {
+      gap: $spacing-sm;
+      padding: $spacing-sm;
+
       .movie,
       .series {
         &__info {
@@ -414,7 +418,7 @@
     display: none;
   }
 
-  @media (max-width: 500px) {
+  @include mobile-width-mixin {
     .desktop {
       display: none;
     }

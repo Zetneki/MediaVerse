@@ -33,6 +33,7 @@ $breakpoint-login-content: 400px;
 $breakpoint-profile-settings: 400px;
 $breakpoint-add-movie-to-library: 500px;
 $breakpoint-add-series-to-library: 500px;
+$breakpoint-mobile-width: 500px;
 
 :root {
   //system tokens
@@ -161,4 +162,8 @@ $breakpoint-add-series-to-library: 500px;
   --p-accordion-content-background: var(--about-page-rights-background);
   --p-accordion-header-padding: 1rem 0.5rem;
   --p-accordion-content-padding: 0;
+}
+
+.p-confirmdialog.p-dialog {
+  margin: 1rem;
 }

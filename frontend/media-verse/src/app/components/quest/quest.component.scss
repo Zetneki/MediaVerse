@@ -1,0 +1,90 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
+
+.quest {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "quest__description quest__description"
+    "quest__progress quest__btns";
+  background-color: var(
+    --library-page-list-items-background
+  ); // todo: ENNEK SAJAT VALTOZO
+  border-radius: $radius-sm;
+  padding: $spacing-md;
+  column-gap: $spacing-lg;
+  row-gap: $spacing-xs;
+
+  p,
+  h2 {
+    margin-block: $spacing-xs;
+    word-break: break-word;
+  }
+
+  &__description {
+    grid-area: quest__description;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    .header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto;
+      grid-template-areas: "title reward-token-price";
+      gap: $spacing-md;
+
+      h2 {
+        grid-area: title;
+      }
+
+      #reward {
+        display: flex;
+        gap: $spacing-xs;
+
+        p {
+          grid-area: content-type;
+          font-size: 1.7ch;
+          opacity: 0.8;
+        }
+
+        .token {
+          height: 1.5rem;
+          width: auto;
+          background-color: rgba($color: #000000, $alpha: 0.1);
+          border: rgba($color: #ffffff, $alpha: 0.5) 1px solid;
+          backdrop-filter: blur(10px);
+          border-radius: 100%;
+        }
+      }
+    }
+  }
+
+  &__progress {
+    grid-area: quest__progress;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    align-self: flex-end;
+
+    .episode-watched {
+      font-size: $font-size-sm;
+      opacity: 0.8;
+      text-align: end;
+      margin: 0;
+    }
+  }
+
+  &__btns {
+    grid-area: quest__btns;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: $spacing-sm;
+  }
+
+  @include desktop-mobile-media-mixin {
+    column-gap: $spacing-md;
+  }
+}

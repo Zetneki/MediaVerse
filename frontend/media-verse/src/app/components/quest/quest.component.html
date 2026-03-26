@@ -1,0 +1,45 @@
+<div class="quest">
+  <div class="quest__description">
+    <div class="header">
+      <h2>{{ quest().title }}</h2>
+      <span id="reward"
+        ><p>Reward: {{ quest().reward_tokens }}</p>
+        <img class="token" src="assets/logo-10.png" alt="logo"
+      /></span>
+    </div>
+  </div>
+  <div class="quest__progress">
+    <p class="desc">{{ quest().description }}</p>
+    <p-progressbar
+      [value]="(quest().current_progress / quest().required_progress) * 100"
+      [showValue]="false"
+    />
+    <p class="episode-watched">
+      {{
+        quest().current_progress > quest().required_progress
+          ? quest().required_progress
+          : quest().current_progress
+      }}
+      /
+      {{ quest().required_progress }}
+    </p>
+  </div>
+
+  <div class="quest__btns">
+    <p-button
+      severity="secondary"
+      icon="pi pi-sync"
+      [size]="buttonSize()"
+      (onClick)="rerollClicked.emit(quest().slot_number)"
+      [disabled]="questLoading()"
+    ></p-button>
+    <p-button
+      severity="secondary"
+      icon="pi pi-check-circle"
+      [size]="buttonSize()"
+      (onClick)="claimClicked.emit(quest().slot_number)"
+      [loading]="isClaimLoading()"
+      [disabled]="questLoading()"
+    ></p-button>
+  </div>
+</div>

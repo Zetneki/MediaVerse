@@ -1,45 +1,121 @@
-<p>quests works!</p>
-<div class="wallet">
-  <h2>Profile</h2>
+@if (user) {
+  <div class="quests">
+    @if (walletConnected() && hasMetamask) {
+      <div class="quests__title">
+        <h1><span>Quests</span></h1>
+        <p-button
+          (click)="onDisconnectWallet()"
+          label="Disconnect"
+          icon="pi pi-wallet"
+          [size]="buttonSize()"
+        />
+      </div>
 
-  @if (user) {
-    <div class="user-info">
+      <div class="tasks">
+        @for (quest of this.quests(); track $index) {
+          <app-quest
+            [quest]="quest"
+            [buttonSize]="questButtonSize()"
+            [questLoading]="questLoading()"
+            [isClaimLoading]="claimLoadingSlot() === quest.slot_number"
+            (rerollClicked)="rerollQuest($event)"
+            (claimClicked)="claimQuestReward($event)"
+          ></app-quest>
+        }
+      </div>
+      <!-- <p>{{ canReroll() }}</p>
+    <p>{{ nextRerollIn() }}</p> -->
+
+      <!-- <div class="user-info">
       <p><strong>Username:</strong> {{ user.username }}</p>
       <p><strong>Created:</strong> {{ user.created_at | date }}</p>
-    </div>
+    </div> -->
 
-    <div class="wallet-section">
-      <h3>Wallet</h3>
-      <span
-        >Token balance: {{ tokenBalance() || 0 }}
-        <img class="token" src="assets/logo-10.png" alt="logo"
-      /></span>
+      <!-- <div class="wallet-section">
+        <h3>Wallet</h3>
 
-      @if (walletConnected()) {
-        <div class="wallet-connected">
-          <p><strong>Address:</strong> {{ walletAddress() }}</p>
-          <p><strong>Status:</strong> Connected</p>
-          <button (click)="onDisconnectWallet()">Disconnect Wallet</button>
+        <button pButton (click)="onGetWalletInfo()" [loading]="isLoading()">
+          Get wallet info
+        </button>
+        <br />
+      </div> -->
+
+      <div class="themes">
+        <div class="themes__title">
+          <h2>Themes</h2>
+          @if (tokenBalance()) {
+            <span
+              >Token balance: {{ tokenBalance() }}
+              <img class="token" src="assets/logo-10.png" alt="logo"
+            /></span>
+          } @else {
+            <span
+              >Token balance:
+              <p-progress-spinner
+                strokeWidth="8"
+                fill="transparent"
+                animationDuration=".5s"
+                [style]="{ width: '25px', height: '25px' }"
+              />
+            </span>
+          }
         </div>
-      } @else {
-        <div class="wallet-disconnected">
-          <p>No wallet connected</p>
-          <button (click)="onConnectWallet()" [disabled]="isConnecting()">
-            {{ isConnecting() ? "Connecting..." : "Connect MetaMask" }}
-          </button>
-        </div>
-      }
+      </div>
 
-      <button pButton (click)="onGetWalletInfo()" [loading]="isLoading()">
-        Get wallet info
-      </button>
-      <br />
-      <button
-        pButton
+      <p-button
         label="🎄 Test: Buy Christmas Theme (100 MVT)"
         (click)="testThemePurchase()"
         [loading]="isLoading()"
-      ></button>
+        [size]="buttonSize()"
+      ></p-button>
+    } @else {
+      @if (!hasMetamask) {
+        <div class="metamask-not-downloaded">
+          <div class="card">
+            <img src="/assets/metamask.png" alt="Wallet required" />
+
+            <h2>MetaMask is not installed</h2>
+            <p>
+              You need the metamask extension in your browser to be able to
+              progress in quests.
+            </p>
+
+            <p-button label="Download here" (onClick)="redirectToMetamask()" />
+          </div>
+        </div>
+      } @else {
+        <div class="wallet-not-connected">
+          <div class="card">
+            <img src="/assets/metamask.png" alt="Wallet required" />
+
+            <h2>Wallet required</h2>
+            <p>
+              You need to connect your metamask wallet to be able to progress in
+              quests.
+            </p>
+            <p-button
+              (click)="onConnectWallet()"
+              [loading]="isConnecting()"
+              label="Connect"
+              icon="pi pi-wallet"
+              [size]="buttonSize()"
+              [disabled]="!hasMetamask"
+            />
+          </div>
+        </div>
+      }
+    }
+  </div>
+  <p-confirmdialog />
+} @else {
+  <div class="not-logged-in">
+    <div class="card">
+      <img src="/assets/library-login-required.png" alt="Login required" />
+
+      <h2>Login required</h2>
+      <p>You need to be logged in to see the quests page.</p>
+
+      <p-button label="Click here to login" routerLink="/login"></p-button>
     </div>
-  }
-</div>
+  </div>
+}
