@@ -21,6 +21,13 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RouterLink } from '@angular/router';
+import { ClaimQuestResponse } from '../../models/claimquestresponse';
+import { ThemeName } from '../../utils/theme.registry';
+import { UserService } from '../../services/user.service';
+import { THEME_PRESETS } from '../../utils/theme.registry';
+import { ThemeCardComponent } from '../../components/theme-card/theme-card.component';
+import { THEME_PRICES } from '../../utils/prices.registry';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-quests',
@@ -30,6 +37,7 @@ import { RouterLink } from '@angular/router';
     ConfirmDialogModule,
     ProgressSpinnerModule,
     RouterLink,
+    ThemeCardComponent,
   ],
   providers: [ConfirmationService],
   templateUrl: './quests.component.html',
@@ -45,11 +53,14 @@ export class QuestsComponent {
   questLoading = signal<boolean>(false);
   claimLoadingSlot = signal<number | null>(null);
   isBalanceLoading = signal<boolean>(false);
-  isPurchaseLoading = signal<boolean>(false);
+  purchaseThemeLoading = signal<ThemeName | null>(null);
   tokenBalance = signal<string>('');
   quests = signal<Quest[]>([]);
   canReroll = signal<boolean>(false);
   nextRerollIn = signal<number>(0);
+  ownedThemes = signal<ThemeName[]>([]);
+  allThemes = signal<ThemeName[]>([]);
+  previewingTheme = signal<ThemeName | null>(null);
 
   isLargeScreen = signal<boolean>(window.innerWidth > 1024);
   isSmallScreen = signal<boolean>(window.innerWidth < 501);
@@ -61,6 +72,8 @@ export class QuestsComponent {
     private notificationService: NotificationService,
     private questsService: QuestsService,
     private confirmationService: ConfirmationService,
+    private userService: UserService,
+    private themeService: ThemeService,
   ) {
     this.authService.currentUser$
       .pipe(
@@ -79,6 +92,12 @@ export class QuestsComponent {
         }
 
         this.loadQuests();
+
+        this.userService.getUserThemes().then((themes) => {
+          this.ownedThemes.set(themes.map((t) => t.name));
+        });
+
+        this.allThemes.set(Object.keys(THEME_PRESETS) as ThemeName[]);
       });
 
     effect(() => {
@@ -105,6 +124,16 @@ export class QuestsComponent {
     });
   }
 
+  remainingThemes = computed(() => {
+    return this.allThemes()
+      .filter((t) => !this.ownedThemes().includes(t))
+      .sort((a, b) => {
+        const priceDiff = THEME_PRICES[a] - THEME_PRICES[b];
+        if (priceDiff !== 0) return priceDiff;
+        return a.localeCompare(b);
+      });
+  });
+
   questButtonSize = computed(() => {
     if (this.isLargeScreen()) return 'large';
     return this.isSmallScreen() ? 'small' : undefined;
@@ -112,23 +141,36 @@ export class QuestsComponent {
 
   buttonSize = computed(() => (this.isLargeScreen() ? undefined : 'small'));
 
+  togglePreview(theme: ThemeName, isOn: boolean) {
+    if (isOn) {
+      this.previewingTheme.set(theme);
+      this.themeService.previewTheme(theme);
+    } else {
+      this.previewingTheme.set(null);
+      this.themeService.applyTheme(this.user.active_theme);
+    }
+  }
+
   loadQuests() {
     this.isLoading.set(true);
 
-    this.questsService.getUserQuests().subscribe({
-      next: (questResponse) => {
-        this.quests.set(questResponse.quests);
-        this.canReroll.set(questResponse.canReroll);
-        this.nextRerollIn.set(questResponse.nextRerollIn);
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        this.notificationService.error(
-          err.error?.error ?? 'Failed to get quests',
-        );
-        this.isLoading.set(false);
-      },
-    });
+    this.questsService
+      .getUserQuests()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (questResponse) => {
+          this.quests.set(questResponse.quests);
+          this.canReroll.set(questResponse.canReroll);
+          this.nextRerollIn.set(questResponse.nextRerollIn);
+          this.isLoading.set(false);
+        },
+        error: (err) => {
+          this.notificationService.error(
+            err.error?.error ?? 'Failed to get quests',
+          );
+          this.isLoading.set(false);
+        },
+      });
   }
 
   rerollQuest(slotNumber: number) {
@@ -163,48 +205,58 @@ export class QuestsComponent {
           label: 'Reroll',
         },
         accept: () => {
-          this.questsService.rerollQuestSlot(slotNumber).subscribe({
-            next: (res: any) => {
-              this.notificationService.success(res.message);
-              this.loadQuests();
-              this.questLoading.set(false);
-              this.loadTokenBalance(this.walletAddress());
-            },
-            error: (err) => {
-              this.notificationService.error(
-                err.error?.error ?? 'Failed to reroll quest',
-              );
-              this.questLoading.set(false);
-            },
-          });
+          this.questsService
+            .rerollQuestSlot(slotNumber)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+              next: () => {
+                this.notificationService.success('Quest rerolled successfully');
+                this.loadQuests();
+                this.questLoading.set(false);
+                this.loadTokenBalance(this.walletAddress());
+              },
+              error: (err) => {
+                this.notificationService.error(
+                  err.error?.error ?? 'Failed to reroll quest',
+                );
+                this.questLoading.set(false);
+              },
+            });
         },
       });
       this.questLoading.set(false);
     }
-
-    //rakerdezni hogy biztos akarja-e
   }
 
   claimQuestReward(slotNumber: number) {
     this.claimLoadingSlot.set(slotNumber);
     this.questLoading.set(true);
 
-    this.questsService.claimQuestReward(slotNumber).subscribe({
-      next: () => {
-        this.notificationService.success('Quest reward claimed successfully');
-        this.loadQuests();
-        this.claimLoadingSlot.set(null);
-        this.questLoading.set(false);
-        this.loadTokenBalance(this.walletAddress());
-      },
-      error: (err) => {
-        this.notificationService.error(
-          err.error?.error ?? 'Failed to claim quest reward',
-        );
-        this.claimLoadingSlot.set(null);
-        this.questLoading.set(false);
-      },
-    });
+    this.questsService
+      .claimQuestReward(slotNumber)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: async (res: ClaimQuestResponse) => {
+          this.notificationService.success('Quest reward claimed successfully');
+
+          //Wait for transaction
+          if (res.txHash) {
+            await this.blockchainService.waitForTransaction(res.txHash);
+          }
+
+          this.loadQuests();
+          this.claimLoadingSlot.set(null);
+          this.questLoading.set(false);
+          this.loadTokenBalance(this.walletAddress());
+        },
+        error: (err) => {
+          this.notificationService.error(
+            err.error?.error ?? 'Failed to claim quest reward',
+          );
+          this.claimLoadingSlot.set(null);
+          this.questLoading.set(false);
+        },
+      });
   }
 
   redirectToMetamask() {
@@ -266,8 +318,6 @@ export class QuestsComponent {
 
           await this.authService.loadUserFromToken();
         } catch (err: any) {
-          //console.error('Wallet error:', err);
-
           const errorMessage =
             err.error?.error || 'Failed to disconnect wallet';
 
@@ -277,29 +327,12 @@ export class QuestsComponent {
     });
   }
 
-  //todo: ezt majd torlom
-  // async onGetWalletInfo() {
-  //   try {
-  //     this.isLoading.set(true);
-  //     console.log(await this.walletService.getWalletInfo());
-  //     this.loadTokenBalance(this.walletAddress());
-
-  //     this.notificationService.success('Got token successfully!');
-  //   } catch (err: any) {
-  //     console.error('Purchase failed:', err);
-  //     this.notificationService.error(err.error?.error ?? 'Purchase failed');
-  //   } finally {
-  //     this.isLoading.set(false);
-  //   }
-  // }
-
   async loadTokenBalance(address: string) {
     try {
       this.isBalanceLoading.set(true);
       const balance = await this.blockchainService.getTokenBalance(address);
-      this.tokenBalance.set(balance.substring(0, balance.length - 2));
+      this.tokenBalance.set(balance);
     } catch (err: any) {
-      console.error('Failed to get token balance:', err);
       this.notificationService.error(
         err.error?.error ?? 'Failed to get token balance',
       );
@@ -308,26 +341,33 @@ export class QuestsComponent {
     }
   }
 
-  async testThemePurchase() {
+  async themePurchase(theme: ThemeName) {
     try {
-      this.isPurchaseLoading.set(true);
+      this.purchaseThemeLoading.set(theme);
 
-      const txHash =
-        await this.blockchainService.purchaseThemeGasless('halloween');
+      const txHash = await this.blockchainService.purchaseThemeGasless(theme);
 
-      console.log('Theme purchased! TX:', txHash);
+      if (txHash) {
+        await this.blockchainService.waitForTransaction(txHash);
+      }
+
       this.notificationService.success(
-        'Christmas theme purchased successfully!',
+        `${theme.charAt(0).toUpperCase() + theme.slice(1)} theme purchased successfully!`,
       );
 
       // Reload user
       this.loadTokenBalance(this.walletAddress());
       await this.authService.loadUserFromToken();
     } catch (err: any) {
-      console.error('Purchase failed:', err);
-      this.notificationService.error(err.error?.error ?? 'Purchase failed');
+      if (Number(this.tokenBalance()) < THEME_PRICES[theme]) {
+        this.notificationService.error(
+          'Your balance is too low to buy this theme',
+        );
+      } else {
+        this.notificationService.error(err.error?.error ?? 'Purchase failed');
+      }
     } finally {
-      this.isPurchaseLoading.set(false);
+      this.purchaseThemeLoading.set(null);
     }
   }
 }

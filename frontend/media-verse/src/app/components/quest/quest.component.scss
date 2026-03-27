@@ -8,9 +8,7 @@
   grid-template-areas:
     "quest__description quest__description"
     "quest__progress quest__btns";
-  background-color: var(
-    --library-page-list-items-background
-  ); // todo: ENNEK SAJAT VALTOZO
+  background-color: var(--quest-page-list-items-background);
   border-radius: $radius-sm;
   padding: $spacing-md;
   column-gap: $spacing-lg;

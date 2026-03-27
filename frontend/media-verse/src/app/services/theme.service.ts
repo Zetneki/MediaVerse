@@ -25,6 +25,16 @@ export class ThemeService {
     });
   }
 
+  async previewTheme(theme: ThemeName) {
+    const preset = THEME_PRESETS[theme];
+    if (!preset) return;
+
+    useTheme({
+      preset,
+      options: { darkModeSelector: '.p-dark' },
+    });
+  }
+
   async applyTheme(theme: ThemeName) {
     const preset = THEME_PRESETS[theme];
     if (!preset) return;

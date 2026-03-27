@@ -1,0 +1,25 @@
+<div class="card">
+  <div class="img" [style.background]="color()"></div>
+  <div class="card__data">
+    <p class="name">{{ theme() | capitalize }}</p>
+    <span id="price"
+      ><p>Price: {{ price() }}</p>
+      <img class="token" src="assets/logo-1.png" alt="logo"
+    /></span>
+  </div>
+  <div class="card__btns">
+    <p-toggleswitch
+      class="preview-toggle"
+      [ngModel]="isPreviewing()"
+      (ngModelChange)="previewToggled.emit($event)"
+    ></p-toggleswitch>
+    <p class="preview-title">Preview</p>
+    <p-button
+      class="buy-btn"
+      label="Buy Theme"
+      (onClick)="buyClicked.emit(theme())"
+      [size]="buttonSize()"
+      [loading]="isPurchaseLoading()"
+    ></p-button>
+  </div>
+</div>

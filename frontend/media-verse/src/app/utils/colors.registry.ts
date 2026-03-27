@@ -1,0 +1,25 @@
+export const THEME_COLORS = {
+  indigo: '#6366f1',
+  green: '#22c55e',
+  emerald: '#10b981',
+  blue: '#3b82f6',
+  violet: '#8b5cf6',
+  rose: '#f43f5e',
+  noir: '#111111',
+  lime: '#84cc16',
+  red: '#ef4444',
+  orange: '#f97316',
+  amber: '#f59e0b',
+  yellow: '#eab308',
+  cyan: '#06b6d4',
+  sky: '#0ea5e9',
+  purple: '#a855f7',
+  fuchsia: '#d946ef',
+  pink: '#ec4899',
+  christmas: 'linear-gradient(142deg, #dc2626 50%, #45632d 50%)',
+  halloween: 'linear-gradient(142deg, #f97316 50%, #7c3aed 50%)',
+  cyberpunk: 'linear-gradient(142deg, #047ccc 50%, #dbab00 50%)',
+  neon: 'linear-gradient(142deg, #16a34a 50%, #c712ac 50%)',
+} as const;
+
+export type ThemeName = keyof typeof THEME_COLORS;

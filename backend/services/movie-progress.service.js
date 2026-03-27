@@ -89,6 +89,8 @@ const setMovieProgress = async (userId, movieId, status) => {
   }
 
   try {
+    let completedQuests = [];
+
     const result = await movieProgressDao.upsertMovieProgress(
       userId,
       movieId,
@@ -100,7 +102,7 @@ const setMovieProgress = async (userId, movieId, status) => {
     if (user.wallet_address && user.wallet_verified) {
       //Add to plan quest
       if (status === "plan_to_watch") {
-        await questsService.checkAndIncrementQuests(
+        completedQuests = await questsService.checkAndIncrementQuests(
           userId,
           "add_to_plan",
           "movie",
@@ -110,7 +112,7 @@ const setMovieProgress = async (userId, movieId, status) => {
 
       //Complete movie quest
       if (status === "completed") {
-        await questsService.checkAndIncrementQuests(
+        completedQuests = await questsService.checkAndIncrementQuests(
           userId,
           "complete_movie",
           "movie",
@@ -125,6 +127,7 @@ const setMovieProgress = async (userId, movieId, status) => {
         status: result.status,
         last_watched: result.last_watched,
       },
+      completedQuests,
     };
   } catch (err) {
     throw err;

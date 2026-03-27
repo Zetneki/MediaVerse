@@ -1,0 +1,25 @@
+export const THEME_PRICES = {
+  indigo: 100,
+  green: 100,
+  emerald: 100,
+  blue: 100,
+  violet: 100,
+  rose: 100,
+  noir: 100,
+  lime: 100,
+  red: 100,
+  orange: 100,
+  amber: 100,
+  yellow: 100,
+  cyan: 100,
+  sky: 100,
+  purple: 100,
+  fuchsia: 100,
+  pink: 100,
+  christmas: 250,
+  halloween: 250,
+  cyberpunk: 200,
+  neon: 200,
+} as const;
+
+export type ThemePrice = keyof typeof THEME_PRICES;

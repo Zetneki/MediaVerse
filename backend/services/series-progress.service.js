@@ -137,6 +137,8 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
   }
 
   try {
+    completedQuests = [];
+
     const oldProgress = await seriesProgressDao.getProgressBySeriesId(
       userId,
       seriesId,
@@ -155,7 +157,7 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
     if (user.wallet_address && user.wallet_verified) {
       //Add to plan quest (first time only)
       if (status === "plan_to_watch" && !oldProgress) {
-        await questsService.checkAndIncrementQuests(
+        completedQuests = await questsService.checkAndIncrementQuests(
           userId,
           "add_to_plan",
           "series",
@@ -172,6 +174,12 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
         const sameSeasonEpisodeIncremented =
           season === oldProgress.current_season &&
           episode > oldProgress.current_episode;
+
+        series.seasons.sort((a, b) => {
+          if (a.season_number === 0) return 1;
+          if (b.season_number === 0) return -1;
+          return a.season_number - b.season_number;
+        });
 
         if (seasonIncremented) {
           //Season jump: count all episodes between old and new
@@ -214,7 +222,7 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
         }
 
         if (seasonIncremented || sameSeasonEpisodeIncremented) {
-          await questsService.checkAndIncrementQuests(
+          completedQuests = await questsService.checkAndIncrementQuests(
             userId,
             "watch_episode",
             "series",
@@ -223,7 +231,9 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
           );
         }
       } else if (status === "watching" && season > 0 && episode > 0) {
-        for (let s = 1; s <= season; s++) {
+        const targetSeason = season === 0 ? series.seasons.length : season;
+
+        for (let s = 1; s <= targetSeason; s++) {
           const seasonData = series.seasons.find(
             (sd) => sd.season_number === s,
           );
@@ -243,7 +253,7 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
         }
 
         //First time watching (no previous progress)
-        await questsService.checkAndIncrementQuests(
+        completedQuests = await questsService.checkAndIncrementQuests(
           userId,
           "watch_episode",
           "series",
@@ -254,7 +264,7 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
 
       //Complete series quest
       if (status === "completed") {
-        await questsService.checkAndIncrementQuests(
+        completedQuests = await questsService.checkAndIncrementQuests(
           userId,
           "complete_series",
           "series",
@@ -271,6 +281,7 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
         current_episode: result.current_episode,
         last_watched: result.last_watched,
       },
+      completedQuests,
     };
   } catch (err) {
     throw err;

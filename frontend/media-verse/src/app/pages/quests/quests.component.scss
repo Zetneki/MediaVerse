@@ -12,7 +12,7 @@
   padding: $spacing-xxl $spacing-md;
 
   .card {
-    background: var(--library-page-background);
+    background: var(--quest-page-background);
     border-radius: $radius-lg;
     padding: $spacing-xxl $spacing-xl;
     text-align: center;
@@ -78,25 +78,22 @@
     gap: $spacing-md;
     padding: $spacing-md;
     border-radius: $radius-sm;
-    background-color: var(
-      --library-page-components-background
-    ); // todo: ENNEK SAJAT VALTOZO
+    background-color: var(--quest-page-components-background);
   }
 
   .themes {
     padding: $spacing-md;
     border-radius: $radius-sm;
-    background-color: var(
-      --library-page-components-background
-    ); // todo: ENNEK SAJAT VALTOZO
+    background-color: var(--quest-page-components-background);
+    margin-bottom: $spacing-lg;
 
     &__title {
       display: flex;
       justify-content: space-between;
       align-items: center;
-
+      margin-bottom: $spacing-md;
       h2 {
-        margin-block: $spacing-xs;
+        margin-block: 0;
       }
 
       span {
@@ -114,6 +111,18 @@
           backdrop-filter: blur(10px);
           border-radius: 100%;
         }
+      }
+    }
+
+    &__remaining {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, clamp(12rem, 100%, 15rem));
+      grid-template-rows: auto;
+      gap: $spacing-md;
+      justify-content: center;
+
+      @media (max-width: 575px) {
+        grid-template-columns: 1fr;
       }
     }
   }
@@ -138,6 +147,12 @@
 
     .themes {
       border-radius: 0;
+
+      padding: $spacing-sm;
+
+      &__remaining {
+        gap: $spacing-sm;
+      }
     }
   }
 }

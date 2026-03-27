@@ -30,6 +30,7 @@ import { shouldHandleError } from '../../utils/error-handler';
 import { ThemeName } from '../../utils/theme.registry';
 import { filter } from 'rxjs';
 import { ColorMode } from '../../types/theme.type';
+import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 
 @Component({
   selector: 'app-profile',

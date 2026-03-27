@@ -73,6 +73,7 @@ const setSeriesProgress = async (req, res) => {
     res.status(200).json({
       message: MESSAGES[result.action],
       progress: result.progress ?? null,
+      completedQuests: result.completedQuests ?? null,
     });
   } catch (err) {
     console.log(err);

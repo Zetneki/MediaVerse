@@ -62,7 +62,7 @@
         ></p-button>
       </div>
       <div class="library__movies" @fadeSlideIn>
-        @if (isLoading) {
+        @if (isLoading || !isInitialized) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card library></app-skeleton-card>
           }
@@ -107,7 +107,7 @@
         [movieId]="selectedMovie?.id!"
         [existingProgress]="selectedMovie"
         (visibleChange)="editDialogVisibleMovie = $event"
-        (saved)="onMovieSaved($event)"
+        (saved)="onMovieSaved()"
         (deleted)="onMovieDeleted($event)"
       ></app-add-movie-to-library>
     } @else if (this.selectedTypeSignal().value == "series") {
@@ -156,7 +156,7 @@
         ></p-button>
       </div>
       <div class="library__series" @fadeSlideIn>
-        @if (isLoading) {
+        @if (isLoading || !isInitialized) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card library></app-skeleton-card>
           }
@@ -252,7 +252,7 @@
                 />
                 <app-plus-episode-button
                   [series]="item"
-                  (saved)="onSeriesSaved($event)"
+                  (saved)="onSeriesSaved()"
                 ></app-plus-episode-button>
               </div>
             </div>
@@ -267,7 +267,7 @@
         [seriesId]="selectedSeries?.id!"
         [existingProgress]="selectedSeries"
         (visibleChange)="editDialogVisibleSeries = $event"
-        (saved)="onSeriesSaved($event)"
+        (saved)="onSeriesSaved()"
         (deleted)="onSeriesDeleted($event)"
       ></app-add-series-to-library>
     }

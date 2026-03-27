@@ -172,6 +172,9 @@ export class AddMovieToLibraryComponent {
             this.notificationService.success(
               res.message ?? 'Saved successfully',
             );
+            for (const quest of res.completedQuests) {
+              this.notificationService.success(quest + ' quest completed');
+            }
           }
         },
         error: (err) => {

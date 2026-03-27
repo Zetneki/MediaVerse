@@ -14,9 +14,9 @@
 
 -- sepolia --
 
-1. save https://ethereum-sepolia-rpc.publicnode.com in .env for the backend, blockchain and in evironment for the frontend (once)
+1. save https://ethereum-sepolia-rpc.publicnode.com in .env for the backend, blockchain and in evironment.sepolia for the frontend (once)
 2. npm run deploy-sepolia (once)
-3. save contract addresses in .env for the backend and in evironment for the frontend (once)
+3. save contract addresses in .env for the backend and in evironment.sepolia for the frontend (once)
 4. frontend start w sepolia: ng serve --configuration=sepolia
 
 -- network change --
@@ -24,3 +24,4 @@
 1. on blockchain sepolia deploy once - localhost steps everytime
 2. on backend .env value change (as in comment the at the moment invalid values - rpc url, contract addresses)
 3. on frontend ng serve or ng serve --configuration=sepolia
+4. in the wallet change the token source (hardhat local, sepolia) based on the used network

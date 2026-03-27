@@ -76,6 +76,7 @@ export class LibraryComponent {
   private destroyRef = inject(DestroyRef);
   authService = inject(AuthService);
   private isFirstLoad = true;
+  isInitialized = false;
 
   skeletonArray = Array(20);
 
@@ -252,6 +253,7 @@ export class LibraryComponent {
 
         this.totalItems = res.total;
         this.isLoading = false;
+        this.isInitialized = true;
       });
 
     this.triggerLoad();
@@ -402,25 +404,8 @@ export class LibraryComponent {
     this.editDialogVisibleMovie = true;
   }
 
-  onMovieSaved(updatedMovie: {
-    id: number;
-    status: MovieStatus;
-    last_watched: string;
-  }) {
-    const index = this.movies.findIndex((m) => m.id === updatedMovie.id);
-    if (index !== -1) {
-      this.movies[index] = {
-        ...this.movies[index],
-        status: updatedMovie.status,
-        last_watched: updatedMovie.last_watched,
-      };
-
-      this.movies.sort(
-        (a, b) =>
-          new Date(b.last_watched!).getTime() -
-          new Date(a.last_watched!).getTime(),
-      );
-    }
+  onMovieSaved() {
+    this.triggerLoad();
   }
 
   onMovieDeleted(movieId: number) {
@@ -432,29 +417,8 @@ export class LibraryComponent {
     this.editDialogVisibleSeries = true;
   }
 
-  onSeriesSaved(updatedSeries: {
-    id: number;
-    status: SeriesStatus;
-    current_season: number;
-    current_episode: number;
-    last_watched: string;
-  }) {
-    const index = this.series.findIndex((s) => s.id === updatedSeries.id);
-    if (index !== -1) {
-      this.series[index] = {
-        ...this.series[index],
-        status: updatedSeries.status,
-        current_season: updatedSeries.current_season,
-        current_episode: updatedSeries.current_episode,
-        last_watched: updatedSeries.last_watched,
-      };
-
-      this.series.sort(
-        (a, b) =>
-          new Date(b.last_watched!).getTime() -
-          new Date(a.last_watched!).getTime(),
-      );
-    }
+  onSeriesSaved() {
+    this.triggerLoad();
   }
 
   onSeriesDeleted(seriesId: number) {

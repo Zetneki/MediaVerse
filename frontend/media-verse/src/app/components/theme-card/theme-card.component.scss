@@ -1,0 +1,109 @@
+@use "../../../styles/variables" as *;
+
+.card {
+  background: var(--quest-page-list-items-background);
+  padding: $spacing-md;
+  border-radius: $radius-sm;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    "img"
+    "card__data"
+    "card__btns";
+  gap: $spacing-md;
+
+  .img {
+    grid-area: img;
+    width: 100%;
+    height: 10rem;
+    border-radius: $radius-sm;
+  }
+
+  &__data {
+    grid-area: card__data;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-md;
+
+    p {
+      margin: 0;
+    }
+
+    .name {
+      font-size: $font-size-lg;
+      font-weight: bold;
+    }
+
+    #price {
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+
+      p {
+        margin: 0;
+        opacity: 0.6;
+        font-weight: bold;
+      }
+
+      .token {
+        height: 1.5rem;
+        width: auto;
+        background-color: rgba($color: #000000, $alpha: 0.1);
+        border: rgba($color: #ffffff, $alpha: 0.5) 1px solid;
+        backdrop-filter: blur(10px);
+        border-radius: 100%;
+      }
+    }
+  }
+
+  &__btns {
+    grid-area: card__btns;
+    display: inherit;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "preview-toggle buy-btn"
+      "preview-title buy-btn";
+
+    .preview-toggle {
+      grid-area: preview-toggle;
+      align-self: flex-end;
+    }
+
+    .preview-title {
+      grid-area: preview-title;
+      font-size: $font-size-sm;
+      opacity: 0.6;
+      margin: 0;
+    }
+
+    .buy-btn {
+      grid-area: buy-btn;
+      align-self: center;
+    }
+  }
+
+  @media (max-width: 575px) {
+    flex-direction: row;
+
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "img card__data"
+      "img card__btns";
+
+    .img {
+      width: 6rem;
+      height: 8rem;
+    }
+
+    &__data {
+      margin-block: 0;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-grow: 1;
+    }
+  }
+}

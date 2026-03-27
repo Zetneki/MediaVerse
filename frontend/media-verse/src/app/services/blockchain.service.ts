@@ -131,6 +131,16 @@ export class BlockchainService {
     );
     const balance = await tokenCrontract['balanceOf'](userAddress);
 
-    return ethers.formatEther(balance);
+    return Math.floor(parseFloat(ethers.formatEther(balance))).toString();
+  }
+
+  async waitForTransaction(
+    txHash: string,
+    confirmations: number = 1,
+  ): Promise<void> {
+    if (!this.provider) {
+      await this.init();
+    }
+    await this.provider.waitForTransaction(txHash, confirmations);
   }
 }

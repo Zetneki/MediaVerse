@@ -82,6 +82,10 @@ $breakpoint-mobile-width: 500px;
   --library-page-list-items-background: var(--app-background-color);
   --about-page-background: #{layer(10%, black, var(--app-background-color))};
   --about-page-rights-background: var(--app-background-color-light);
+  --not-found-page-background: #{layer(5%, black)};
+  --quest-page-background: #{layer(5%, black)};
+  --quest-page-components-background: var(--app-background-color-light);
+  --quest-page-list-items-background: var(--app-background-color);
 }
 
 .p-dark {
@@ -134,6 +138,14 @@ $breakpoint-mobile-width: 500px;
     )};
   --about-page-background: #{layer(5%, white)};
   --about-page-rights-background: var(--app-background-color-dark);
+  --not-found-page-background: #{layer(5%, white)};
+  --quest-page-background: #{layer(5%, white)};
+  --quest-page-components-background: var(--app-background-color-dark);
+  --quest-page-list-items-background: #{layer(
+      3%,
+      white,
+      var(--app-background-color-dark)
+    )};
 }
 
 .p-drawer {

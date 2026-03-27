@@ -116,7 +116,7 @@ async function rerollQuestSlot(userId, slotNumber) {
     randomQuest.requirement_count,
   );
 
-  //Update cooldown (SHARED - affects both slots!)
+  //Update cooldown (SHARED - affects both slots)
   await questsDao.updateRerollCooldown(userId);
 
   return newQuest;
@@ -201,7 +201,8 @@ async function claimQuestReward(userId, slotNumber) {
  * @param {string} actionType - 'add_to_plan', 'watch_episode', 'complete_movie', 'complete_series'
  * @param {string} contentType - 'movie', 'series'
  * @param {number} contentId
- * @param {sting} episodeIds - Optional episode IDs for quests
+ * @param {string} episodeIds - Optional episode IDs for quests
+ * @returns {Promise<Array<string>>} Array of completed quest names
  */
 async function checkAndIncrementQuests(
   userId,
@@ -212,6 +213,7 @@ async function checkAndIncrementQuests(
 ) {
   //Get user's active quests
   const quests = await questsDao.getUserQuests(userId);
+  const completedQuests = [];
 
   for (const quest of quests) {
     if (quest.is_completed || quest.is_claimed) continue;
@@ -254,6 +256,7 @@ async function checkAndIncrementQuests(
       //Check if quest completed
       if (updatedQuest.current_progress >= updatedQuest.required_progress) {
         await questsDao.markQuestCompleted(quest.id);
+        completedQuests.push(quest.title);
       }
     } else {
       //Etcetera types (add_to_plan, complete_series, complete_movie)
@@ -276,9 +279,12 @@ async function checkAndIncrementQuests(
 
       if (updatedQuest.current_progress >= updatedQuest.required_progress) {
         await questsDao.markQuestCompleted(quest.id);
+        completedQuests.push(quest.title);
       }
     }
   }
+
+  return completedQuests;
 }
 
 /**

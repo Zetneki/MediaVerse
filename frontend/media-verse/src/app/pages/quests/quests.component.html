@@ -23,22 +23,6 @@
           ></app-quest>
         }
       </div>
-      <!-- <p>{{ canReroll() }}</p>
-    <p>{{ nextRerollIn() }}</p> -->
-
-      <!-- <div class="user-info">
-      <p><strong>Username:</strong> {{ user.username }}</p>
-      <p><strong>Created:</strong> {{ user.created_at | date }}</p>
-    </div> -->
-
-      <!-- <div class="wallet-section">
-        <h3>Wallet</h3>
-
-        <button pButton (click)="onGetWalletInfo()" [loading]="isLoading()">
-          Get wallet info
-        </button>
-        <br />
-      </div> -->
 
       <div class="themes">
         <div class="themes__title">
@@ -46,7 +30,7 @@
           @if (tokenBalance()) {
             <span
               >Token balance: {{ tokenBalance() }}
-              <img class="token" src="assets/logo-10.png" alt="logo"
+              <img class="token" src="assets/logo-1.png" alt="logo"
             /></span>
           } @else {
             <span
@@ -60,14 +44,20 @@
             </span>
           }
         </div>
-      </div>
 
-      <p-button
-        label="🎄 Test: Buy Christmas Theme (100 MVT)"
-        (click)="testThemePurchase()"
-        [loading]="isLoading()"
-        [size]="buttonSize()"
-      ></p-button>
+        <div class="themes__remaining">
+          @for (theme of this.remainingThemes(); track $index) {
+            <app-theme-card
+              [theme]="theme"
+              [buttonSize]="buttonSize()"
+              (buyClicked)="themePurchase($event)"
+              [isPreviewing]="previewingTheme() === theme"
+              (previewToggled)="togglePreview(theme, $event)"
+              [isPurchaseLoading]="purchaseThemeLoading() === theme"
+            ></app-theme-card>
+          }
+        </div>
+      </div>
     } @else {
       @if (!hasMetamask) {
         <div class="metamask-not-downloaded">
@@ -106,7 +96,6 @@
       }
     }
   </div>
-  <p-confirmdialog />
 } @else {
   <div class="not-logged-in">
     <div class="card">
@@ -119,3 +108,4 @@
     </div>
   </div>
 }
+<p-confirmdialog />

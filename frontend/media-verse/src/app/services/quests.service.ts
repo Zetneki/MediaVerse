@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { QuestsResponse } from '../models/questsresponse';
+import { ClaimQuestResponse } from '../models/claimquestresponse';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +23,8 @@ export class QuestsService {
     });
   }
 
-  claimQuestReward(slotNumber: number) {
-    return this.http.post(`${this.baseUrl}/quests/claim`, {
+  claimQuestReward(slotNumber: number): Observable<ClaimQuestResponse> {
+    return this.http.post<ClaimQuestResponse>(`${this.baseUrl}/quests/claim`, {
       slotNumber,
     });
   }
