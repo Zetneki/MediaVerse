@@ -11,16 +11,22 @@
         />
       </div>
 
-      <div class="tasks">
-        @for (quest of this.quests(); track $index) {
-          <app-quest
-            [quest]="quest"
-            [buttonSize]="questButtonSize()"
-            [questLoading]="questLoading()"
-            [isClaimLoading]="claimLoadingSlot() === quest.slot_number"
-            (rerollClicked)="rerollQuest($event)"
-            (claimClicked)="claimQuestReward($event)"
-          ></app-quest>
+      <div class="tasks" @fadeSlideIn>
+        @if (isLoading()) {
+          @for (item of questSkeletonArray; track $index) {
+            <app-skeleton-quest></app-skeleton-quest>
+          }
+        } @else {
+          @for (quest of this.quests(); track $index) {
+            <app-quest
+              [quest]="quest"
+              [buttonSize]="questButtonSize()"
+              [questLoading]="questLoading()"
+              [isClaimLoading]="claimLoadingSlot() === quest.slot_number"
+              (rerollClicked)="rerollQuest($event)"
+              (claimClicked)="claimQuestReward($event)"
+            ></app-quest>
+          }
         }
       </div>
 
@@ -45,16 +51,24 @@
           }
         </div>
 
-        <div class="themes__remaining">
+        <div class="themes__remaining" @fadeSlideIn>
           @for (theme of this.remainingThemes(); track $index) {
             <app-theme-card
               [theme]="theme"
               [buttonSize]="buttonSize()"
               (buyClicked)="themePurchase($event)"
-              [isPreviewing]="previewingTheme() === theme"
-              (previewToggled)="togglePreview(theme, $event)"
+              [isPreviewing]="this.themeService.activePreviewTheme() === theme"
+              (previewToggled)="
+                this.themeService.togglePreview(
+                  theme,
+                  this.user.active_theme,
+                  $event
+                )
+              "
               [isPurchaseLoading]="purchaseThemeLoading() === theme"
             ></app-theme-card>
+          } @empty {
+            <p>There are no themes left to show.</p>
           }
         </div>
       </div>

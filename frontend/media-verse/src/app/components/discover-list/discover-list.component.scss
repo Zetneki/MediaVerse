@@ -1,5 +1,6 @@
 @use "../../../styles/variables" as *;
 @use "../../../styles/mixins/discover-page-list-media-mixin" as *;
+@use "../../../styles/mixins/mobile-width-mixin" as *;
 
 .list {
   display: grid;
@@ -16,6 +17,11 @@
     display: flex;
     flex-direction: column;
   }
+
+  @include mobile-width-mixin {
+    gap: $spacing-sm;
+    padding: $spacing-sm;
+  }
 }
 
 .desktop {
@@ -26,7 +32,7 @@
   display: none;
 }
 
-@media (max-width: 500px) {
+@include mobile-width-mixin {
   .desktop {
     display: none;
   }

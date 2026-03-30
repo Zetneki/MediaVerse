@@ -76,13 +76,6 @@ const getWalletInfo = async (userId) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
 
-  //const userWallet = user.wallet_address;
-  //await blockchainService.rewardUser(userWallet, 50);
-  // const balance = await blockchainService.getTokenBalance(user.wallet_address);
-  // console.log("User token balance:", balance);
-  //const hasTheme = await blockchainService.hasTheme(user.wallet_address, "asd");
-  //console.log("User has theme:", hasTheme);
-
   return {
     walletAddress: user.wallet_address,
     walletVerified: user.wallet_verified,

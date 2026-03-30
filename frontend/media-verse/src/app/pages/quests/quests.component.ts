@@ -28,6 +28,8 @@ import { THEME_PRESETS } from '../../utils/theme.registry';
 import { ThemeCardComponent } from '../../components/theme-card/theme-card.component';
 import { THEME_PRICES } from '../../utils/prices.registry';
 import { ThemeService } from '../../services/theme.service';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { SkeletonQuestComponent } from '../../components/skeleton-quest/skeleton-quest.component';
 
 @Component({
   selector: 'app-quests',
@@ -38,13 +40,27 @@ import { ThemeService } from '../../services/theme.service';
     ProgressSpinnerModule,
     RouterLink,
     ThemeCardComponent,
+    SkeletonQuestComponent,
   ],
   providers: [ConfirmationService],
   templateUrl: './quests.component.html',
   styleUrl: './quests.component.scss',
+  animations: [
+    trigger('fadeSlideIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate(
+          '600ms 50ms ease',
+          style({ opacity: 1, transform: 'translateY(0)' }),
+        ),
+      ]),
+    ]),
+  ],
 })
 export class QuestsComponent {
   private destroyRef = inject(DestroyRef);
+  themeService = inject(ThemeService);
+  questSkeletonArray = Array(2);
   user!: User;
   walletConnected = signal<boolean>(false);
   walletAddress = signal<string>('');
@@ -60,7 +76,6 @@ export class QuestsComponent {
   nextRerollIn = signal<number>(0);
   ownedThemes = signal<ThemeName[]>([]);
   allThemes = signal<ThemeName[]>([]);
-  previewingTheme = signal<ThemeName | null>(null);
 
   isLargeScreen = signal<boolean>(window.innerWidth > 1024);
   isSmallScreen = signal<boolean>(window.innerWidth < 501);
@@ -73,7 +88,6 @@ export class QuestsComponent {
     private questsService: QuestsService,
     private confirmationService: ConfirmationService,
     private userService: UserService,
-    private themeService: ThemeService,
   ) {
     this.authService.currentUser$
       .pipe(
@@ -140,16 +154,6 @@ export class QuestsComponent {
   });
 
   buttonSize = computed(() => (this.isLargeScreen() ? undefined : 'small'));
-
-  togglePreview(theme: ThemeName, isOn: boolean) {
-    if (isOn) {
-      this.previewingTheme.set(theme);
-      this.themeService.previewTheme(theme);
-    } else {
-      this.previewingTheme.set(null);
-      this.themeService.applyTheme(this.user.active_theme);
-    }
-  }
 
   loadQuests() {
     this.isLoading.set(true);

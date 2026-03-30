@@ -51,15 +51,12 @@
     align-items: center;
 
     span {
-      backdrop-filter: blur(50px);
-      border-radius: $radius-sm;
-    }
-
-    span {
       display: flex;
       align-content: center;
       align-items: center;
       gap: $spacing-xs;
+      backdrop-filter: blur(50px);
+      border-radius: $radius-sm;
       .token {
         height: 1.5rem;
         width: auto;

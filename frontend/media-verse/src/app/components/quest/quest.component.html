@@ -31,6 +31,8 @@
       icon="pi pi-sync"
       [size]="buttonSize()"
       (onClick)="rerollClicked.emit(quest().slot_number)"
+      pTooltip="Reroll quest"
+      tooltipPosition="top"
       [disabled]="questLoading()"
     ></p-button>
     <p-button
@@ -38,6 +40,8 @@
       icon="pi pi-check-circle"
       [size]="buttonSize()"
       (onClick)="claimClicked.emit(quest().slot_number)"
+      pTooltip="Claim reward"
+      tooltipPosition="top"
       [loading]="isClaimLoading()"
       [disabled]="questLoading()"
     ></p-button>

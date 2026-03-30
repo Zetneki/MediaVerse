@@ -343,7 +343,7 @@
     }
   }
 
-  @media (max-width: 500px) {
+  @include mobile-width-mixin {
     padding-inline: 0;
     &__filter,
     &__movies,

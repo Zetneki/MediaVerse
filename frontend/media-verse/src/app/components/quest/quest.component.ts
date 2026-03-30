@@ -2,10 +2,11 @@ import { Component, input, output } from '@angular/core';
 import { Quest } from '../../models/quest';
 import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { TooltipModule, Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-quest',
-  imports: [ButtonModule, ProgressBarModule],
+  imports: [ButtonModule, ProgressBarModule, Tooltip],
   templateUrl: './quest.component.html',
   styleUrl: './quest.component.scss',
 })

@@ -107,6 +107,11 @@
       display: flex;
       flex-direction: column;
     }
+
+    @include discover-page-media-mixin {
+      gap: $spacing-sm;
+      padding: $spacing-sm;
+    }
   }
 
   .paginator {

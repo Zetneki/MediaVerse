@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { useTheme } from '@primeng/themes';
 import { THEME_PRESETS, ThemeName } from '../utils/theme.registry';
 import { ColorMode } from '../types/theme.type';
@@ -8,6 +8,7 @@ import { ColorMode } from '../types/theme.type';
 })
 export class ThemeService {
   private currentTheme: ThemeName = 'indigo';
+  activePreviewTheme = signal<ThemeName | null>(null);
   private mode: ColorMode = 'system';
 
   private systemDarkQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -45,6 +46,16 @@ export class ThemeService {
       preset,
       options: { darkModeSelector: '.p-dark' },
     });
+  }
+
+  togglePreview(theme: ThemeName, activeTheme: ThemeName, isOn: boolean) {
+    if (isOn) {
+      this.activePreviewTheme.set(theme);
+      this.previewTheme(theme);
+    } else {
+      this.activePreviewTheme.set(null);
+      this.applyTheme(activeTheme);
+    }
   }
 
   getCurrentTheme(): ThemeName {
