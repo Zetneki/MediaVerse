@@ -137,7 +137,7 @@ export class WalletService {
             symbol: 'MVT',
             decimals: 18,
             image:
-              'https://github.com/Zetneki/MediaVerse/blob/main/frontend/media-verse/public/assets/logo-8.png',
+              'https://raw.githubusercontent.com/Zetneki/MediaVerse/refs/heads/main/frontend/media-verse/public/assets/logo-1.png',
           },
         },
       });

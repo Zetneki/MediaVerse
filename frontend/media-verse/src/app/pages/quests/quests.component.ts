@@ -286,10 +286,12 @@ export class QuestsComponent {
 
       await this.authService.loadUserFromToken();
     } catch (err: any) {
-      const errorMessage =
-        err.error?.error || err.message === 'MetaMask not installed'
-          ? err.message
-          : 'Failed to connect wallet';
+      let errorMessage;
+
+      if (err.message.toLowerCase().includes('user rejected action')) return;
+      else if (err.message === 'MetaMask not installed')
+        errorMessage = err.message;
+      else errorMessage = err.error?.error ?? 'Failed to connect wallet';
 
       this.notificationService.error(errorMessage);
     } finally {
