@@ -6,6 +6,14 @@ const {
 const sanitizeHtml = require("sanitize-html");
 const { AppError } = require("../middlewares/error-handler.middleware");
 
+/**
+ * Get reviews by content id and type with pagination
+ * @param {number} contentId
+ * @param {string} contentType
+ * @param {number} page
+ * @param {number} limit
+ * @returns {Promise<items>, total} Paginated reviews
+ */
 const getReviewsByContent = async (
   contentId,
   contentType,
@@ -30,6 +38,14 @@ const getReviewsByContent = async (
   return reviews;
 };
 
+/**
+ * Get specific user's reviews with pagination
+ * @param {number} userId
+ * @param {number} page
+ * @param {number} limit
+ * @param {string} search
+ * @returns {Promise<items>, total} Paginated reviews
+ */
 const getUserReviews = async (userId, page = 1, limit = 20, search = "") => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
@@ -44,6 +60,15 @@ const getUserReviews = async (userId, page = 1, limit = 20, search = "") => {
   return reviews;
 };
 
+/**
+ * Insert or update user's review about the chosen content
+ * @param {number} userId
+ * @param {number} contentId
+ * @param {string} contentType
+ * @param {number} score
+ * @param {string} review
+ * @returns {action: string} action - INSERTED, UPDATED, UNCHANGED
+ */
 const upsertReview = async (userId, contentId, contentType, score, review) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
@@ -57,6 +82,7 @@ const upsertReview = async (userId, contentId, contentType, score, review) => {
   if (parsedScore < 1 || parsedScore > 5)
     throw AppError.badRequest("Score must be between 1 and 5");
 
+  //todo: some kind of limit for the length of the review
   const cleanReview = review
     ? sanitizeHtml(review, {
         allowedTags: [
@@ -116,6 +142,12 @@ const upsertReview = async (userId, contentId, contentType, score, review) => {
   };
 };
 
+/**
+ * Delete user's review about the chosen content
+ * @param {number} userId
+ * @param {number} contentId
+ * @param {string} contentType
+ */
 const deleteReview = async (userId, contentId, contentType) => {
   const user = await usersDao.findById(userId);
   if (!user) throw AppError.notFound("User not found");
