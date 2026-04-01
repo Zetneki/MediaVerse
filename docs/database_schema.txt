@@ -148,6 +148,19 @@ CREATE TABLE IF NOT EXISTS public.user_quest_slots
     CONSTRAINT unique_user_quest_slot UNIQUE (user_id, slot_number)
 );
 
+CREATE TABLE IF NOT EXISTS public.user_reviews
+(
+    id bigserial NOT NULL,
+    user_id integer NOT NULL,
+    content_id bigint NOT NULL,
+    content_type character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    score smallint NOT NULL,
+    review text COLLATE pg_catalog."default",
+    reviewed_at timestamp with time zone NOT NULL DEFAULT now(),
+    CONSTRAINT user_reviews_pkey PRIMARY KEY (id),
+    CONSTRAINT unique_user_content_review UNIQUE (user_id, content_id, content_type)
+);
+
 CREATE TABLE IF NOT EXISTS public.user_series_progress
 (
     user_id integer NOT NULL,
@@ -227,6 +240,15 @@ ALTER TABLE IF EXISTS public.user_quest_slots
     ON DELETE CASCADE;
 CREATE INDEX IF NOT EXISTS idx_user_quest_slots_user_id
     ON public.user_quest_slots(user_id);
+
+
+ALTER TABLE IF EXISTS public.user_reviews
+    ADD CONSTRAINT user_reviews_user_id_fkey FOREIGN KEY (user_id)
+    REFERENCES public.user_profile (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS idx_user_reviews_user_id
+    ON public.user_reviews(user_id);
 
 
 ALTER TABLE IF EXISTS public.user_series_progress

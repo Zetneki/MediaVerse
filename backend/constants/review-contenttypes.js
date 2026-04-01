@@ -1,0 +1,11 @@
+const REVIEW_CONTENTTYPES = {
+  MOVIE: "movie",
+  SERIES: "series",
+};
+
+const VALID_REVIEW_CONTENTTYPES = Object.values(REVIEW_CONTENTTYPES);
+
+module.exports = {
+  REVIEW_CONTENTTYPES,
+  VALID_REVIEW_CONTENTTYPES,
+};

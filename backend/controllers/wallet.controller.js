@@ -1,7 +1,6 @@
 const { AppError } = require("../middlewares/error-handler.middleware");
 const { handleControllerError } = require("../utils/error-response.util");
 const walletService = require("../services/wallet.service");
-const blockchainService = require("../services/blockchain.service");
 
 const connectWallet = async (req, res) => {
   try {
