@@ -1,6 +1,7 @@
 const { AppError } = require("../middlewares/error-handler.middleware");
 const { handleControllerError } = require("../utils/error-response.util");
 const userReviewsService = require("../services/user-reviews.service");
+const { MESSAGES } = require("../constants/review-messages");
 
 const getReviewsByContent = async (req, res) => {
   try {
@@ -8,8 +9,8 @@ const getReviewsByContent = async (req, res) => {
     if (!contentId) throw AppError.badRequest("Missing content ID");
     if (!contentType) throw AppError.badRequest("Missing content type");
 
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
 
     const reviews = await userReviewsService.getReviewsByContent(
       contentId,
@@ -30,13 +31,16 @@ const getUserReviews = async (req, res) => {
     const userId = req.user.id;
     if (!userId) throw AppError.unauthorized("User not logged in");
 
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+    const search = req.query.search || "";
+
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
 
     const reviews = await userReviewsService.getUserReviews(
       userId,
       page,
       limit,
+      search,
     );
 
     res.status(200).json(reviews);
@@ -56,7 +60,7 @@ const upsertReview = async (req, res) => {
     if (!contentType) throw AppError.badRequest("Missing content type");
     if (!score) throw AppError.badRequest("Missing score");
 
-    await userReviewsService.upsertReview(
+    const result = await userReviewsService.upsertReview(
       userId,
       contentId,
       contentType,
@@ -64,7 +68,7 @@ const upsertReview = async (req, res) => {
       review,
     );
 
-    res.status(201).json({ message: "Review created successfully" });
+    res.status(201).json({ message: MESSAGES[result.action] });
   } catch (err) {
     //console.log(err);
     handleControllerError(err, res);

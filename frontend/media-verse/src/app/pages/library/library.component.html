@@ -62,14 +62,12 @@
         ></p-button>
       </div>
 
-      @if (isLoading || !isInitialized) {
-        <div class="library__movies" @fadeSlideIn>
+      <div class="library__movies" @fadeSlideIn>
+        @if (isLoading || !isInitialized) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card library></app-skeleton-card>
           }
-        </div>
-      } @else {
-        <div class="library__movies" @fadeSlideIn>
+        } @else {
           @for (movie of movies; track movie.id) {
             <div
               class="movie"
@@ -102,8 +100,8 @@
           } @empty {
             <p>There are no movies to show.</p>
           }
-        </div>
-      }
+        }
+      </div>
 
       <app-add-movie-to-library
         [visible]="editDialogVisibleMovie"
@@ -159,14 +157,12 @@
         ></p-button>
       </div>
 
-      @if (isLoading || !isInitialized) {
-        <div class="library__series" @fadeSlideIn>
+      <div class="library__series" @fadeSlideIn>
+        @if (isLoading || !isInitialized) {
           @for (i of skeletonArray; let idx = $index; track idx) {
             <app-skeleton-card library></app-skeleton-card>
           }
-        </div>
-      } @else {
-        <div class="library__series" @fadeSlideIn>
+        } @else {
           @for (item of series; track item.id) {
             <div
               class="series"
@@ -265,8 +261,8 @@
           } @empty {
             <p>There are no series to show.</p>
           }
-        </div>
-      }
+        }
+      </div>
 
       <app-add-series-to-library
         [visible]="editDialogVisibleSeries"

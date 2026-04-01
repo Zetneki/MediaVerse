@@ -1,6 +1,28 @@
 const db = require("../config/db");
 
+async function doesContentExist(contentId, contentType) {
+  const res = await db.query(
+    `SELECT EXISTS(
+      SELECT 1 FROM ${contentType}_cache 
+      WHERE id = $1
+    ) as exists`,
+    [contentId],
+  );
+  return res.rows[0].exists;
+}
+
+async function getReviewByUserAndContent(userId, contentId, contentType) {
+  if (!(await doesContentExist(contentId, contentType))) return false;
+  const res = await db.query(
+    `SELECT score, review FROM user_reviews 
+     WHERE user_id = $1 AND content_id = $2 AND content_type = $3`,
+    [userId, contentId, contentType],
+  );
+  return res.rows[0] ?? null;
+}
+
 async function getReviewsByContent(contentId, contentType, page, limit = 20) {
+  if (!(await doesContentExist(contentId, contentType))) return false;
   const res = await db.query(
     `
     SELECT 
@@ -18,34 +40,65 @@ async function getReviewsByContent(contentId, contentType, page, limit = 20) {
     [contentId, contentType, limit, (page - 1) * limit],
   );
 
+  const items = res.rows;
+  const totalCount = items.length > 0 ? parseInt(items[0].total_count) : 0;
+
   return {
-    reviews: res.rows,
-    total: res.rows[0]?.total_count ?? 0,
+    items: items.map((item) => {
+      const { total_count, ...rest } = item;
+      return rest;
+    }),
+    total: totalCount,
   };
 }
 
-async function getUserReviews(userId, page, limit = 20) {
+async function getUserReviews(userId, page, limit = 20, search = "") {
+  const conditions = ["r.user_id = $1"];
+  const params = [userId];
+  let paramIndex = 2;
+
+  if (search && search.trim() !== "") {
+    conditions.push(`
+      (mc.title ILIKE $${paramIndex} OR sc.name ILIKE $${paramIndex})
+    `);
+    params.push(`%${search.trim()}%`);
+    paramIndex++;
+  }
+
+  params.push(limit, (page - 1) * limit);
+
   const res = await db.query(
     `
     SELECT 
-    r.score,
-    r.review,
-    r.reviewed_at,
-    CASE
-      WHEN r.content_type = 'movie' THEN mc.title
-      WHEN r.content_type = 'series' THEN sc.name
-    END as content_title
+      r.score,
+      r.review,
+      r.reviewed_at,
+      r.content_type,
+      CASE
+        WHEN r.content_type = 'movie' THEN mc.title
+        WHEN r.content_type = 'series' THEN sc.name
+      END as content_title,
+      COUNT(*) OVER() AS total_count
     FROM user_reviews r
     LEFT JOIN movie_cache mc ON mc.id = r.content_id AND r.content_type = 'movie'
     LEFT JOIN series_cache sc ON sc.id = r.content_id AND r.content_type = 'series'
-    WHERE r.user_id = $1 
+    WHERE ${conditions.join(" AND ")}
     ORDER BY r.reviewed_at DESC 
-    LIMIT $2 OFFSET $3
+    LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `,
-    [userId, limit, (page - 1) * limit],
+    params,
   );
 
-  return res.rows;
+  const items = res.rows;
+  const totalCount = items.length > 0 ? parseInt(items[0].total_count) : 0;
+
+  return {
+    items: items.map((item) => {
+      const { total_count, ...rest } = item;
+      return rest;
+    }),
+    total: totalCount,
+  };
 }
 
 async function upsertReview(userId, contentId, contentType, score, review) {
@@ -59,7 +112,8 @@ async function upsertReview(userId, contentId, contentType, score, review) {
       score = EXCLUDED.score,
       review = EXCLUDED.review,
       reviewed_at = NOW()
-    RETURNING *
+    RETURNING *, 
+      (xmax = 0) as inserted
     `,
     [userId, contentId, contentType, score, review],
   );
@@ -81,6 +135,7 @@ async function deleteReview(userId, contentId, contentType) {
 }
 
 module.exports = {
+  getReviewByUserAndContent,
   getReviewsByContent,
   getUserReviews,
   upsertReview,

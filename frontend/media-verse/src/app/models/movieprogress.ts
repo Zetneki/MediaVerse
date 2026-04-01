@@ -8,4 +8,5 @@ export interface MovieProgress {
   status: MovieStatus;
   last_watched?: string;
   genres?: Genre[];
+  score?: number;
 }

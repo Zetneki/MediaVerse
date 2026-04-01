@@ -14,4 +14,5 @@ export interface SeriesProgress {
   total_seasons: number;
   total_episodes: number;
   genres?: Genre[];
+  score?: number;
 }

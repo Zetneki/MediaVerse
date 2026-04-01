@@ -63,9 +63,13 @@ async function getMoviesWithDetails(
       p.status,
       p.last_watched,
       m.genres,
+      r.score,
       COUNT(*) OVER() as total_count
     FROM user_movie_progress p
     JOIN movie_cache m ON m.id = p.movie_id
+    LEFT JOIN user_reviews r ON r.user_id = p.user_id 
+      AND r.content_id = p.movie_id 
+      AND r.content_type = 'movie'
     WHERE ${whereClause}
     ORDER BY ${orderByClause}
     LIMIT $${paramIndex} OFFSET $${paramIndex + 1}

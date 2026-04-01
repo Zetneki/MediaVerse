@@ -3,7 +3,7 @@ const router = express.Router();
 const userReviewsController = require("../controllers/user-reviews.controller");
 const { authenticate } = require("../middlewares/auth.middleware");
 
-router.get("/user", authenticate, userReviewsController.getUserReviews);
+router.get("/", authenticate, userReviewsController.getUserReviews);
 router.get(
   "/:contentType/:contentId",
   userReviewsController.getReviewsByContent,

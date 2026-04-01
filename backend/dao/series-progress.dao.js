@@ -75,9 +75,13 @@ async function getSeriesWithDetails(
       s.total_seasons,
       s.total_episodes,
       s.genres,
+      r.score,
       COUNT(*) OVER() as total_count
     FROM user_series_progress p
     JOIN series_cache s ON s.id = p.series_id
+    LEFT JOIN user_reviews r ON r.user_id = p.user_id 
+      AND r.content_id = p.series_id 
+      AND r.content_type = 'series'
     WHERE ${whereClause}
     ORDER BY ${orderByClause}
     LIMIT $${paramIndex} OFFSET $${paramIndex + 1}

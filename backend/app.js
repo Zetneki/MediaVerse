@@ -17,6 +17,7 @@ const movieProgressRouter = require("./routes/movie-progress.routes");
 const seriesProgressRouter = require("./routes/series-progress.routes");
 const walletRouter = require("./routes/wallet.routes");
 const questsRouter = require("./routes/quests.routes");
+const userReviewsRouter = require("./routes/user-reviews.routes");
 
 require("./cron/movie-refresh.cron");
 require("./cron/series-refresh.cron");
@@ -77,6 +78,7 @@ app.use("/movie-progress", movieProgressRouter);
 app.use("/series-progress", seriesProgressRouter);
 app.use("/wallet", walletRouter);
 app.use("/quests", questsRouter);
+app.use("/user-reviews", userReviewsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
