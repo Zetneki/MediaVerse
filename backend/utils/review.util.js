@@ -5,6 +5,12 @@ const isEmptyReview = (html) => {
   return text.length === 0;
 };
 
+const getTextLength = (html) => {
+  if (!html) return 0;
+  return html.replace(/<[^>]*>/g, "").trim().length;
+};
+
 module.exports = {
   isEmptyReview,
+  getTextLength,
 };

@@ -4,7 +4,7 @@ const {
   VALID_REVIEW_CONTENTTYPES,
 } = require("../constants/review-contenttypes");
 const sanitizeHtml = require("sanitize-html");
-const { isEmptyReview } = require("../utils/is-empty-review.util");
+const { isEmptyReview, getTextLength } = require("../utils/review.util");
 const { AppError } = require("../middlewares/error-handler.middleware");
 
 /**
@@ -105,7 +105,20 @@ const upsertReview = async (userId, contentId, contentType, score, review) => {
     review = null;
   }
 
-  //todo: some kind of limit for the length of the review
+  const textLength = getTextLength(review);
+  if (textLength > 5000)
+    throw AppError.badRequest(
+      "Review is too long (maximum 5000 characters). Your review is " +
+        textLength +
+        " characters long.",
+    );
+  if (review && review.length > 20000)
+    throw AppError.badRequest(
+      "Review with formatting is too long (maximum 20000 characters) Your review is " +
+        review.length +
+        " characters long.",
+    );
+
   const cleanReview = review
     ? sanitizeHtml(review, {
         allowedTags: [
@@ -138,8 +151,6 @@ const upsertReview = async (userId, contentId, contentType, score, review) => {
         allowedSchemes: ["http", "https", "mailto"],
       })
     : null;
-
-  console.log(cleanReview);
 
   const contentExists = await userReviewsDao.doesContentExist(
     parsedContentId,

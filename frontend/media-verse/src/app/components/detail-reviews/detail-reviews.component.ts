@@ -44,7 +44,7 @@ export class DetailReviewsComponent implements OnInit, OnChanges {
   contentId = input.required<number>();
   contentType = input.required<string>();
   first: number = 0;
-  rows: number = 20;
+  rows: number = 2;
 
   currentReviews = signal<DetailReview[]>([]);
   totalReviewNumber = signal<number>(0);

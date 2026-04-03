@@ -186,6 +186,29 @@ $breakpoint-mobile-width: 500px;
   --p-accordion-content-padding: 0;
 }
 
-.p-confirmdialog.p-dialog {
-  margin: 1rem;
+.ql-editor {
+  ul,
+  ol {
+    padding-left: 1.5em;
+  }
+
+  ul > li {
+    list-style-type: disc;
+  }
+
+  ol > li {
+    list-style-type: decimal;
+  }
+
+  ul > li > ul > li {
+    list-style-type: circle;
+  }
+
+  ol > li > ol > li {
+    list-style-type: lower-alpha;
+  }
+
+  ol > li > ol > li > ol > li {
+    list-style-type: lower-roman;
+  }
 }

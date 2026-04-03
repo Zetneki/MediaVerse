@@ -33,7 +33,7 @@ export class WriteReviewComponent {
   saveReview = output<UserReview>();
   deleteReview = output<void>();
 
-  formats = ['bold', 'italic', 'underline', 'list', 'indent', 'size'];
+  formats = ['bold', 'italic', 'underline', 'blockquote', 'indent', 'size'];
 
   constructor(private confirmationService: ConfirmationService) {
     effect(() => {
