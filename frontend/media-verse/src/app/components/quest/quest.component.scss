@@ -66,6 +66,10 @@
     gap: $spacing-sm;
     align-self: flex-end;
 
+    .progress {
+      --p-progressbar-height: 0.5rem;
+    }
+
     .episode-watched {
       font-size: $font-size-sm;
       opacity: 0.8;

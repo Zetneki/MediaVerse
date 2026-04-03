@@ -59,7 +59,7 @@ export class ThemeService {
   }
 
   getCurrentTheme(): ThemeName {
-    return this.currentTheme;
+    return this.activePreviewTheme() ?? this.currentTheme;
   }
 
   setMode(mode: ColorMode) {

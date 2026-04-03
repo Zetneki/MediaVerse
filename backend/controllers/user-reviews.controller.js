@@ -5,6 +5,7 @@ const { MESSAGES } = require("../constants/review-messages");
 
 const getReviewsByContent = async (req, res) => {
   try {
+    const userId = req.user?.id ?? null;
     const { contentType, contentId } = req.params;
     if (!contentId) throw AppError.badRequest("Missing content ID");
     if (!contentType) throw AppError.badRequest("Missing content type");
@@ -13,6 +14,7 @@ const getReviewsByContent = async (req, res) => {
     const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
 
     const reviews = await userReviewsService.getReviewsByContent(
+      userId,
       contentId,
       contentType,
       page,

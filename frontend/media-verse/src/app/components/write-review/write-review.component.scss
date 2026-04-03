@@ -1,0 +1,49 @@
+@use "../../../styles/variables.scss" as *;
+@use "../../../styles/mixins/mobile-width-mixin.scss" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin.scss" as *;
+
+.dialog {
+  ::ng-deep .p-dialog {
+    width: 60vw !important;
+  }
+  .score {
+    span {
+      display: flex;
+      gap: $spacing-sm;
+      align-items: center;
+    }
+  }
+
+  ::ng-deep .ql-editor {
+    scrollbar-width: thin;
+    scrollbar-color: #888 rgba(0, 0, 0, 0);
+  }
+
+  & {
+    --p-dialog-header-padding: 1rem 1rem 0rem 1rem;
+  }
+
+  &__btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-md;
+    margin-top: $spacing-md;
+  }
+
+  @include desktop-mobile-media-mixin {
+    ::ng-deep .p-dialog {
+      width: 95vw !important;
+    }
+  }
+
+  @include mobile-width-mixin {
+    &__btns {
+      gap: $spacing-sm;
+    }
+
+    & {
+      --p-dialog-header-padding: 0.5rem 1rem 0rem 1rem;
+      --p-dialog-content-padding: 0.5rem;
+    }
+  }
+}

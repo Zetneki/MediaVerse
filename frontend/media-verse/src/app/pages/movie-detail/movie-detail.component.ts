@@ -23,8 +23,8 @@ import { SkeletonDetailsComponent } from '../../components/skeleton-details/skel
 import { TrailerComponent } from '../../components/trailer/trailer.component';
 import { GalleriaComponent } from '../../components/galleria/galleria.component';
 import { AddMovieToLibraryComponent } from '../../components/add-movie-to-library/add-movie-to-library.component';
-import { User } from '../../models/user';
 import { AuthService } from '../../services/auth.service';
+import { DetailReviewsComponent } from '../../components/detail-reviews/detail-reviews.component';
 
 @Component({
   selector: 'app-movie-detail',
@@ -40,6 +40,7 @@ import { AuthService } from '../../services/auth.service';
     TrailerComponent,
     GalleriaComponent,
     AddMovieToLibraryComponent,
+    DetailReviewsComponent,
   ],
   templateUrl: './movie-detail.component.html',
   styleUrl: './movie-detail.component.scss',
@@ -56,6 +57,7 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   private paramSub!: Subscription;
   isLoading: boolean = false;
   addToLibraryVisible = signal<boolean>(false);
+  writeReviewVisible = signal<boolean>(false);
 
   ngOnInit() {
     this.paramSub = this.route.paramMap.subscribe((params) => {

@@ -1,7 +1,7 @@
 const MESSAGES = {
   INSERTED: "Review successfully created",
-  UPDATED: "Review progress successfully updated",
-  UNCHANGED: "Review progress unchanged",
+  UPDATED: "Review successfully updated",
+  UNCHANGED: "Review unchanged",
 };
 
 module.exports = {

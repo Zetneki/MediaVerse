@@ -22,7 +22,7 @@ const connectWallet = async (req, res) => {
       walletAddress: connectedWallet,
     });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     handleControllerError(err, res);
   }
 };

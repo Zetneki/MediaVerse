@@ -1,6 +1,37 @@
 const { verifyAccessToken, verifyRefreshToken } = require("../utils/jwt.util");
 const usersDao = require("../dao/users.dao");
 
+const optionalAuthenticate = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      req.user = null;
+      return next();
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      req.user = null;
+      return next();
+    }
+
+    const payload = verifyAccessToken(token);
+    const user = await usersDao.findById(payload.id);
+
+    if (!user || payload.tokenVersion !== user.token_version) {
+      req.user = null;
+      return next();
+    }
+
+    req.user = payload;
+    next();
+  } catch (err) {
+    req.user = null;
+    next();
+  }
+};
+
 const authenticate = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -73,6 +104,7 @@ const validateRefreshToken = async (req, res, next) => {
 };
 
 module.exports = {
+  optionalAuthenticate,
   authenticate,
   validateRefreshToken,
 };

@@ -11,18 +11,16 @@ async function doesContentExist(contentId, contentType) {
   return res.rows[0].exists;
 }
 
-async function getReviewByUserAndContent(userId, contentId, contentType) {
-  if (!(await doesContentExist(contentId, contentType))) return false;
+async function getUserReviewByContent(userId, contentId, contentType) {
   const res = await db.query(
     `SELECT score, review FROM user_reviews 
      WHERE user_id = $1 AND content_id = $2 AND content_type = $3`,
     [userId, contentId, contentType],
   );
-  return res.rows[0] ?? null;
+  return res.rows[0];
 }
 
 async function getReviewsByContent(contentId, contentType, page, limit = 20) {
-  if (!(await doesContentExist(contentId, contentType))) return false;
   const res = await db.query(
     `
     SELECT 
@@ -135,8 +133,9 @@ async function deleteReview(userId, contentId, contentType) {
 }
 
 module.exports = {
-  getReviewByUserAndContent,
+  doesContentExist,
   getReviewsByContent,
+  getUserReviewByContent,
   getUserReviews,
   upsertReview,
   deleteReview,

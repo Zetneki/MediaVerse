@@ -1,0 +1,69 @@
+<p-dialog
+  header="Write Review"
+  [modal]="true"
+  [visible]="visible()"
+  (visibleChange)="onDialogVisibilityChange($event)"
+  [draggable]="false"
+  class="dialog"
+>
+  <p class="score">
+    <span>Rating: <p-rating [(ngModel)]="score" /></span>
+  </p>
+
+  <p-editor
+    [(ngModel)]="review"
+    [formats]="formats"
+    [style]="{ height: '320px' }"
+  >
+    <ng-template #header>
+      <!-- font size -->
+      <span class="ql-formats">
+        <select class="ql-size">
+          <option value="huge">Huge</option>
+          <option value="large">Large</option>
+          <option selected>Normal</option>
+        </select>
+      </span>
+
+      <!-- font style -->
+      <span class="ql-formats">
+        <button type="button" class="ql-bold" aria-label="Bold"></button>
+        <button type="button" class="ql-italic" aria-label="Italic"></button>
+        <button
+          type="button"
+          class="ql-underline"
+          aria-label="Underline"
+        ></button>
+      </span>
+
+      <!-- indent -->
+      <span class="ql-formats">
+        <button class="ql-list" value="ordered"></button>
+        <!-- <button class="ql-list" value="bullet"></button> -->
+        <button class="ql-indent" value="-1"></button>
+        <button class="ql-indent" value="+1"></button>
+      </span>
+      <!-- cleanup -->
+      <span class="ql-formats">
+        <button type="button" class="ql-clean" aria-label="Clean"></button>
+      </span>
+    </ng-template>
+  </p-editor>
+
+  <div class="dialog__btns">
+    <p-button
+      label="Cancel"
+      severity="secondary"
+      (onClick)="close()"
+    ></p-button>
+    @if (this.ownReview()) {
+      <p-button
+        label="Delete"
+        severity="danger"
+        (onClick)="delete()"
+      ></p-button>
+    }
+    <p-button label="Save" severity="success" (onClick)="save()"></p-button>
+  </div>
+</p-dialog>
+<p-confirmdialog></p-confirmdialog>

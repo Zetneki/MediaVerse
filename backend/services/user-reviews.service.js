@@ -4,10 +4,12 @@ const {
   VALID_REVIEW_CONTENTTYPES,
 } = require("../constants/review-contenttypes");
 const sanitizeHtml = require("sanitize-html");
+const { isEmptyReview } = require("../utils/is-empty-review.util");
 const { AppError } = require("../middlewares/error-handler.middleware");
 
 /**
  * Get reviews by content id and type with pagination
+ * @param {number} userId
  * @param {number} contentId
  * @param {string} contentType
  * @param {number} page
@@ -15,6 +17,7 @@ const { AppError } = require("../middlewares/error-handler.middleware");
  * @returns {Promise<items>, total} Paginated reviews
  */
 const getReviewsByContent = async (
+  userId,
   contentId,
   contentType,
   page = 1,
@@ -26,16 +29,32 @@ const getReviewsByContent = async (
   const parsedContentId = parseInt(contentId);
   if (isNaN(parsedContentId)) throw AppError.badRequest("Invalid content ID");
 
-  const reviews = await userReviewsDao.getReviewsByContent(
+  const contentExists = await userReviewsDao.doesContentExist(
     parsedContentId,
     contentType,
-    page,
-    limit,
   );
+  if (!contentExists) throw AppError.notFound("Content not found");
 
-  if (!reviews) throw AppError.notFound("Content not found");
+  const [reviews, userReview] = await Promise.all([
+    userReviewsDao.getReviewsByContent(
+      parsedContentId,
+      contentType,
+      page,
+      limit,
+    ),
+    userId
+      ? userReviewsDao.getUserReviewByContent(
+          userId,
+          parsedContentId,
+          contentType,
+        )
+      : null,
+  ]);
 
-  return reviews;
+  return {
+    ...reviews,
+    userReview: userReview ?? null,
+  };
 };
 
 /**
@@ -82,6 +101,10 @@ const upsertReview = async (userId, contentId, contentType, score, review) => {
   if (parsedScore < 1 || parsedScore > 5)
     throw AppError.badRequest("Score must be between 1 and 5");
 
+  if (isEmptyReview(review)) {
+    review = null;
+  }
+
   //todo: some kind of limit for the length of the review
   const cleanReview = review
     ? sanitizeHtml(review, {
@@ -106,20 +129,31 @@ const upsertReview = async (userId, contentId, contentType, score, review) => {
         ],
         allowedAttributes: {
           a: ["href", "target", "rel"],
+          p: ["class"],
           span: ["class"],
+          ol: ["class"],
+          ul: ["class"],
+          li: ["class"],
         },
         allowedSchemes: ["http", "https", "mailto"],
       })
     : null;
 
-  const existing = await userReviewsDao.getReviewByUserAndContent(
+  console.log(cleanReview);
+
+  const contentExists = await userReviewsDao.doesContentExist(
+    parsedContentId,
+    contentType,
+  );
+  if (!contentExists) throw AppError.notFound("Content not found");
+
+  const existing = await userReviewsDao.getUserReviewByContent(
     userId,
     parsedContentId,
     contentType,
   );
 
-  if (existing === false) throw AppError.notFound("Content not found");
-  else if (
+  if (
     existing &&
     existing.score === parsedScore &&
     existing.review === cleanReview

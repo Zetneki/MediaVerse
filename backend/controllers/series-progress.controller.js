@@ -44,7 +44,7 @@ const getSeriesProgress = async (req, res) => {
     );
     res.status(200).json(seriesProgress);
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -76,7 +76,7 @@ const setSeriesProgress = async (req, res) => {
       completedQuests: result.completedQuests ?? null,
     });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     handleControllerError(err, res);
   }
 };

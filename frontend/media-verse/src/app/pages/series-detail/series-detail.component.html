@@ -121,6 +121,12 @@
       </div>
     </div>
 
+    <app-detail-reviews
+      [contentId]="series.id"
+      [contentType]="'series'"
+      [isLoggedIn]="authService.isLoggedIn()"
+    ></app-detail-reviews>
+
     <app-trailer [originalTrailerUrl]="series.trailer ?? ''"></app-trailer>
 
     <app-galleria [backDrops]="series.backdrops"></app-galleria>

@@ -36,8 +36,11 @@
   }
 
   &__no-trailer {
+    box-sizing: border-box;
+    background: var(--trailer-background-color);
     font-size: $font-size-md;
-    margin-block: $spacing-xxl;
+    padding-block: $spacing-xxl;
+    margin: 0;
     text-align: center;
   }
 

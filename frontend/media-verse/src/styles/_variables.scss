@@ -36,6 +36,11 @@ $breakpoint-add-series-to-library: 500px;
 $breakpoint-mobile-width: 500px;
 
 :root {
+  .p-toggleswitch {
+    --p-toggleswitch-background: rgba(0, 0, 0, 0.1);
+    --p-toggleswitch-hover-background: rgba(0, 0, 0, 0.2);
+  }
+
   //system tokens
   --app-page-background: var(--p-surface-50);
 
@@ -62,6 +67,8 @@ $breakpoint-mobile-width: 500px;
   --discover-page-genres-background: #{layer(5%, black)};
   --details-page-items-background: #{layer(5%, black)};
   --galleria-background-color: #{layer(10%, black)};
+  --trailer-background-color: #{layer(10%, black)};
+  --reviews-background-color: #{layer(10%, black)};
   --details-page-items-active: #{layer(15%, black)};
   --details-page-default-backdrop-0: rgba(255, 255, 255, 0.6);
   --details-page-default-backdrop-100: white;
@@ -89,6 +96,11 @@ $breakpoint-mobile-width: 500px;
 }
 
 .p-dark {
+  .p-toggleswitch {
+    --p-toggleswitch-background: rgba(255, 255, 255, 0.1);
+    --p-toggleswitch-hover-background: rgba(255, 255, 255, 0.2);
+  }
+
   //system tokens
   --app-page-background: var(--p-surface-950);
 
@@ -115,6 +127,8 @@ $breakpoint-mobile-width: 500px;
   --discover-page-genres-background: #{layer(10%, black)};
   --details-page-items-background: #{layer(5%, white)};
   --galleria-background-color: #{layer(10%, white)};
+  --trailer-background-color: #{layer(10%, white)};
+  --reviews-background-color: #{layer(10%, white)};
   --details-page-items-active: #{layer(15%, white)};
   --details-page-default-backdrop-0: var(--app-background-color-light);
   --details-page-default-backdrop-100: var(--app-background-color);
@@ -154,10 +168,6 @@ $breakpoint-mobile-width: 500px;
 
 .p-knob.p-disabled {
   opacity: 1;
-}
-
-.p-progressbar {
-  --p-progressbar-height: 0.5rem;
 }
 
 .p-paginator {

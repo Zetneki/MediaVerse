@@ -1,0 +1,141 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
+@use "../../../styles/mixins/mobile-width-mixin" as *;
+
+.reviews {
+  margin-inline: 5rem;
+  background: var(--details-page-items-background);
+  border-radius: $radius-sm;
+  max-height: 3rem;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+
+  &__btn {
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    text-align: start;
+    font-size: $font-size-lg;
+    font-weight: bold;
+    color: var(--app-text-color);
+    padding-inline: $spacing-md;
+  }
+
+  &__btn:hover {
+    background: var(--details-page-items-active);
+  }
+
+  &__active {
+    .current-reviews {
+      background: var(--reviews-background-color);
+      max-height: 80vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #888 rgba(0, 0, 0, 0);
+
+      .review {
+        border-bottom: 1px solid var(--border-color);
+        &:last-of-type {
+          border-bottom: none;
+        }
+        padding-inline: $spacing-md;
+        &__owner {
+          p:first-of-type {
+            overflow-wrap: break-word;
+            word-break: break-word;
+          }
+
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: $spacing-sm;
+        }
+
+        &__score {
+          margin-block: 0;
+
+          span {
+            height: $spacing-xl;
+            display: flex;
+            gap: $spacing-sm;
+            align-items: center;
+          }
+        }
+
+        .ql-editor {
+          border-radius: $radius-sm;
+          border: 1px solid var(--border-color);
+          margin-block: $spacing-sm $spacing-md;
+        }
+      }
+    }
+
+    .no-reviews {
+      font-size: $font-size-md;
+      margin-block: $spacing-xxl;
+      text-align: center;
+    }
+
+    .bottom-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: $spacing-sm;
+
+      .btn {
+        margin-left: auto;
+      }
+
+      .paginator {
+        .desktop {
+          display: block;
+        }
+
+        .mobile {
+          display: none;
+        }
+
+        @include mobile-width-mixin {
+          .desktop {
+            display: none;
+          }
+          .mobile {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  &.open {
+    max-height: 100vh;
+  }
+
+  @include desktop-mobile-media-mixin {
+    font-size: $font-size-sm;
+
+    margin-inline: 0;
+    border-radius: 0;
+
+    &__active {
+      padding: 0;
+    }
+  }
+}
+
+:host ::ng-deep .review__score .p-rating {
+  pointer-events: none;
+}
+
+:host ::ng-deep .p-paginator {
+  padding: 0;
+  --p-paginator-background: var(--details-page-items-background);
+}
+
+:host ::ng-deep .ql-snow .ql-editor p:empty::before {
+  content: "\00a0"; // non-breaking space
+}

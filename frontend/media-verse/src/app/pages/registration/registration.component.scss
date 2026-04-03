@@ -12,7 +12,7 @@
     margin: 0 auto;
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 4rem;
+    column-gap: 4rem;
     align-items: center;
 
     .register {

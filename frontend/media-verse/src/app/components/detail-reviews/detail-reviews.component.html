@@ -1,0 +1,79 @@
+<div class="reviews" [class.open]="isReviewOpen">
+  <div (click)="toggleReviews()" class="reviews__btn">
+    Reviews<i
+      class="pi"
+      [ngClass]="isReviewOpen ? 'pi-angle-up' : 'pi-angle-down'"
+    ></i>
+  </div>
+  <div class="reviews__active">
+    <div class="current-reviews">
+      @for (review of currentReviews(); track $index) {
+        <div class="review">
+          <div class="review__owner">
+            <p>{{ review.username }}</p>
+            <p>{{ review.reviewed_at | date: "medium" }}</p>
+          </div>
+          <p class="review__score">
+            <span
+              >Rating: <p-rating [(ngModel)]="review.score" readonly="true"
+            /></span>
+          </p>
+
+          @if (review.review !== null) {
+            <div class="ql-snow">
+              <div
+                class="ql-editor"
+                [innerHTML]="review.review | safeHtml"
+              ></div>
+            </div>
+          }
+        </div>
+      } @empty {
+        <div class="no-reviews">
+          <p>There are no reviews on this {{ contentType() }}.</p>
+        </div>
+      }
+    </div>
+
+    <div class="bottom-section">
+      @if (totalReviewNumber() > 4) {
+        <div class="paginator">
+          <div class="desktop">
+            <p-paginator
+              (onPageChange)="onPageChange($event)"
+              [first]="first"
+              [rows]="rows"
+              [totalRecords]="totalReviewNumber()"
+            />
+          </div>
+
+          <div class="mobile">
+            <p-paginator
+              (onPageChange)="onPageChange($event)"
+              [first]="first"
+              [rows]="rows"
+              [totalRecords]="totalReviewNumber()"
+              [pageLinkSize]="1"
+              [showFirstLastIcon]="false"
+            />
+          </div>
+        </div>
+      }
+      <p-button
+        class="btn"
+        label="Write Review"
+        icon="pi pi-comment"
+        (click)="showReviewDialog()"
+        [disabled]="!isLoggedIn()"
+      />
+    </div>
+  </div>
+</div>
+
+<app-write-review
+  [visible]="writeReviewVisible()"
+  [ownReview]="ownReview()"
+  (visibleChange)="writeReviewVisible.set($event)"
+  (saveReview)="upsertReview($event)"
+  (deleteReview)="deleteReview()"
+></app-write-review>

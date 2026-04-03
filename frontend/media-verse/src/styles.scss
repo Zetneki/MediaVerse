@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @use "styles/variables" as *;
 @use "styles/mixins/background-img-mixin" as *;
+@import "../node_modules/quill/dist/quill.snow.css";
 @import "primeicons/primeicons.css";
 
 html,

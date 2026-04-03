@@ -11,7 +11,7 @@ const getUserQuests = async (req, res) => {
 
     res.status(200).json(data);
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -48,7 +48,7 @@ const claimQuestReward = async (req, res) => {
     const result = await questsService.claimQuestReward(userId, slotNumber);
     res.status(200).json(result);
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     handleControllerError(err, res);
   }
 };

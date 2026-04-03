@@ -1,11 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const userReviewsController = require("../controllers/user-reviews.controller");
-const { authenticate } = require("../middlewares/auth.middleware");
+const {
+  optionalAuthenticate,
+  authenticate,
+} = require("../middlewares/auth.middleware");
 
 router.get("/", authenticate, userReviewsController.getUserReviews);
 router.get(
   "/:contentType/:contentId",
+  optionalAuthenticate,
   userReviewsController.getReviewsByContent,
 );
 

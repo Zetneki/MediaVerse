@@ -20,10 +20,10 @@ import { Button } from 'primeng/button';
 import { TrailerComponent } from '../../components/trailer/trailer.component';
 import { GalleriaComponent } from '../../components/galleria/galleria.component';
 import { SeriesCardComponent } from '../../components/series-card/series-card.component';
-import { AddMovieToLibraryComponent } from '../../components/add-movie-to-library/add-movie-to-library.component';
 import { DragscrollDirective } from '../../directives/dragscroll.directive';
 import { AddSeriesToLibraryComponent } from '../../components/add-series-to-library/add-series-to-library.component';
 import { AuthService } from '../../services/auth.service';
+import { DetailReviewsComponent } from '../../components/detail-reviews/detail-reviews.component';
 
 @Component({
   selector: 'app-series-detail',
@@ -38,6 +38,7 @@ import { AuthService } from '../../services/auth.service';
     SeriesCardComponent,
     DragscrollDirective,
     AddSeriesToLibraryComponent,
+    DetailReviewsComponent,
   ],
   templateUrl: './series-detail.component.html',
   styleUrl: './series-detail.component.scss',
@@ -54,6 +55,7 @@ export class SeriesDetailComponent implements OnInit, OnDestroy {
   private paramSub!: Subscription;
   isLoading: boolean = false;
   addToLibraryVisible = signal(false);
+  writeReviewVisible = signal<boolean>(false);
 
   ngOnInit() {
     this.paramSub = this.route.paramMap.subscribe((params) => {

@@ -198,6 +198,7 @@
               <div class="series__progress">
                 @if (item.current_season === 0 && item.status === "watching") {
                   <p-progressbar
+                    class="progress"
                     [value]="
                       (item.current_episode /
                         item.seasons[item.seasons.length - 1].episode_count) *
@@ -212,6 +213,7 @@
                   </p>
                 } @else {
                   <p-progressbar
+                    class="progress"
                     [value]="
                       (episodesWatched(
                         item.seasons,

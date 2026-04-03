@@ -11,6 +11,7 @@
   <div class="quest__progress">
     <p class="desc">{{ quest().description }}</p>
     <p-progressbar
+      class="progress"
       [value]="(quest().current_progress / quest().required_progress) * 100"
       [showValue]="false"
     />
