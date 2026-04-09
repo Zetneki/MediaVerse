@@ -96,15 +96,15 @@
       </div>
     </div>
 
+    <app-trailer [originalTrailerUrl]="movie.trailer ?? ''"></app-trailer>
+
+    <app-galleria [backDrops]="movie.backdrops"></app-galleria>
+
     <app-detail-reviews
       [contentId]="movie.id"
       [contentType]="'movie'"
       [isLoggedIn]="authService.isLoggedIn()"
     ></app-detail-reviews>
-
-    <app-trailer [originalTrailerUrl]="movie.trailer ?? ''"></app-trailer>
-
-    <app-galleria [backDrops]="movie.backdrops"></app-galleria>
 
     @if (similarMovies.length > 0) {
       <div class="similar-movies">

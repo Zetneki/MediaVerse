@@ -76,6 +76,7 @@ async function getUserReviews(userId, page, limit = 20, search = "") {
         WHEN r.content_type = 'movie' THEN mc.title
         WHEN r.content_type = 'series' THEN sc.name
       END as content_title,
+      r.content_id,
       COUNT(*) OVER() AS total_count
     FROM user_reviews r
     LEFT JOIN movie_cache mc ON mc.id = r.content_id AND r.content_type = 'movie'

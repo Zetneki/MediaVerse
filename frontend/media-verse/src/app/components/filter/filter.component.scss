@@ -82,6 +82,16 @@
     justify-content: flex-end;
   }
 
+  @include desktop-mobile-media-mixin {
+    width: 90%;
+
+    &__genres_header,
+    &__sortby,
+    &__apply {
+      font-size: $font-size-md;
+    }
+  }
+
   @include discover-page-list-media-mixin {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -94,14 +104,6 @@
 
     &__apply {
       margin-top: $spacing-md;
-    }
-  }
-
-  @include desktop-mobile-media-mixin {
-    &__genres_header,
-    &__sortby,
-    &__apply {
-      font-size: $font-size-md;
     }
   }
 }

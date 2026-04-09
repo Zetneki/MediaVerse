@@ -6,12 +6,26 @@
   ::ng-deep .p-dialog {
     width: 60vw !important;
   }
+  .title {
+    margin-top: $spacing-md;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
   .score {
     span {
       display: flex;
       gap: $spacing-sm;
       align-items: center;
     }
+  }
+
+  .optional {
+    p {
+      margin: 0;
+    }
+    font-size: $font-size-sm;
+    opacity: 0.8;
   }
 
   ::ng-deep .ql-editor {
@@ -37,12 +51,16 @@
   }
 
   @include mobile-width-mixin {
+    .title {
+      margin-top: 0;
+    }
+
     &__btns {
       gap: $spacing-sm;
     }
 
     & {
-      --p-dialog-header-padding: 0.5rem 1rem 0rem 1rem;
+      --p-dialog-header-padding: 0.5rem 0.5rem 0rem 0.5rem;
       --p-dialog-content-padding: 0.5rem;
     }
   }

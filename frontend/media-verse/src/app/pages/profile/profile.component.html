@@ -17,11 +17,11 @@
     </p>
     <p class="details">
       <span class="details__title">Wallet address:</span>
-      {{ user.wallet_address }}
+      {{ user.wallet_address || "Not connected" }}
     </p>
     <p class="details">
       <span class="details__title">Wallet verified:</span>
-      {{ user.wallet_verified }}
+      {{ user.wallet_verified.toString() | capitalize }}
     </p>
     <p class="details">
       <span class="details__title">Created at:</span>
@@ -57,6 +57,14 @@
         (onChange)="onThemeChange()"
       ></p-select>
     </div>
+
+    <div class="manage-reviews-title">
+      <hr />
+      <h2>Manage reviews</h2>
+      <hr />
+    </div>
+
+    <app-profile-reviews [buttonSize]="buttonSize"></app-profile-reviews>
 
     <div class="settings-title">
       <hr />

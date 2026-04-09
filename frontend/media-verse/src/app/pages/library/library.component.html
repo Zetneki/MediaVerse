@@ -83,10 +83,19 @@
                 >
                   {{ movie.title }}
                 </p>
-                <p>{{ movie.last_watched | date: "medium" }}</p>
-                <p class="status-badge">
-                  {{ getMovieStatusLabel(movie.status) }}
+                <p class="last-watched">
+                  {{ movie.last_watched | date: "medium" }}
                 </p>
+                <div class="badges">
+                  <p class="status-badge">
+                    {{ getMovieStatusLabel(movie.status) }}
+                  </p>
+                  @if (movie.score !== null) {
+                    <p class="rating-badge">
+                      {{ movie.score }}<i class="pi pi-star-fill"></i>
+                    </p>
+                  }
+                </div>
               </div>
               <div class="movie__btns">
                 <p-button
@@ -178,22 +187,32 @@
                 >
                   {{ item.name }}
                 </p>
-                <p>{{ item.last_watched | date: "medium" }}</p>
-                <p class="status-badge">
-                  {{
-                    getSeriesStatusLabel(item.status) +
-                      (item.status === "watching" ? "," : "")
-                  }}
-                  @if (
-                    item.current_season > 0 &&
-                    item.current_episode > 0 &&
-                    item.status === "watching"
-                  ) {
-                    S {{ item.current_season }} E {{ item.current_episode }}
-                  } @else if (item.status === "watching") {
-                    Special E {{ item.current_episode }}
-                  }
+                <p class="last-watched">
+                  {{ item.last_watched | date: "medium" }}
                 </p>
+                <div class="badges">
+                  <p class="status-badge">
+                    {{
+                      getSeriesStatusLabel(item.status) +
+                        (item.status === "watching" ? "," : "")
+                    }}
+                    @if (
+                      item.current_season > 0 &&
+                      item.current_episode > 0 &&
+                      item.status === "watching"
+                    ) {
+                      S {{ item.current_season }} E {{ item.current_episode }}
+                    } @else if (item.status === "watching") {
+                      SP E {{ item.current_episode }}
+                    }
+                  </p>
+                  @if (item.score !== null) {
+                    <p class="rating-badge">
+                      {{ item.score }}
+                      <i class="pi pi-star-fill"></i>
+                    </p>
+                  }
+                </div>
               </div>
               <div class="series__progress">
                 @if (item.current_season === 0 && item.status === "watching") {

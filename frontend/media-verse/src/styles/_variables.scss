@@ -65,10 +65,17 @@ $breakpoint-mobile-width: 500px;
   --header-img-background: #{layer(10%, black, var(--app-background-color))};
   --discover-page-list-background: #{layer(5%, black)};
   --discover-page-genres-background: #{layer(5%, black)};
+  --discover-page-search-background: #{layer(5%, black)};
   --details-page-items-background: #{layer(5%, black)};
   --galleria-background-color: #{layer(10%, black)};
   --trailer-background-color: #{layer(10%, black)};
   --reviews-background-color: #{layer(10%, black)};
+  --profile-reviews-background: var(--p-button-secondary-background);
+  --profile-current-reviews-background: #{layer(
+      5%,
+      black,
+      var(--p-button-secondary-background)
+    )};
   --details-page-items-active: #{layer(15%, black)};
   --details-page-default-backdrop-0: rgba(255, 255, 255, 0.6);
   --details-page-default-backdrop-100: white;
@@ -81,7 +88,7 @@ $breakpoint-mobile-width: 500px;
   --dropdown-border: var(--app-background-color-dark);
   --tabs-hover-color: var(--app-background-color-dark);
   --login-register-form-background: var(--app-background-color-light);
-  --profile-page-background: var(--app-background-color);
+  --profile-page-background: #{layer(20%, white, var(--app-background-color))};
   --profile-username-change: var(--app-background-color-lighter);
   --dialog-header-padding: 1rem;
   --library-page-background: #{layer(5%, black)};
@@ -125,10 +132,17 @@ $breakpoint-mobile-width: 500px;
   --header-img-background: #{layer(10%, white, var(--app-background-color))};
   --discover-page-list-background: #{layer(5%, white)};
   --discover-page-genres-background: #{layer(10%, black)};
+  --discover-page-search-background: #{layer(10%, black)};
   --details-page-items-background: #{layer(5%, white)};
   --galleria-background-color: #{layer(10%, white)};
   --trailer-background-color: #{layer(10%, white)};
   --reviews-background-color: #{layer(10%, white)};
+  --profile-reviews-background: var(--p-button-secondary-background);
+  --profile-current-reviews-background: #{layer(
+      20%,
+      black,
+      var(--p-button-secondary-background)
+    )};
   --details-page-items-active: #{layer(15%, white)};
   --details-page-default-backdrop-0: var(--app-background-color-light);
   --details-page-default-backdrop-100: var(--app-background-color);
@@ -186,29 +200,33 @@ $breakpoint-mobile-width: 500px;
   --p-accordion-content-padding: 0;
 }
 
-.ql-editor {
-  ul,
-  ol {
-    padding-left: 1.5em;
+.ql-snow .ql-editor p:empty::before {
+  content: "\00a0";
+}
+
+.ql-snow .ql-editor {
+  h3,
+  h2 {
+    font-weight: 400;
   }
 
-  ul > li {
-    list-style-type: disc;
+  @for $i from 1 through 8 {
+    .ql-indent-#{$i} {
+      padding-left: #{$i * 1}rem !important;
+    }
   }
 
-  ol > li {
-    list-style-type: decimal;
-  }
+  @media (max-width: $breakpoint-lg) {
+    h3 {
+      font-size: 2.1ch !important;
+    }
 
-  ul > li > ul > li {
-    list-style-type: circle;
-  }
+    h2 {
+      font-size: 2.6ch !important;
+    }
 
-  ol > li > ol > li {
-    list-style-type: lower-alpha;
-  }
-
-  ol > li > ol > li > ol > li {
-    list-style-type: lower-roman;
+    p {
+      font-size: 1.8ch !important;
+    }
   }
 }

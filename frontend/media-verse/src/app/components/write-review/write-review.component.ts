@@ -23,8 +23,10 @@ import { ConfirmationService } from 'primeng/api';
   styleUrl: './write-review.component.scss',
 })
 export class WriteReviewComponent {
+  title = input.required<string>();
   visible = input.required<boolean>();
   ownReview = input.required<UserReview | null>();
+  saveSuccess = input<boolean>(false);
 
   score = signal<number>(0);
   review = signal<string>('');
@@ -33,13 +35,20 @@ export class WriteReviewComponent {
   saveReview = output<UserReview>();
   deleteReview = output<void>();
 
-  formats = ['bold', 'italic', 'underline', 'blockquote', 'indent', 'size'];
+  formats = ['bold', 'italic', 'underline', 'blockquote', 'indent', 'header'];
 
   constructor(private confirmationService: ConfirmationService) {
     effect(() => {
-      this.score.set(this.ownReview()?.score ?? 0);
-      this.review.set(this.ownReview()?.review ?? '');
+      if (this.saveSuccess()) {
+        this.visibleChange.emit(false);
+        this.resetValues();
+      }
     });
+  }
+
+  onDialogShow() {
+    this.score.set(this.ownReview()?.score ?? 0);
+    this.review.set(this.ownReview()?.review ?? '');
   }
 
   delete() {
@@ -59,24 +68,29 @@ export class WriteReviewComponent {
       accept: () => {
         this.deleteReview.emit();
         this.visibleChange.emit(false);
+        this.resetValues();
       },
     });
   }
 
   save() {
-    console.log(this.score(), this.review());
     this.saveReview.emit({
       score: this.score(),
       review: this.review(),
     });
-    this.visibleChange.emit(false);
   }
 
   close() {
     this.visibleChange.emit(false);
+    this.resetValues();
   }
 
   onDialogVisibilityChange(value: boolean) {
     this.visibleChange.emit(value);
+  }
+
+  resetValues() {
+    this.score.set(0);
+    this.review.set('');
   }
 }

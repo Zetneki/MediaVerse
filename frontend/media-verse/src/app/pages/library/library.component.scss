@@ -136,7 +136,7 @@
     flex-direction: column;
     gap: $spacing-md;
     padding: $spacing-md;
-    border-radius: $radius-md;
+    border-radius: $radius-sm;
     background: var(--library-page-components-background);
     width: 60%;
     margin: 0 auto;
@@ -155,6 +155,12 @@
 
       &__info {
         .title {
+          font-size: $font-size-xl;
+          font-weight: bold;
+          width: fit-content;
+          overflow-wrap: break-word;
+          word-break: break-word;
+
           @media (min-width: 1025px) {
             cursor: pointer;
 
@@ -163,9 +169,42 @@
             }
           }
         }
+
+        .badges {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          gap: $spacing-sm;
+          flex-wrap: wrap;
+
+          .status-badge {
+            width: fit-content;
+            font-weight: bold;
+            padding: 0.3rem $spacing-sm;
+            border-radius: $radius-md;
+            background: var(--app-primary-color);
+            color: white;
+          }
+
+          .rating-badge {
+            display: flex;
+            align-items: center;
+            gap: $spacing-xs;
+            width: fit-content;
+            font-weight: bold;
+            padding: 0.3rem $spacing-sm;
+            border-radius: $radius-md;
+            background: var(--app-primary-color);
+            color: white;
+
+            i {
+              font-size: $font-size-md;
+            }
+          }
+        }
       }
 
-      @media (max-width: 1024px) {
+      @include desktop-mobile-media-mixin {
         cursor: pointer;
         user-select: none;
       }
@@ -193,29 +232,12 @@
         gap: $spacing-sm;
         align-self: flex-start;
 
-        .title {
-          font-size: $font-size-xl;
-          font-weight: bold;
-          width: fit-content;
-          overflow-wrap: break-word;
-          word-break: break-word;
-        }
-
-        .status-badge {
-          width: fit-content;
-          font-weight: bold;
-          padding: 0.3rem $spacing-sm;
-          border-radius: $radius-md;
-          background: var(--app-primary-color);
-          color: white;
-        }
-
         p {
           margin: 0;
           font-size: $font-size-sm;
         }
 
-        p:nth-of-type(2) {
+        .last-watched {
           opacity: 0.8;
         }
       }
@@ -256,29 +278,12 @@
         align-self: flex-start;
         height: 100%;
 
-        .title {
-          font-size: $font-size-xl;
-          font-weight: bold;
-          width: fit-content;
-          overflow-wrap: break-word;
-          word-break: break-word;
-        }
-
-        .status-badge {
-          width: fit-content;
-          font-weight: bold;
-          padding: 0.3rem $spacing-sm;
-          border-radius: $radius-md;
-          background: var(--app-primary-color);
-          color: white;
-        }
-
         p {
           margin: 0;
           font-size: $font-size-sm;
         }
 
-        p:nth-of-type(2) {
+        .last-watched {
           opacity: 0.8;
         }
       }
@@ -401,8 +406,11 @@
             font-size: $font-size-md;
           }
 
-          .status-badge {
-            padding: 0.2rem $spacing-sm;
+          .badges {
+            .status-badge,
+            .rating-badge {
+              padding: 0.2rem $spacing-sm;
+            }
           }
 
           p {

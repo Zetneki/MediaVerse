@@ -34,6 +34,7 @@ const getUserReviews = async (req, res) => {
     if (!userId) throw AppError.unauthorized("User not logged in");
 
     const search = req.query.search || "";
+    const trimmedSearch = search.trim();
 
     const page = Math.max(1, Number(req.query.page) || 1);
     const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
@@ -42,12 +43,12 @@ const getUserReviews = async (req, res) => {
       userId,
       page,
       limit,
-      search,
+      trimmedSearch,
     );
 
     res.status(200).json(reviews);
   } catch (err) {
-    //console.log(err);
+    console.log(err);
     handleControllerError(err, res);
   }
 };

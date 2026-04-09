@@ -21,8 +21,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { Rating } from 'primeng/rating';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
-
-//TODO: gombok meretenek kezelese
+import { SkeletonDetailsComponent } from '../skeleton-details/skeleton-details.component';
 
 @Component({
   selector: 'app-detail-reviews',
@@ -35,16 +34,18 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
     Rating,
     FormsModule,
     PaginatorModule,
+    SkeletonDetailsComponent,
   ],
   templateUrl: './detail-reviews.component.html',
   styleUrl: './detail-reviews.component.scss',
 })
 export class DetailReviewsComponent implements OnInit, OnChanges {
+  isLoading: boolean = false;
   private destroyRef = inject(DestroyRef);
   contentId = input.required<number>();
   contentType = input.required<string>();
   first: number = 0;
-  rows: number = 2;
+  rows: number = 10;
 
   currentReviews = signal<DetailReview[]>([]);
   totalReviewNumber = signal<number>(0);
@@ -53,6 +54,8 @@ export class DetailReviewsComponent implements OnInit, OnChanges {
   isLoggedIn = input.required<boolean>();
   writeReviewVisible = signal<boolean>(false);
   isReviewOpen: boolean = false;
+
+  saveSuccessSignal = signal<boolean>(false);
 
   constructor(
     private reviewsService: ReviewsService,
@@ -70,6 +73,7 @@ export class DetailReviewsComponent implements OnInit, OnChanges {
   }
 
   getReviews() {
+    this.isLoading = true;
     const page = Math.floor(this.first / this.rows) + 1;
 
     this.reviewsService
@@ -85,17 +89,20 @@ export class DetailReviewsComponent implements OnInit, OnChanges {
           this.currentReviews.set(reviews.items);
           this.totalReviewNumber.set(reviews.total);
           this.ownReview.set(reviews.userReview ?? null);
+          this.isLoading = false;
         },
         error: (err) => {
           if (!shouldHandleError(err)) return;
           this.notificationService.error(
             err.error?.error ?? 'Failed to load reviews',
           );
+          this.isLoading = false;
         },
       });
   }
 
   upsertReview(review: UserReview) {
+    this.saveSuccessSignal.set(false);
     this.reviewsService
       .upsertReview(
         this.contentId(),
@@ -114,6 +121,7 @@ export class DetailReviewsComponent implements OnInit, OnChanges {
             );
           }
 
+          this.saveSuccessSignal.set(true);
           this.getReviews();
         },
         error: (err) => {
@@ -161,7 +169,6 @@ export class DetailReviewsComponent implements OnInit, OnChanges {
     this.first = event.first ?? 0;
     this.rows = event.rows ?? 20;
 
-    window.scrollTo({ top: 0, behavior: 'instant' });
     this.getReviews();
   }
 }

@@ -8,8 +8,6 @@ import {
 } from '@angular/core';
 import { Movie } from '../../models/movie';
 import { Series } from '../../models/series';
-import { MovieService } from '../../services/movie.service';
-import { SeriesService } from '../../services/series.service';
 import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
 import { SelectOption } from '../../models/selectoption';
 import { DiscoverDropdownComponent } from '../../components/discover-dropdown/discover-dropdown.component';
@@ -31,9 +29,7 @@ import { SelectModule } from 'primeng/select';
 import { FilterComponent } from '../../components/filter/filter.component';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SkeletonCardComponent } from '../../components/skeleton-card/skeleton-card.component';
-import { DiscoverListComponent } from '../../components/discover-list/discover-list.component';
 import { ContentService } from '../../services/content.service';
-import { RouterLink } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
@@ -311,80 +307,4 @@ export class DiscoverComponent implements OnInit, OnDestroy {
         }
       });
   }
-
-  // get currentType() {
-  //   return this.selectedTypeSignal().value;
-  // }
-
-  // get currentGenres(): Genre[] {
-  //   switch (this.currentType) {
-  //     case 'movies':
-  //       return this.movieGenres;
-  //     case 'series':
-  //       return this.seriesGenres;
-
-  //     default:
-  //       return [];
-  //   }
-  // }
-
-  // get currentItems(): any[] {
-  //   const tabKey = this.tabsValues[this.activeTab()];
-  //   switch (this.currentType) {
-  //     case 'movies':
-  //       return this.getItemsByTab(
-  //         this.popularMovies,
-  //         this.topRatedMovies,
-  //         this.searchMovies,
-  //         this.filterMovies,
-  //         tabKey
-  //       );
-  //     case 'series':
-  //       return this.getItemsByTab(
-  //         this.popularSeries,
-  //         this.topRatedSeries,
-  //         this.searchSeries,
-  //         this.filterSeries,
-  //         tabKey
-  //       );
-  //     default:
-  //       return [];
-  //   }
-  // }
-
-  // private getItemsByTab(
-  //   popular: any[],
-  //   topRated: any[],
-  //   search: any[],
-  //   filter: any[],
-  //   tabKey: string
-  // ): any[] {
-  //   switch (tabKey) {
-  //     case 'popular':
-  //       return popular;
-  //     case 'top_rated':
-  //       return topRated;
-  //     case 'search':
-  //       return search;
-  //     case 'filter':
-  //       return filter;
-  //     default:
-  //       return [];
-  //   }
-  // }
-
-  // get currentIsLoading(): boolean {
-  //   const tabKey = this.tabsValues[this.activeTab()];
-  //   switch (tabKey) {
-  //     case 'popular':
-  //     case 'top_rated':
-  //       return this.currentItems.length === 0;
-  //     case 'search':
-  //       return this.isSearching();
-  //     case 'filter':
-  //       return this.isFiltering();
-  //     default:
-  //       return false;
-  //   }
-  // }
 }

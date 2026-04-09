@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { DetailReviewsResponse } from '../models/detailreviewsresponse';
+import { ProfileReviewsResponse } from '../models/profilereviewsresponse';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,20 @@ export class ReviewsService {
     );
   }
 
-  getUserReviews(page: number = 1, limit: number = 20, search: string) {}
+  getUserReviews(page: number = 1, limit: number = 20, search: string) {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+
+    if (search) {
+      params = params.set('search', search);
+    }
+
+    return this.http.get<ProfileReviewsResponse>(
+      `${this.baseUrl}/user-reviews`,
+      { params },
+    );
+  }
 
   upsertReview(
     contentId: number,

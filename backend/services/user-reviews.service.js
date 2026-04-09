@@ -4,6 +4,7 @@ const {
   VALID_REVIEW_CONTENTTYPES,
 } = require("../constants/review-contenttypes");
 const sanitizeHtml = require("sanitize-html");
+const { containsProfanity } = require("../utils/profanity-check.util");
 const { isEmptyReview, getTextLength } = require("../utils/review.util");
 const { AppError } = require("../middlewares/error-handler.middleware");
 
@@ -119,7 +120,7 @@ const upsertReview = async (userId, contentId, contentType, score, review) => {
         " characters long.",
     );
 
-  const cleanReview = review
+  const sanitizedReview = review
     ? sanitizeHtml(review, {
         allowedTags: [
           "p",
@@ -151,6 +152,25 @@ const upsertReview = async (userId, contentId, contentType, score, review) => {
         allowedSchemes: ["http", "https", "mailto"],
       })
     : null;
+
+  const cleanReview = sanitizedReview
+    ? sanitizedReview
+        .replace(/\u00A0/g, " ") //non-breaking space
+        .replace(/&nbsp;/g, " ") //fallback
+        .replace(/^(\s*<(p|h[1-6]|ul|ol|li|br)\b[^>]*>\s*<\/\2>\s*)+/gi, "") //cut off empty paragraphs from the start
+        .replace(/(\s*<(p|h[1-6]|ul|ol|li|br)\b[^>]*>\s*<\/\2>\s*)+$/gi, "") //cut off empty paragraphs from the end
+        .trim()
+    : null;
+
+  const textContent = cleanReview
+    ? cleanReview
+        .replace(/<[^>]*>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+    : null;
+
+  if (containsProfanity(textContent))
+    throw AppError.badRequest("Review contains banned word(s)");
 
   const contentExists = await userReviewsDao.doesContentExist(
     parsedContentId,

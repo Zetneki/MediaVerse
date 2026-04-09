@@ -1,14 +1,22 @@
 <p-dialog
-  header="Write Review"
+  header="Modify Review"
   [modal]="true"
   [visible]="visible()"
   (visibleChange)="onDialogVisibilityChange($event)"
   [draggable]="false"
+  (onShow)="onDialogShow()"
   class="dialog"
 >
+  @if (title()) {
+    <div class="title">Title: {{ title() }}</div>
+  }
   <p class="score">
     <span>Rating: <p-rating [(ngModel)]="score" /></span>
   </p>
+
+  <div class="optional">
+    <p>Rating is required. Review is optional.</p>
+  </div>
 
   <p-editor
     [(ngModel)]="review"
@@ -18,10 +26,10 @@
     <ng-template #header>
       <!-- font size -->
       <span class="ql-formats">
-        <select class="ql-size">
-          <option value="huge">Huge</option>
-          <option value="large">Large</option>
+        <select class="ql-header">
           <option selected>Normal</option>
+          <option value="3">Large</option>
+          <option value="2">Huge</option>
         </select>
       </span>
 

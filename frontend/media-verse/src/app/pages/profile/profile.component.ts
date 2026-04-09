@@ -30,6 +30,7 @@ import { shouldHandleError } from '../../utils/error-handler';
 import { ThemeName } from '../../utils/theme.registry';
 import { filter } from 'rxjs';
 import { ColorMode } from '../../types/theme.type';
+import { ProfileReviewsComponent } from '../../components/profile-reviews/profile-reviews.component';
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 
 @Component({
@@ -48,6 +49,8 @@ import { CapitalizePipe } from '../../pipes/capitalize.pipe';
     SelectModule,
     FormsModule,
     SelectButtonModule,
+    ProfileReviewsComponent,
+    CapitalizePipe,
   ],
   providers: [ConfirmationService],
   templateUrl: './profile.component.html',

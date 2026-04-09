@@ -60,18 +60,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: $spacing-md;
-  padding: $spacing-sm;
+  margin: $spacing-lg $spacing-md $spacing-md $spacing-md;
 
   input {
     width: 50%;
-    height: 3rem;
+    height: 2.75rem;
     padding: $spacing-sm;
     border: none;
+    background: var(--discover-page-genres-background);
     border-radius: $radius-sm;
-    background: var(--app-background-color);
     font-size: $font-size-lg;
-    color: var(--app-text-color);
     border: 1px solid var(--border-color);
 
     &::placeholder {
@@ -84,10 +82,20 @@
     }
 
     @include desktop-mobile-media-mixin {
-      width: 80%;
-      height: 2rem;
+      width: 90%;
+      height: 2.5rem;
       font-size: $font-size-md;
     }
+  }
+
+  @include discover-page-list-media-mixin {
+    input {
+      width: 100%;
+    }
+  }
+
+  @include discover-page-media-mixin {
+    margin: $spacing-md;
   }
 }
 
