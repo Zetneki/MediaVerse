@@ -26,9 +26,16 @@ require("./cron/user-activity.cron");
 
 var app = express();
 
+// app.use(
+//   cors({
+//     origin: "http://localhost:4200",
+//     credentials: true,
+//   }),
+// );
+
 app.use(
   cors({
-    origin: "http://localhost:4200",
+    origin: true,
     credentials: true,
   }),
 );

@@ -25,7 +25,10 @@
     .track-movie {
       display: flex;
       width: max-content;
-      animation: marquee-movie 60s linear infinite;
+
+      &.running {
+        animation: marquee-movie 60s linear infinite;
+      }
 
       .img {
         width: 100px;
@@ -40,8 +43,11 @@
     .track-series {
       display: flex;
       width: max-content;
-      animation: marquee-series 55s linear infinite;
       margin-left: -4rem;
+
+      &.running {
+        animation: marquee-series 55s linear infinite;
+      }
 
       .img {
         width: 100px;

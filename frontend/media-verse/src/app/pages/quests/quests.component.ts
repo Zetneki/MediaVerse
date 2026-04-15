@@ -334,6 +334,7 @@ export class QuestsComponent {
   }
 
   async loadTokenBalance(address: string) {
+    if (!this.walletConnected() || !this.hasMetamask) return;
     try {
       this.isBalanceLoading.set(true);
       const balance = await this.blockchainService.getTokenBalance(address);

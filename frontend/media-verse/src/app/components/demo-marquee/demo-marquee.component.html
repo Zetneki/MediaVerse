@@ -1,6 +1,6 @@
 <div class="demo">
   <div class="viewport">
-    <div class="track-movie">
+    <div class="track-movie" [class.running]="animationReady()">
       @if (popularMovies$ | async; as data) {
         @for (movie of data.results; track movie.id) {
           <img [src]="movie.poster_path" class="img" />
@@ -10,7 +10,7 @@
         }
       }
     </div>
-    <div class="track-series">
+    <div class="track-series" [class.running]="animationReady()">
       @if (popularSeries$ | async; as data) {
         @for (series of data.results; track series.id) {
           <img [src]="series.poster_path" class="img" />
