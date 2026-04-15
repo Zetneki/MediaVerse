@@ -1,5 +1,6 @@
 const userThemesDao = require("../dao/user-themes.dao");
 const usersDao = require("../dao/users.dao");
+const { upsertUserActivity } = require("../dao/user-activity.dao");
 const blockchainService = require("../services/blockchain.service");
 const { VALID_THEME_NAMES } = require("../constants/themes");
 const { AppError } = require("../middlewares/error-handler.middleware");
@@ -63,6 +64,12 @@ const buyTheme = async (userId, theme, deadline, v, r, s) => {
     );
 
     await userThemesDao.buyTheme(userId, theme);
+
+    try {
+      await upsertUserActivity(userId);
+    } catch (activityErr) {
+      console.error("Failed to track user activity:", activityErr);
+    }
 
     return receipt;
   } catch (err) {

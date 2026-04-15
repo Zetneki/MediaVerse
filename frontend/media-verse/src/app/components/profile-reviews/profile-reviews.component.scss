@@ -9,6 +9,53 @@
   overflow: hidden;
 
   &__active {
+    position: relative;
+    &:not(.engaged) {
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    &.engaged {
+      overflow-y: auto;
+      pointer-events: all;
+    }
+
+    .engage-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: all;
+      cursor: pointer;
+      border-radius: $radius-sm;
+      border: 1px dashed var(--profile-reviews-border-color);
+      z-index: 1;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--profile-reviews-overlay-background);
+        opacity: 0.85;
+        border-radius: inherit;
+      }
+
+      span {
+        position: relative;
+        font-size: $font-size-sm;
+        color: var(--app-text-color);
+        margin-right: $spacing-xs;
+      }
+      i {
+        position: relative;
+      }
+
+      @include mobile-width-mixin {
+        border-radius: 0;
+      }
+    }
+
     .search {
       text-align: center;
       background: var(--profile-reviews-background);
@@ -45,18 +92,35 @@
             word-break: break-word;
             display: inherit;
             align-items: center;
+            align-self: stretch;
             column-gap: $spacing-sm;
             flex-wrap: wrap;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: $font-size-md;
+
+            p:first-of-type {
+              margin-block: $spacing-xs;
+            }
 
             .content-badge {
               width: fit-content;
-              font-weight: bold;
+
               margin: 0;
               font-size: $font-size-sm;
               padding: 0.3rem $spacing-sm;
               border-radius: $radius-md;
               background: var(--app-primary-color);
               color: white;
+            }
+
+            &:hover {
+              p:first-of-type {
+                text-decoration: underline;
+              }
+              .content-badge {
+                background: var(--app-primary-color-lighter);
+              }
             }
           }
 

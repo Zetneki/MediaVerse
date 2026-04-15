@@ -1,9 +1,10 @@
 import {
   Component,
   DestroyRef,
+  HostListener,
   inject,
   input,
-  OnChanges,
+  ElementRef,
   OnInit,
   signal,
 } from '@angular/core';
@@ -33,6 +34,7 @@ import {
 import { ProfileReview } from '../../models/profilereview';
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-profile-reviews',
@@ -48,11 +50,13 @@ import { BreakpointObserver } from '@angular/cdk/layout';
     InputText,
     ReactiveFormsModule,
     CapitalizePipe,
+    RouterModule,
   ],
   templateUrl: './profile-reviews.component.html',
   styleUrl: './profile-reviews.component.scss',
 })
 export class ProfileReviewsComponent implements OnInit {
+  private el = inject(ElementRef);
   private breakpointObserver = inject(BreakpointObserver);
   buttonSize = input.required<'small' | 'large' | undefined>();
   isLoading: boolean = false;
@@ -73,6 +77,8 @@ export class ProfileReviewsComponent implements OnInit {
   searchControl = new FormControl('');
 
   saveSuccessSignal = signal<boolean>(false);
+
+  isEngaged = false;
 
   constructor(
     private reviewsService: ReviewsService,
@@ -121,6 +127,18 @@ export class ProfileReviewsComponent implements OnInit {
         next: this.handleSuccess.bind(this),
         error: this.handleError.bind(this),
       });
+  }
+
+  engage() {
+    this.isEngaged = true;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (this.isEngaged) return;
+    if (!this.el.nativeElement.contains(event.target as Node)) {
+      this.isEngaged = false;
+    }
   }
 
   handleSuccess(reviews: ProfileReviewsResponse) {

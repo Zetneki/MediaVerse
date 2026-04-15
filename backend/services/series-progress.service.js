@@ -1,6 +1,7 @@
 const seriesProgressDao = require("../dao/series-progress.dao");
 const usersDao = require("../dao/users.dao");
 const seriesDao = require("../dao/series.dao");
+const { upsertUserActivity } = require("../dao/user-activity.dao");
 const questsService = require("../services/quests.service");
 const { VALID_SERIES_STATUSES } = require("../constants/series-status");
 const { VALID_SERIES_ORDERS } = require("../constants/series-order");
@@ -271,6 +272,12 @@ const setSeriesProgress = async (userId, seriesId, status, season, episode) => {
           seriesId,
         );
       }
+    }
+
+    try {
+      await upsertUserActivity(userId);
+    } catch (activityErr) {
+      console.error("Failed to track user activity:", activityErr);
     }
 
     return {

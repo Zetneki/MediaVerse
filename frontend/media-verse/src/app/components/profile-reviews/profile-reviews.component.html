@@ -1,5 +1,10 @@
 <div class="reviews">
-  <div class="reviews__active">
+  <div class="reviews__active" [class.engaged]="isEngaged" (click)="engage()">
+    @if (!isEngaged) {
+      <div class="engage-overlay">
+        <span>Click to interact </span><i class="pi pi-file-edit"></i>
+      </div>
+    }
     <div class="search">
       <input
         pInputText
@@ -15,7 +20,13 @@
         @for (review of currentReviews(); track $index) {
           <div class="review">
             <div class="review__owner">
-              <div class="title">
+              <div
+                class="title"
+                [routerLink]="[
+                  `/discover/${review.content_type}`,
+                  review.content_id,
+                ]"
+              >
                 <p>{{ review.content_title }}</p>
                 <p class="content-badge">
                   {{ review.content_type | capitalize }}

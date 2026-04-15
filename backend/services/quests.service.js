@@ -1,5 +1,6 @@
 const questsDao = require("../dao/quests.dao");
 const userDao = require("../dao/users.dao");
+const { upsertUserActivity } = require("../dao/user-activity.dao");
 const blockchainService = require("./blockchain.service");
 const { AppError } = require("../middlewares/error-handler.middleware");
 
@@ -158,6 +159,12 @@ async function claimQuestReward(userId, slotNumber) {
     user.wallet_address,
     questSlot.reward_tokens,
   );
+
+  try {
+    await upsertUserActivity(userId);
+  } catch (activityErr) {
+    console.error("Failed to track user activity:", activityErr);
+  }
 
   //Mark as claimed
   await questsDao.markQuestClaimed(questSlot.id);

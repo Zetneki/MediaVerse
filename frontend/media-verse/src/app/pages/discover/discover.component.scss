@@ -102,13 +102,11 @@
 .discover-page {
   .list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, clamp(12rem, 100%, 15rem));
+    grid-template-columns: repeat(auto-fill, 14rem);
     grid-template-rows: auto auto;
     gap: $spacing-md;
     padding: $spacing-md;
-
     justify-content: center;
-
     background: var(--discover-page-list-background);
 
     @include discover-page-list-media-mixin {

@@ -1,6 +1,7 @@
 const { AppError } = require("../middlewares/error-handler.middleware");
 const { handleControllerError } = require("../utils/error-response.util");
 const usersService = require("../services/users.service");
+const { geLast7DaysActivityByUserdId } = require("../dao/user-activity.dao");
 const {
   getRefreshTokenCookieOptions,
 } = require("../utils/cookie-options-helper.util");
@@ -14,6 +15,7 @@ const registerUser = async (req, res) => {
     await usersService.register(username, password);
     res.status(201).json({ message: "User created successfully" });
   } catch (err) {
+    //console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -36,6 +38,7 @@ const loginUser = async (req, res) => {
         accessToken,
       });
   } catch (err) {
+    //console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -48,6 +51,20 @@ const refreshToken = async (req, res) => {
       .cookie("refresh_token", newRefreshToken, getRefreshTokenCookieOptions())
       .json({ accessToken });
   } catch (err) {
+    //console.log(err);
+    handleControllerError(err, res);
+  }
+};
+
+const getUserActivity = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    if (!userId) throw AppError.unauthorized("User not logged in");
+
+    const activity = await geLast7DaysActivityByUserdId(userId);
+    res.json(activity);
+  } catch (err) {
+    //console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -60,6 +77,7 @@ const logoutUser = async (req, res) => {
       .clearCookie("refresh_token", getRefreshTokenCookieOptions())
       .json({ message: "Logged out successfully" });
   } catch (err) {
+    //console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -74,6 +92,7 @@ const activeMode = async (req, res) => {
       message: "Active mode updated",
     });
   } catch (err) {
+    //console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -98,6 +117,7 @@ const getUser = async (req, res) => {
     const user = await usersService.getUserById(req.user.id);
     res.json(user);
   } catch (err) {
+    //console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -111,6 +131,7 @@ const changeUsername = async (req, res) => {
 
     res.status(200).json({ message: "Username changed successfully", user });
   } catch (err) {
+    //console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -128,6 +149,7 @@ const changePassword = async (req, res) => {
       .clearCookie("refresh_token", getRefreshTokenCookieOptions())
       .json({ message: "Password changed successfully" });
   } catch (err) {
+    //console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -140,6 +162,7 @@ const deleteAccount = async (req, res) => {
       .clearCookie("refresh_token", getRefreshTokenCookieOptions())
       .json({ message: "Account deleted successfully" });
   } catch (err) {
+    //console.log(err);
     handleControllerError(err, res);
   }
 };
@@ -149,6 +172,7 @@ module.exports = {
   loginUser,
   refreshToken,
   logoutUser,
+  getUserActivity,
   activeMode,
   activeTheme,
   getUser,

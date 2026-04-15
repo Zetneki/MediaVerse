@@ -42,7 +42,7 @@ const buyTheme = async (req, res) => {
 
     res.status(200).json(response);
   } catch (err) {
-    //console.log(err);
+    console.log(err);
     handleControllerError(err, res);
   }
 };

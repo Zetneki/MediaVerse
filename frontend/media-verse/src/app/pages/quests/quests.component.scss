@@ -111,15 +111,22 @@
       }
     }
 
+    &__remaining-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
     &__remaining {
       display: grid;
-      grid-template-columns: repeat(auto-fit, clamp(12rem, 100%, 15rem));
-      grid-template-rows: auto;
+      grid-template-columns: repeat(auto-fill, 14rem);
       gap: $spacing-md;
-      justify-content: center;
+      width: fit-content;
+      max-width: 100%;
 
       @media (max-width: 575px) {
         grid-template-columns: 1fr;
+        width: 100%;
       }
     }
   }

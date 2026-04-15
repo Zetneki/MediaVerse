@@ -1,4 +1,14 @@
-import { Component, effect, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  effect,
+  ElementRef,
+  inject,
+  OnDestroy,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -32,6 +42,11 @@ import { filter } from 'rxjs';
 import { ColorMode } from '../../types/theme.type';
 import { ProfileReviewsComponent } from '../../components/profile-reviews/profile-reviews.component';
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { THEME_COLORS } from '../../utils/colors.registry';
+import { DragscrollDirective } from '../../directives/dragscroll.directive';
+import { UserActivityComponent } from '../../components/user-activity/user-activity.component';
+import { ContentStatisticsComponent } from '../../components/content-statistics/content-statistics.component';
 
 @Component({
   selector: 'app-profile',
@@ -51,18 +66,24 @@ import { CapitalizePipe } from '../../pipes/capitalize.pipe';
     SelectButtonModule,
     ProfileReviewsComponent,
     CapitalizePipe,
+    DragscrollDirective,
+    UserActivityComponent,
+    ContentStatisticsComponent,
   ],
   providers: [ConfirmationService],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
-export class ProfileComponent {
+export class ProfileComponent implements AfterViewInit, OnDestroy {
+  private destroyRef = inject(DestroyRef);
   user!: User;
   usernameChangeForm!: FormGroup;
   passwordChangeForm!: FormGroup;
   loading: boolean = false;
   passwordErrors: string[] = [];
   closable: boolean = false;
+
+  themeColors = THEME_COLORS;
 
   openState = {
     username: false,
@@ -87,6 +108,9 @@ export class ProfileComponent {
 
   isLargeScreen = signal<boolean>(window.innerWidth > 1024);
 
+  @ViewChild('scrollTrack') scrollTrack!: ElementRef;
+  private resizeObserver!: ResizeObserver;
+
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -97,7 +121,10 @@ export class ProfileComponent {
     private themeService: ThemeService,
   ) {
     this.authService.currentUser$
-      .pipe(filter((user): user is User => !!user))
+      .pipe(
+        filter((user): user is User => !!user),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe((user) => {
         this.user = user;
         this.currentTheme = user.active_theme;
@@ -146,6 +173,33 @@ export class ProfileComponent {
     this.setupResizeListener();
   }
 
+  ngOnDestroy() {
+    this.resizeObserver.disconnect();
+  }
+
+  ngAfterViewInit() {
+    this.resizeObserver = new ResizeObserver(() => {
+      this.updateScrollState();
+    });
+
+    this.resizeObserver.observe(this.scrollTrack.nativeElement);
+
+    this.scrollTrack.nativeElement.addEventListener('scroll', () => {
+      this.updateScrollState();
+    });
+  }
+
+  updateScrollState() {
+    const el = this.scrollTrack.nativeElement;
+    const scrollWrapper = el.parentElement;
+
+    const canScrollLeft = el.scrollLeft > 0;
+    const canScrollRight = el.scrollLeft + el.clientWidth < el.scrollWidth - 1;
+
+    scrollWrapper.classList.toggle('can-scroll-left', canScrollLeft);
+    scrollWrapper.classList.toggle('can-scroll-right', canScrollRight);
+  }
+
   private setupResizeListener() {
     const handleResize = () => {
       this.isLargeScreen.set(window.innerWidth > 1024);
@@ -176,16 +230,15 @@ export class ProfileComponent {
     return Math.max(0, 30 - daysSince);
   }
 
-  async onThemeChange() {
+  async onThemeChange(theme: ThemeName) {
+    this.currentTheme = theme;
     try {
-      this.themeService.applyTheme(this.currentTheme);
-
-      await this.userService.updateActiveTheme(this.currentTheme);
-
+      this.themeService.applyTheme(theme);
+      await this.userService.updateActiveTheme(theme);
       if (this.user) {
         this.authService.updateCurrentUser({
           ...this.user,
-          active_theme: this.currentTheme,
+          active_theme: theme,
         });
       }
     } catch (err) {

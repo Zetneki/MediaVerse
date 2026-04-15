@@ -51,11 +51,31 @@
         unselectable="true"
         size="small"
       />
-      <p-select
-        [options]="themes"
-        [(ngModel)]="currentTheme"
-        (onChange)="onThemeChange()"
-      ></p-select>
+
+      <div class="scroll-wrapper">
+        <div class="scroll-track" #scrollTrack appDragscroll>
+          @for (theme of themes; track theme) {
+            <div class="swatch-item" (click)="onThemeChange(theme)">
+              <div
+                class="swatch"
+                [class.active]="currentTheme === theme"
+                [style.background]="themeColors[theme]"
+              ></div>
+              <span class="swatch-label">{{ theme | capitalize }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="active-theme">
+        <div
+          class="active-theme__swatch"
+          [style.background]="themeColors[currentTheme]"
+        ></div>
+        <p class="active-theme__title">
+          <span> Active:</span> {{ currentTheme | capitalize }}
+        </p>
+      </div>
     </div>
 
     <div class="manage-reviews-title">
@@ -229,6 +249,31 @@
   @if (loading) {
     <p-progressbar mode="indeterminate" class="loading" />
   }
+
+  <div class="profile__component">
+    <div class="header">
+      <h1>User Activity</h1>
+    </div>
+    <div class="user-activity">
+      <app-user-activity></app-user-activity>
+    </div>
+  </div>
+
+  <div class="profile__content-stats">
+    <div class="component">
+      <div class="header">
+        <h2>Movie Statistics</h2>
+      </div>
+      <app-content-statistics [contentType]="'movie'"></app-content-statistics>
+    </div>
+
+    <div class="component">
+      <div class="header">
+        <h2>Series Statistics</h2>
+      </div>
+      <app-content-statistics [contentType]="'series'"></app-content-statistics>
+    </div>
+  </div>
 </div>
 <div class="confirmation">
   <p-confirmdialog />

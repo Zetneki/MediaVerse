@@ -76,6 +76,17 @@ $breakpoint-mobile-width: 500px;
       black,
       var(--p-button-secondary-background)
     )};
+  --profile-reviews-overlay-background: #{layer(
+      20%,
+      black,
+      var(--app-background-color)
+    )};
+  --profile-activity-background: #{layer(
+      5%,
+      black,
+      var(--p-button-secondary-background)
+    )};
+  --profile-reviews-border-color: var(--app-background-color-dark);
   --details-page-items-active: #{layer(15%, black)};
   --details-page-default-backdrop-0: rgba(255, 255, 255, 0.6);
   --details-page-default-backdrop-100: white;
@@ -94,7 +105,7 @@ $breakpoint-mobile-width: 500px;
   --library-page-background: #{layer(5%, black)};
   --library-page-components-background: var(--app-background-color-light);
   --library-page-list-items-background: var(--app-background-color);
-  --about-page-background: #{layer(10%, black, var(--app-background-color))};
+  --about-page-background: #{layer(20%, white, var(--app-background-color))};
   --about-page-rights-background: var(--app-background-color-light);
   --not-found-page-background: #{layer(5%, black)};
   --quest-page-background: #{layer(5%, black)};
@@ -143,6 +154,13 @@ $breakpoint-mobile-width: 500px;
       black,
       var(--p-button-secondary-background)
     )};
+  --profile-reviews-overlay-background: #{layer(10%, white)};
+  --profile-activity-background: #{layer(
+      20%,
+      black,
+      var(--p-button-secondary-background)
+    )};
+  --profile-reviews-border-color: var(--app-background-color-lighter);
   --details-page-items-active: #{layer(15%, white)};
   --details-page-default-backdrop-0: var(--app-background-color-light);
   --details-page-default-backdrop-100: var(--app-background-color);
@@ -198,6 +216,10 @@ $breakpoint-mobile-width: 500px;
   --p-accordion-content-background: var(--about-page-rights-background);
   --p-accordion-header-padding: 1rem 0.5rem;
   --p-accordion-content-padding: 0;
+}
+
+.p-card {
+  --p-card-background: var(--profile-activity-background);
 }
 
 .ql-snow .ql-editor p:empty::before {

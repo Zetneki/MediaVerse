@@ -49,6 +49,8 @@
           p:first-of-type {
             overflow-wrap: break-word;
             word-break: break-word;
+            font-weight: bold;
+            font-size: $font-size-md;
           }
 
           p:last-of-type {

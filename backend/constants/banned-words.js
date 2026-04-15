@@ -268,6 +268,7 @@ const BANNED_WORDS = [
   "clits",
   "cock",
   "cum",
+  "cumguzzler",
   "cunt",
   "dildo",
   "dirsa",

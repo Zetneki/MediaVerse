@@ -51,25 +51,29 @@
           }
         </div>
 
-        <div class="themes__remaining" @fadeSlideIn>
-          @for (theme of this.remainingThemes(); track $index) {
-            <app-theme-card
-              [theme]="theme"
-              [buttonSize]="buttonSize()"
-              (buyClicked)="themePurchase($event)"
-              [isPreviewing]="this.themeService.activePreviewTheme() === theme"
-              (previewToggled)="
-                this.themeService.togglePreview(
-                  theme,
-                  this.user.active_theme,
-                  $event
-                )
-              "
-              [isPurchaseLoading]="purchaseThemeLoading() === theme"
-            ></app-theme-card>
-          } @empty {
-            <p>There are no themes left to show.</p>
-          }
+        <div class="themes__remaining-wrapper">
+          <div class="themes__remaining" @fadeSlideIn>
+            @for (theme of this.remainingThemes(); track $index) {
+              <app-theme-card
+                [theme]="theme"
+                [buttonSize]="buttonSize()"
+                (buyClicked)="themePurchase($event)"
+                [isPreviewing]="
+                  this.themeService.activePreviewTheme() === theme
+                "
+                (previewToggled)="
+                  this.themeService.togglePreview(
+                    theme,
+                    this.user.active_theme,
+                    $event
+                  )
+                "
+                [isPurchaseLoading]="purchaseThemeLoading() === theme"
+              ></app-theme-card>
+            } @empty {
+              <p>There are no themes left to show.</p>
+            }
+          </div>
         </div>
       </div>
     } @else {

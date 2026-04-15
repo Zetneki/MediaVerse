@@ -5,6 +5,7 @@ import { ThemeName } from '../utils/theme.registry';
 import { ColorMode } from '../types/theme.type';
 import { UserTheme } from '../models/usertheme';
 import { environment } from '../../environments/environment';
+import { UserActivity } from '../models/useractivity';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,12 @@ export class UserService {
   private readonly baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) {}
+
+  getActivity(): Promise<UserActivity[]> {
+    return firstValueFrom(
+      this.http.get<UserActivity[]>(`${this.baseUrl}/users/activity`),
+    );
+  }
 
   updateActiveMode(modeName: ColorMode): Promise<void> {
     return firstValueFrom(
@@ -31,8 +38,6 @@ export class UserService {
       this.http.get<UserTheme[]>(`${this.baseUrl}/user-themes`),
     );
   }
-
-  //buyTheme(themeName: ThemeName) {}
 
   changeUsername(newUsername: string) {
     return this.http.put(`${this.baseUrl}/users/change-username`, {

@@ -365,7 +365,11 @@ export class QuestsComponent {
       this.loadTokenBalance(this.walletAddress());
       await this.authService.loadUserFromToken();
     } catch (err: any) {
-      if (Number(this.tokenBalance()) < THEME_PRICES[theme]) {
+      const userRejected = err?.code === 'ACTION_REJECTED';
+
+      if (userRejected) {
+        this.notificationService.error('Purchase cancelled');
+      } else if (Number(this.tokenBalance()) < THEME_PRICES[theme]) {
         this.notificationService.error(
           'Your balance is too low to buy this theme',
         );

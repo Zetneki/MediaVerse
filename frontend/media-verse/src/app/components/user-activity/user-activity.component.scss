@@ -1,0 +1,13 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins/mobile-width-mixin" as *;
+
+.diagram {
+  background: var(--profile-activity-background);
+  padding: $spacing-md;
+  border-radius: $radius-sm;
+
+  @include mobile-width-mixin {
+    padding: 0 $spacing-xs;
+    border-radius: 0;
+  }
+}

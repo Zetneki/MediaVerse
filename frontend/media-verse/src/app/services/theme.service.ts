@@ -10,6 +10,8 @@ export class ThemeService {
   private currentTheme: ThemeName = 'indigo';
   activePreviewTheme = signal<ThemeName | null>(null);
   private mode: ColorMode = 'system';
+  activeThemeSignal = signal<ThemeName>(this.currentTheme);
+  activeModeSignal = signal<ColorMode>(this.mode);
 
   private systemDarkQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -46,6 +48,7 @@ export class ThemeService {
       preset,
       options: { darkModeSelector: '.p-dark' },
     });
+    this.activeThemeSignal.set(theme);
   }
 
   togglePreview(theme: ThemeName, activeTheme: ThemeName, isOn: boolean) {
@@ -65,6 +68,7 @@ export class ThemeService {
   setMode(mode: ColorMode) {
     this.mode = mode;
     this.applyMode();
+    this.activeModeSignal.set(mode);
   }
 
   getMode(): ColorMode {

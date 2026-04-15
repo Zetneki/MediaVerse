@@ -1,6 +1,7 @@
 @use "../../../styles/variables.scss" as *;
 @use "../../../styles/mixins/desktop-mobile-media-mixin" as *;
 @use "../../../styles/mixins/profile-settings-media-mixin" as *;
+@use "../../../styles/mixins/mobile-width-mixin" as *;
 
 .profile {
   display: flex;
@@ -26,7 +27,8 @@
       display: flex;
       justify-content: space-between;
 
-      h1 {
+      h1,
+      h2 {
         margin-top: 0;
         margin-bottom: $spacing-sm;
       }
@@ -57,6 +59,129 @@
     .theme-changer {
       display: flex;
       flex-direction: column;
+      gap: $spacing-sm;
+
+      .scroll-wrapper {
+        position: relative;
+
+        .scroll-track {
+          display: flex;
+          gap: $spacing-md;
+          overflow-x: auto;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+          background: transparent;
+          padding: $spacing-xs;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+
+          .swatch-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: $spacing-xs;
+            flex-shrink: 0;
+            cursor: pointer;
+
+            .swatch {
+              width: 44px;
+              height: 44px;
+              border-radius: 25%;
+              transition:
+                transform 0.1s ease,
+                border-color 0.1s ease;
+
+              &:hover {
+                transform: scale(1.1);
+              }
+
+              &.active {
+                border: 2px solid var(--app-text-color);
+              }
+            }
+
+            .swatch-label {
+              font-size: $font-size-sm;
+              white-space: nowrap;
+            }
+          }
+        }
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 3rem;
+          pointer-events: none;
+          background: linear-gradient(
+            to right,
+            var(--profile-page-background),
+            transparent
+          );
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          z-index: 1;
+        }
+
+        // Jobb oldali fade overlay
+        &::after {
+          content: "";
+          position: absolute;
+          right: 0;
+          top: 0;
+          height: 100%;
+          width: 3rem;
+          pointer-events: none;
+          background: linear-gradient(
+            to left,
+            var(--profile-page-background),
+            transparent
+          );
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          z-index: 1;
+        }
+
+        &.can-scroll-left::before {
+          opacity: 1;
+        }
+
+        &.can-scroll-right::after {
+          opacity: 1;
+        }
+      }
+
+      .active-theme {
+        margin-top: $spacing-sm;
+        padding: 0 $spacing-xs $spacing-xs $spacing-xs;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: $spacing-sm;
+
+        p {
+          margin: 0;
+        }
+
+        &__swatch {
+          width: 22px;
+          height: 22px;
+          border-radius: 25%;
+        }
+
+        &__title {
+          margin: $spacing-sm 0 0 0;
+          font-size: $font-size-sm;
+
+          span {
+            font-weight: bold;
+          }
+        }
+      }
     }
 
     .settings {
@@ -177,6 +302,50 @@
       @include profile-settings-media-mixin {
         grid-template-columns: 1fr;
         grid-template-rows: repeat(3, auto);
+      }
+    }
+
+    .user-activity {
+      width: 80%;
+      margin: $spacing-md auto 0 auto;
+
+      @include desktop-mobile-media-mixin {
+        margin: 0;
+        width: 100%;
+      }
+
+      @include mobile-width-mixin {
+        width: calc(100% + #{$spacing-md * 2});
+        margin-inline: #{-$spacing-md};
+      }
+    }
+  }
+
+  &__content-stats {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+    margin: $spacing-md;
+
+    .component {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-grow: 1;
+      background: var(--profile-page-background);
+      padding: $spacing-md;
+      border-radius: $radius-md;
+      border: 1px solid var(--border-color);
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+
+        h2 {
+          margin-top: 0;
+          margin-bottom: $spacing-md;
+        }
       }
     }
   }

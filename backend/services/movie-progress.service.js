@@ -1,6 +1,7 @@
 const movieProgressDao = require("../dao/movie-progress.dao");
 const usersDao = require("../dao/users.dao");
 const moviesDao = require("../dao/movies.dao");
+const { upsertUserActivity } = require("../dao/user-activity.dao");
 const questsService = require("../services/quests.service");
 const { VALID_MOVIE_STATUSES } = require("../constants/movie-status");
 const { VALID_MOVIE_ORDERS } = require("../constants/movie-order");
@@ -119,6 +120,12 @@ const setMovieProgress = async (userId, movieId, status) => {
           movieId,
         );
       }
+    }
+
+    try {
+      await upsertUserActivity(userId);
+    } catch (activityErr) {
+      console.error("Failed to track user activity:", activityErr);
     }
 
     return {

@@ -1,0 +1,29 @@
+<p-metergroup [value]="value" labelPosition="start">
+  <ng-template #label>
+    @if (topGenres.length > 0) {
+      <div class="stats-genres">
+        <span class="stats-genres-label">Top genres</span>
+        <div class="stats-genres-list">
+          @for (genre of topGenres; track genre) {
+            <span class="stats-genre-badge">{{ genre }}</span>
+          }
+        </div>
+      </div>
+    }
+    <div class="stats-labels">
+      @for (item of value; track item.label) {
+        <p-card styleClass="stats-card" class="stats-card-host">
+          <div class="stats-card-content">
+            <div class="stats-card-text">
+              <span class="stats-card-label">{{ item.label }}</span>
+              <span class="stats-card-value">{{ item.count }}</span>
+            </div>
+            <span class="stats-card-icon" [style.background-color]="item.color">
+              <i [class]="item.icon"></i>
+            </span>
+          </div>
+        </p-card>
+      }
+    </div>
+  </ng-template>
+</p-metergroup>

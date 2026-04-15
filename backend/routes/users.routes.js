@@ -23,6 +23,7 @@ router.post(
 
 //protected routes
 router.get("/me", authenticate, usersController.getUser);
+router.get("/activity", authenticate, usersController.getUserActivity);
 router.post("/logout", authenticate, usersController.logoutUser);
 router.put("/active-mode", authenticate, usersController.activeMode);
 router.put("/active-theme", authenticate, usersController.activeTheme);

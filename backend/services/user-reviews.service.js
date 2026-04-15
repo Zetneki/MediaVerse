@@ -1,5 +1,6 @@
 const userReviewsDao = require("../dao/user-reviews.dao");
 const usersDao = require("../dao/users.dao");
+const { upsertUserActivity } = require("../dao/user-activity.dao");
 const {
   VALID_REVIEW_CONTENTTYPES,
 } = require("../constants/review-contenttypes");
@@ -201,6 +202,12 @@ const upsertReview = async (userId, contentId, contentType, score, review) => {
   );
 
   if (!result) throw AppError.badRequest("Failed to save review");
+
+  try {
+    await upsertUserActivity(userId);
+  } catch (activityErr) {
+    console.error("Failed to track user activity:", activityErr);
+  }
 
   return {
     action: result.inserted ? "INSERTED" : "UPDATED",

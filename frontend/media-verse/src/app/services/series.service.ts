@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 import { SeriesResponse } from '../models/seriesresponse';
 import { Genre } from '../models/genre';
 import { SeriesDetails } from '../models/seriesdetails';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SeriesService {
-  readonly baseUrl: string = 'http://localhost:3000';
+  private readonly baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -26,7 +27,7 @@ export class SeriesService {
 
     return this.http.get<SeriesResponse>(
       `${this.baseUrl}/api/series/toprated`,
-      { params }
+      { params },
     );
   }
 
@@ -45,7 +46,7 @@ export class SeriesService {
   filterSeries(
     genreIds: number[] = [],
     sortBy: string = '',
-    page: number = 1
+    page: number = 1,
   ): Observable<SeriesResponse> {
     let params = new HttpParams();
 
@@ -68,7 +69,7 @@ export class SeriesService {
 
   getSeries(id: number): Observable<SeriesDetails> {
     return this.http.get<SeriesDetails>(
-      `${this.baseUrl}/api/series/details/${id}`
+      `${this.baseUrl}/api/series/details/${id}`,
     );
   }
 

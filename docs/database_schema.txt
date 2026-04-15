@@ -85,6 +85,16 @@ CREATE TABLE IF NOT EXISTS public.series_page_cache
     CONSTRAINT series_page_cache_pkey PRIMARY KEY (page, category)
 );
 
+CREATE TABLE IF NOT EXISTS public.user_activity
+(
+    id serial NOT NULL,
+    user_id integer NOT NULL,
+    activity_date date NOT NULL DEFAULT CURRENT_DATE,
+    activity_count integer NOT NULL DEFAULT 1,
+    CONSTRAINT user_activity_pkey PRIMARY KEY (id),
+    CONSTRAINT user_activity_user_id_activity_date_key UNIQUE (user_id, activity_date)
+);
+
 CREATE TABLE IF NOT EXISTS public.user_movie_progress
 (
     user_id integer NOT NULL,
@@ -180,6 +190,13 @@ CREATE TABLE IF NOT EXISTS public.user_themes
     created_at timestamp without time zone DEFAULT now(),
     CONSTRAINT user_themes_pkey PRIMARY KEY (id)
 );
+
+ALTER TABLE IF EXISTS public.user_activity
+    ADD CONSTRAINT user_activity_user_id_fkey FOREIGN KEY (user_id)
+    REFERENCES public.user_profile (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+
 
 ALTER TABLE IF EXISTS public.user_movie_progress
     ADD CONSTRAINT user_movie_progress_movie_id_fkey FOREIGN KEY (movie_id)

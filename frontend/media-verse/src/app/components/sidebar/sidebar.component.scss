@@ -16,7 +16,7 @@
 
     background: var(--app-background-color-dark);
     border-radius: $radius-md;
-    height: 35%;
+    flex-grow: 1;
     gap: $spacing-md;
 
     &__title {
@@ -45,7 +45,7 @@
     display: inherit;
     flex-direction: column;
     padding: $spacing-md;
-    height: 65%;
+    flex-grow: 2;
     align-items: flex-start;
     background: var(--app-background-color-dark);
     gap: $spacing-md;
