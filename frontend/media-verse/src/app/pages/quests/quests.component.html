@@ -82,13 +82,24 @@
           <div class="card">
             <img src="/assets/metamask.png" alt="Wallet required" />
 
-            <h2>MetaMask is not installed</h2>
-            <p>
-              You need the metamask extension in your browser to be able to
-              progress in quests.
-            </p>
-
-            <p-button label="Download here" (onClick)="redirectToMetamask()" />
+            @if (isMobile) {
+              <h2>Open in MetaMask Browser</h2>
+              <p>
+                To use wallet features, open this page in the MetaMask app's
+                built-in browser.
+              </p>
+              <p-button label="Open in MetaMask" (onClick)="openInMetaMask()" />
+            } @else {
+              <h2>MetaMask is not installed</h2>
+              <p>
+                You need the MetaMask extension in your browser to be able to
+                progress in quests.
+              </p>
+              <p-button
+                label="Download here"
+                (onClick)="redirectToMetamask()"
+              />
+            }
           </div>
         </div>
       } @else {
@@ -98,7 +109,7 @@
 
             <h2>Wallet required</h2>
             <p>
-              You need to connect your metamask wallet to be able to progress in
+              You need to connect your MetaMask wallet to be able to progress in
               quests.
             </p>
             <p-button

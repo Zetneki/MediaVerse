@@ -271,6 +271,13 @@ export class QuestsComponent {
     return !!(window as any).ethereum;
   }
 
+  isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+
+  openInMetaMask() {
+    const url = window.location.host + window.location.pathname;
+    window.location.href = `https://metamask.app.link/dapp/${url}`;
+  }
+
   async onConnectWallet() {
     try {
       this.isConnecting.set(true);

@@ -65,8 +65,6 @@ const verifyWalletOwnership = async (walletAddress, signature, userId) => {
   }
 };
 
-const blockchainService = require("./blockchain.service");
-
 /**
  * Get user connected wallet info
  * @param {*} userId

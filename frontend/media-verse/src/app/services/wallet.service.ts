@@ -141,8 +141,6 @@ export class WalletService {
           },
         },
       });
-    } catch (err) {
-      throw err;
-    }
+    } catch (err) {}
   }
 }
