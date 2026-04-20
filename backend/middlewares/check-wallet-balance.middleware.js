@@ -52,6 +52,7 @@ const LOW_BALANCE_THRESHOLD = 1; // ETH
  * Logs warning if balance is low but does NOT block the request
  */
 async function checkWalletBalance(req, res, next) {
+  if (process.env.NODE_ENV === "test") return next();
   try {
     const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
     const backendWallet = process.env.BACKEND_WALLET_ADDRESS;

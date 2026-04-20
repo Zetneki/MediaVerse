@@ -1,0 +1,1699 @@
+{
+  "info": {
+    "_postman_id": "e0756cf3-0cd5-4da5-998f-a8768e61347c",
+    "name": "MediaVerse",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54172296",
+    "_collection_link": "https://go.postman.co/collection/54172296-e0756cf3-0cd5-4da5-998f-a8768e61347c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "genre",
+      "item": [
+        {
+          "name": "get_movie",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/genres/movies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "genres",
+                "movies"
+              ]
+            },
+            "description": "Get list of movie genres"
+          },
+          "response": []
+        },
+        {
+          "name": "get_series",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/genres/series",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "genres",
+                "series"
+              ]
+            },
+            "description": "Get list of TV series genres"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "movie-progress",
+      "item": [
+        {
+          "name": "get_details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/movie-progress/details/11",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movie-progress",
+                "details",
+                "11"
+              ]
+            },
+            "description": "(Bearer) – Get progress details for a specific movie by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "get_all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/movie-progress/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movie-progress",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "plan_to_watch",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "spider",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "title",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "(Bearer) – Get all movie progress entries (pagination, filter, search, sort)"
+          },
+          "response": []
+        },
+        {
+          "name": "post_progress",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"movieId\": 11,\r\n    \"status\" : \"plan_to_watch\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/movie-progress/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movie-progress",
+                ""
+              ]
+            },
+            "description": "(Bearer) – Add or update movie progress (status, etc.)"
+          },
+          "response": []
+        },
+        {
+          "name": "delete_progress",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/movie-progress/11",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movie-progress",
+                "11"
+              ]
+            },
+            "description": "delete_progress (Bearer) – Delete movie progress by movie ID"
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "movies",
+      "item": [
+        {
+          "name": "get_toprated",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/toprated",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "toprated"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get top-rated movies (paginated)"
+          },
+          "response": []
+        },
+        {
+          "name": "get_popular",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/popular",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "popular"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get popular movies (paginated)"
+          },
+          "response": []
+        },
+        {
+          "name": "get_search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "query",
+                  "value": "spider",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Search movies by query (paginated)"
+          },
+          "response": []
+        },
+        {
+          "name": "get_filter",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/filter",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "filter"
+              ],
+              "query": [
+                {
+                  "key": "genreIds",
+                  "value": "12",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "primary_release_date.asc",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "2",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Filter movies by genre, sort, page"
+          },
+          "response": []
+        },
+        {
+          "name": "get_details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/details/3",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "details",
+                "3"
+              ]
+            },
+            "description": "Get detailed info for a specific movie by ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "quests",
+      "item": [
+        {
+          "name": "get_quests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/quests/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quests",
+                ""
+              ]
+            },
+            "description": "(Bearer) – Get all quests for the user"
+          },
+          "response": []
+        },
+        {
+          "name": "post_reroll",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"slotNumber\" : 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/quests/reroll",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quests",
+                "reroll"
+              ]
+            },
+            "description": "(Bearer) – Reroll a quest by slot number"
+          },
+          "response": []
+        },
+        {
+          "name": "post_claim",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"slotNumber\" : 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/quests/claim",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quests",
+                "claim"
+              ]
+            },
+            "description": "(Bearer) – Claim quest reward by slot number"
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "series-progress",
+      "item": [
+        {
+          "name": "get_details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/series-progress/details/241372",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "series-progress",
+                "details",
+                "241372"
+              ]
+            },
+            "description": "(Bearer) – Get progress details for a specific series by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "get_all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/series-progress/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "series-progress",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "plan_to_watch",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "56",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "name",
+                  "disabled": true
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "(Bearer) – Get all series progress entries (pagination, filter, search, sort)"
+          },
+          "response": []
+        },
+        {
+          "name": "post_progress",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"seriesId\": 241372,\r\n    \"status\" : \"watching\",\r\n    \"season\" : \"1\",\r\n    \"episode\" : \"1\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/series-progress/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "series-progress",
+                ""
+              ]
+            },
+            "description": "(Bearer) – Add or update series progress (status, season, episode)"
+          },
+          "response": []
+        },
+        {
+          "name": "delete_progress",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/series-progress/241372",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "series-progress",
+                "241372"
+              ]
+            },
+            "description": "(Bearer) – Delete series progress by series ID"
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "series",
+      "item": [
+        {
+          "name": "get_toprated",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/series/toprated",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "series",
+                "toprated"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get top-rated TV series (paginated)"
+          },
+          "response": []
+        },
+        {
+          "name": "get_popular",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/series/popular",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "series",
+                "popular"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get popular TV series (paginated)"
+          },
+          "response": []
+        },
+        {
+          "name": "get_search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/series/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "series",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "query",
+                  "value": "spider",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Search TV series by query (paginated)"
+          },
+          "response": []
+        },
+        {
+          "name": "get_filter",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/series/filter",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "series",
+                "filter"
+              ],
+              "query": [
+                {
+                  "key": "genreIds",
+                  "value": "12",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "primary_release_date.asc",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "2",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Filter series by genre, sort, page"
+          },
+          "response": []
+        },
+        {
+          "name": "get_details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/series/details/3",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "series",
+                "details",
+                "3"
+              ]
+            },
+            "description": "Get detailed info for a specific series by ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "user-reviews",
+      "item": [
+        {
+          "name": "get_user_reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user-reviews/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-reviews",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "5",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "the shaw",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "(Bearer) – Get reviews by the authenticated user (paginated, search)"
+          },
+          "response": []
+        },
+        {
+          "name": "get_content_reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user-reviews/movie/19404",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-reviews",
+                "movie",
+                "19404"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "1",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "(no auth) – Get reviews for a specific movie or series (paginated)"
+          },
+          "response": []
+        },
+        {
+          "name": "post_review",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"contentId\" : \"19404\",\r\n    \"contentType\" : \"movie\",\r\n    \"score\" : 3,\r\n    \"review\" : \"asd\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/user-reviews/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-reviews",
+                ""
+              ]
+            },
+            "description": "(Bearer) – Add or update a review for a movie/series"
+          },
+          "response": []
+        },
+        {
+          "name": "delete_content_review",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user-reviews/movie/19404",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-reviews",
+                "movie",
+                "19404"
+              ]
+            },
+            "description": "(Bearer) – Delete a review for a specific movie/series"
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "user-statistics",
+      "item": [
+        {
+          "name": "get_movie_status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user-statistics/movie-status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-statistics",
+                "movie-status"
+              ]
+            },
+            "description": "(Bearer) – Get movie status statistics for the user"
+          },
+          "response": []
+        },
+        {
+          "name": "get_series_status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user-statistics/series-status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-statistics",
+                "series-status"
+              ]
+            },
+            "description": "(Bearer) – Get series status statistics for the user"
+          },
+          "response": []
+        },
+        {
+          "name": "get_movie_genres",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user-statistics/movie-genres",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-statistics",
+                "movie-genres"
+              ]
+            },
+            "description": "(Bearer) – Get movie genre statistics for the user"
+          },
+          "response": []
+        },
+        {
+          "name": "get_series_genres",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user-statistics/series-genres",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-statistics",
+                "series-genres"
+              ]
+            },
+            "description": "(Bearer) – Get series genre statistics for the user"
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "user-themes",
+      "item": [
+        {
+          "name": "get_user_themes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user-themes/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-themes",
+                ""
+              ]
+            },
+            "description": "(Bearer) – Get all themes owned by the user"
+          },
+          "response": []
+        },
+        {
+          "name": "post_buy_theme",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.execution.skipRequest();"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"theme\": \"red\",\r\n  \"v\": 27,\r\n  \"r\": \"0x5e...\",\r\n  \"s\": \"0x3b...\",\r\n  \"deadline\": 1710000000\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/user-themes/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-themes",
+                ""
+              ]
+            },
+            "description": "(Bearer) – Purchase a theme (requires EIP-712 signature; not testable directly in Postman)"
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "post_register",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\" : \"apitest\",\r\n    \"password\" : \"Asdasd123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "register"
+              ]
+            },
+            "description": "(no auth) – Register a new user"
+          },
+          "response": []
+        },
+        {
+          "name": "post_login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"token\", response.accessToken);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\" : \"apitest\",\r\n    \"password\" : \"Asdasd123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "login"
+              ]
+            },
+            "description": "(no auth) – Log in and receive access token (sets token variable)"
+          },
+          "response": []
+        },
+        {
+          "name": "post_refresh",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"token\", response.accessToken);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/refresh",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "refresh"
+              ]
+            },
+            "description": "(no auth) – Refresh the access token (sets new token)"
+          },
+          "response": []
+        },
+        {
+          "name": "get_me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
+            },
+            "description": "(Bearer) – Get authenticated user’s profile"
+          },
+          "response": []
+        },
+        {
+          "name": "get_activity",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/activity",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "activity"
+              ]
+            },
+            "description": "(Bearer) – Get user activity log"
+          },
+          "response": []
+        },
+        {
+          "name": "post_logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "logout"
+              ]
+            },
+            "description": "(Bearer) – Log out the authenticated user"
+          },
+          "response": []
+        },
+        {
+          "name": "put_active_mode",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"modeName\" : \"dark\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/active-mode",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "active-mode"
+              ]
+            },
+            "description": "(Bearer) – Set active display mode (e.g., dark)"
+          },
+          "response": []
+        },
+        {
+          "name": "put_active_theme",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"themeName\" : \"rose\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/active-theme",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "active-theme"
+              ]
+            },
+            "description": "(Bearer) – Set active theme (e.g., rose)"
+          },
+          "response": []
+        },
+        {
+          "name": "put_change_username",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"newUsername\" : \"apitest\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/change-username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "change-username"
+              ]
+            },
+            "description": "(Bearer) – Change username"
+          },
+          "response": []
+        },
+        {
+          "name": "put_change_password",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"oldPassword\" : \"Asdasd123\",\r\n    \"newPassword\" : \"AsdAsd123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/change-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "change-password"
+              ]
+            },
+            "description": "(Bearer) – Change password (requires old password)"
+          },
+          "response": []
+        },
+        {
+          "name": "delete_me",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
+            },
+            "description": "(Bearer) – Delete the authenticated user account"
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "wallet",
+      "item": [
+        {
+          "name": "post_connect",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.execution.skipRequest();"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"walletAddress\":\"0x123...\",\r\n    \"signature\":\"0xabc...\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/wallet/connect",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "wallet",
+                "connect"
+              ]
+            },
+            "description": "(Bearer) – Connect a MetaMask wallet (requires signature; not testable directly in Postman)"
+          },
+          "response": []
+        },
+        {
+          "name": "delete_disconnect",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/wallet/disconnect",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "wallet",
+                "disconnect"
+              ]
+            },
+            "description": "(Bearer) – Disconnect the connected wallet"
+          },
+          "response": []
+        },
+        {
+          "name": "get_wallet",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/wallet/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "wallet",
+                ""
+              ]
+            },
+            "description": "(Bearer) – Get connected wallet information"
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}

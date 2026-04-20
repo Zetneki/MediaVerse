@@ -1,0 +1,741 @@
+{
+  "root_group": {
+    "name": "",
+    "path": "",
+    "id": "d41d8cd98f00b204e9800998ecf8427e",
+    "groups": [
+      {
+        "checks": [
+          {
+            "path": "::Auth – register::register – status 2xx",
+            "id": "64adcf792f2442d65b2d1bcdcfbe74ac",
+            "passes": 1907,
+            "fails": 0,
+            "name": "register – status 2xx"
+          }
+        ],
+        "name": "Auth – register",
+        "path": "::Auth – register",
+        "id": "b718eab22d7eb1d0c59987c3b051723b",
+        "groups": []
+      },
+      {
+        "name": "Auth – login",
+        "path": "::Auth – login",
+        "id": "e9823ad6aac54aef2114c40f49a99d7c",
+        "groups": [],
+        "checks": [
+            {
+              "name": "login – status 2xx",
+              "path": "::Auth – login::login – status 2xx",
+              "id": "065d55664b03f3e82ec63cbd6d897946",
+              "passes": 1907,
+              "fails": 0
+            }
+          ]
+      },
+      {
+        "name": "Auth – refresh token",
+        "path": "::Auth – refresh token",
+        "id": "fcd63b6d30cf5608ecdf6214997edeb3",
+        "groups": [],
+        "checks": [
+            {
+              "name": "refresh – responded",
+              "path": "::Auth – refresh token::refresh – responded",
+              "id": "722cae6ade973d9942e5e91ecedc1e99",
+              "passes": 1907,
+              "fails": 0
+            }
+          ]
+      },
+      {
+        "name": "Users – profile & activity",
+        "path": "::Users – profile & activity",
+        "id": "2b62ae0d733da918d3dd8e1aedf2cd77",
+        "groups": [],
+        "checks": [
+            {
+              "fails": 0,
+              "name": "GET /users/me – status 2xx",
+              "path": "::Users – profile & activity::GET /users/me – status 2xx",
+              "id": "78824f02b12eed556a4d0affb6274a9c",
+              "passes": 1907
+            },
+            {
+              "id": "44199d28412377909d37306c032f31c3",
+              "passes": 1907,
+              "fails": 0,
+              "name": "GET /users/activity – status 2xx",
+              "path": "::Users – profile & activity::GET /users/activity – status 2xx"
+            }
+          ]
+      },
+      {
+        "groups": [],
+        "checks": [
+            {
+              "name": "PUT active-mode – status 2xx",
+              "path": "::Users – settings::PUT active-mode – status 2xx",
+              "id": "e0601cf04ccf36a2b2f8fdc66f16a56e",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "passes": 1907,
+              "fails": 0,
+              "name": "PUT active-theme – responded",
+              "path": "::Users – settings::PUT active-theme – responded",
+              "id": "f57e15906c68e6e30e3955f5cc51a056"
+            }
+          ],
+        "name": "Users – settings",
+        "path": "::Users – settings",
+        "id": "30105a9d9947e278bd772a702f4b0a56"
+      },
+      {
+        "id": "c3899a60368602a1bd125c777e9e55b2",
+        "groups": [],
+        "checks": [
+            {
+              "passes": 1907,
+              "fails": 0,
+              "name": "GET genres/movies – status 2xx",
+              "path": "::Genres::GET genres/movies – status 2xx",
+              "id": "e574ff08d54a0d7f6372957634061318"
+            },
+            {
+              "name": "GET genres/series – status 2xx",
+              "path": "::Genres::GET genres/series – status 2xx",
+              "id": "f073a69ef46fb064da9c92aa89418dd5",
+              "passes": 1907,
+              "fails": 0
+            }
+          ],
+        "name": "Genres",
+        "path": "::Genres"
+      },
+      {
+        "name": "Movies",
+        "path": "::Movies",
+        "id": "01f2a164bfbe7a99497382e85e36ae2a",
+        "groups": [],
+        "checks": [
+            {
+              "path": "::Movies::GET movies/popular – status 2xx",
+              "id": "40e5c0feb6643ef2e5dc5d4970d228d2",
+              "passes": 1907,
+              "fails": 0,
+              "name": "GET movies/popular – status 2xx"
+            },
+            {
+              "name": "GET movies/toprated – status 2xx",
+              "path": "::Movies::GET movies/toprated – status 2xx",
+              "id": "f677b570dcb1e9b982cb0aaf380d6016",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "name": "GET movies/search – status 2xx",
+              "path": "::Movies::GET movies/search – status 2xx",
+              "id": "ae86684e4be709bfbc54b0ae0f947bc7",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "name": "GET movies/filter – status 2xx",
+              "path": "::Movies::GET movies/filter – status 2xx",
+              "id": "9a5ccfe5bdacee27eb73eef2952c4376",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "name": "GET movies/details – status 2xx",
+              "path": "::Movies::GET movies/details – status 2xx",
+              "id": "ca3b1780528a0b413dcb3fd46e3575ce",
+              "passes": 1907,
+              "fails": 0
+            }
+          ]
+      },
+      {
+        "groups": [],
+        "checks": [
+            {
+              "name": "GET series/popular – status 2xx",
+              "path": "::Series::GET series/popular – status 2xx",
+              "id": "75937503485e69dd5480b1a592280261",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "name": "GET series/toprated – status 2xx",
+              "path": "::Series::GET series/toprated – status 2xx",
+              "id": "26a71f68baa75761ccf86f7da7cedea0",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "name": "GET series/search – status 2xx",
+              "path": "::Series::GET series/search – status 2xx",
+              "id": "f59b150b642f3382acf88b152eb533a3",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "passes": 1907,
+              "fails": 0,
+              "name": "GET series/filter – status 2xx",
+              "path": "::Series::GET series/filter – status 2xx",
+              "id": "bfd583dc781fba12731ccbae51921ef5"
+            },
+            {
+              "fails": 0,
+              "name": "GET series/details – status 2xx",
+              "path": "::Series::GET series/details – status 2xx",
+              "id": "c323d3cd6d6e26a5ff6c19ed0074077c",
+              "passes": 1907
+            }
+          ],
+        "name": "Series",
+        "path": "::Series",
+        "id": "3d8d48b5a4fd9d15311ff20b26289430"
+      },
+      {
+        "name": "Movie progress",
+        "path": "::Movie progress",
+        "id": "a6407b67e9349908c7488cb8b96ae315",
+        "groups": [],
+        "checks": [
+            {
+              "id": "216483714330fbb92db450644f8458f1",
+              "passes": 1907,
+              "fails": 0,
+              "name": "POST movie-progress – status 2xx",
+              "path": "::Movie progress::POST movie-progress – status 2xx"
+            },
+            {
+              "fails": 0,
+              "name": "GET movie-progress – status 2xx",
+              "path": "::Movie progress::GET movie-progress – status 2xx",
+              "id": "bed58906982a9251334da43d6b7e559f",
+              "passes": 1907
+            },
+            {
+              "path": "::Movie progress::GET movie-progress/details – status 2xx",
+              "id": "8b545ab635cd1b87c26b3565a415f00c",
+              "passes": 1907,
+              "fails": 0,
+              "name": "GET movie-progress/details – status 2xx"
+            },
+            {
+              "passes": 1907,
+              "fails": 0,
+              "name": "DELETE movie-progress – status 2xx",
+              "path": "::Movie progress::DELETE movie-progress – status 2xx",
+              "id": "c656d74f3257db3ef2e17c38aab67036"
+            }
+          ]
+      },
+      {
+        "name": "Series progress",
+        "path": "::Series progress",
+        "id": "05fed02fe6f8a3bb87f11652dc621bf8",
+        "groups": [],
+        "checks": [
+            {
+              "name": "POST series-progress – status 2xx",
+              "path": "::Series progress::POST series-progress – status 2xx",
+              "id": "9f191d6f1fd3baca3477c7983333e9c8",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "path": "::Series progress::GET series-progress – status 2xx",
+              "id": "af0f153c4e4a52b7770af3175398a7f4",
+              "passes": 1907,
+              "fails": 0,
+              "name": "GET series-progress – status 2xx"
+            },
+            {
+              "passes": 1907,
+              "fails": 0,
+              "name": "GET series-progress/details – status 2xx",
+              "path": "::Series progress::GET series-progress/details – status 2xx",
+              "id": "da3a69c070756502188e9240b64f3a84"
+            },
+            {
+              "path": "::Series progress::DELETE series-progress – status 2xx",
+              "id": "f6f9f087a1bf5d3c6abd911fd3c70437",
+              "passes": 1907,
+              "fails": 0,
+              "name": "DELETE series-progress – status 2xx"
+            }
+          ]
+      },
+      {
+        "groups": [],
+        "checks": [
+            {
+              "passes": 1907,
+              "fails": 0,
+              "name": "POST user-reviews – status 2xx",
+              "path": "::User reviews::POST user-reviews – status 2xx",
+              "id": "8c10fcec98ed1fb74fa9c3837f0d8c34"
+            },
+            {
+              "name": "GET user-reviews – status 2xx",
+              "path": "::User reviews::GET user-reviews – status 2xx",
+              "id": "197607d8fc0e301744349d05ca2a8073",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "name": "GET user-reviews/content (public) – status 2xx",
+              "path": "::User reviews::GET user-reviews/content (public) – status 2xx",
+              "id": "293113eadb6c5f32666d1494704fed7d",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "fails": 0,
+              "name": "DELETE user-review – status 2xx",
+              "path": "::User reviews::DELETE user-review – status 2xx",
+              "id": "9ca496a5848471dec3a58f4083ccbfd9",
+              "passes": 1907
+            }
+          ],
+        "name": "User reviews",
+        "path": "::User reviews",
+        "id": "2e678a466a4d910ec7c320a0277b1ae9"
+      },
+      {
+        "name": "User statistics",
+        "path": "::User statistics",
+        "id": "34fb0d1507eb0001c0fc9fd17d5242c3",
+        "groups": [],
+        "checks": [
+            {
+              "name": "GET stats/movie-status – status 2xx",
+              "path": "::User statistics::GET stats/movie-status – status 2xx",
+              "id": "760d0f7a2a48e21de675ee34e7b3661d",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "name": "GET stats/series-status – status 2xx",
+              "path": "::User statistics::GET stats/series-status – status 2xx",
+              "id": "4b5d9399c3598e99cffe34fe54f1c302",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "name": "GET stats/movie-genres – status 2xx",
+              "path": "::User statistics::GET stats/movie-genres – status 2xx",
+              "id": "16cb214e2f5920495985ac2f66632a63",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "name": "GET stats/series-genres – status 2xx",
+              "path": "::User statistics::GET stats/series-genres – status 2xx",
+              "id": "b2876c50ed87fec89beb5e8a1f1e5ad5",
+              "passes": 1907,
+              "fails": 0
+            }
+          ]
+      },
+      {
+        "name": "Quests – blockchain",
+        "path": "::Quests – blockchain",
+        "id": "8c8c1692e279e3ebb32e23d1c838bd79",
+        "groups": [],
+        "checks": [
+            {
+              "path": "::Quests – blockchain::GET quests – status 2xx",
+              "id": "e6ca6c28980a89814c5df5f5a309e40e",
+              "passes": 1907,
+              "fails": 0,
+              "name": "GET quests – status 2xx"
+            },
+            {
+              "name": "POST quests/reroll – status 2xx",
+              "path": "::Quests – blockchain::POST quests/reroll – status 2xx",
+              "id": "97162dfe41dc305276d33a6518edab73",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "fails": 0,
+              "name": "quests/claim – responded",
+              "path": "::Quests – blockchain::quests/claim – responded",
+              "id": "66930a5b3b0ca356da0cced6fc3e4039",
+              "passes": 1907
+            }
+          ]
+      },
+      {
+        "path": "::Wallet",
+        "id": "8f102efd68def608eb9db558c09e4225",
+        "groups": [],
+        "checks": [
+            {
+              "name": "GET wallet – status 2xx",
+              "path": "::Wallet::GET wallet – status 2xx",
+              "id": "80919f58c29ada0f6909b06db1547a6f",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "name": "POST wallet/connect – responded",
+              "path": "::Wallet::POST wallet/connect – responded",
+              "id": "4a5a93159eaf653e0ba25eda4080189d",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "fails": 0,
+              "name": "DELETE wallet/disconnect – status 2xx",
+              "path": "::Wallet::DELETE wallet/disconnect – status 2xx",
+              "id": "ea86d12be2f1868bdf3457f5c0ba91ff",
+              "passes": 1907
+            }
+          ],
+        "name": "Wallet"
+      },
+      {
+        "name": "User themes – blockchain",
+        "path": "::User themes – blockchain",
+        "id": "f7424e694e9eb373d5ca0177ab1bcf48",
+        "groups": [],
+        "checks": [
+            {
+              "name": "GET user-themes – status 2xx",
+              "path": "::User themes – blockchain::GET user-themes – status 2xx",
+              "id": "48c17a87a18dd7c638bc05537886b941",
+              "passes": 1907,
+              "fails": 0
+            },
+            {
+              "fails": 0,
+              "name": "POST user-themes/buy – responded",
+              "path": "::User themes – blockchain::POST user-themes/buy – responded",
+              "id": "e06d9453e360a5b9c7ef8c2e5e2ee684",
+              "passes": 1907
+            }
+          ]
+      },
+      {
+        "name": "Users – account changes",
+        "path": "::Users – account changes",
+        "id": "09cc00dd29d775034d906a9d5358ebca",
+        "groups": [],
+        "checks": [
+            {
+              "passes": 1907,
+              "fails": 0,
+              "name": "PUT change-username – status 2xx",
+              "path": "::Users – account changes::PUT change-username – status 2xx",
+              "id": "0af5556bd40e497aabddb8e020b591d2"
+            }
+          ]
+      },
+      {
+        "name": "Auth – logout",
+        "path": "::Auth – logout",
+        "id": "12951960edf8fcff6ec605aa233c5e88",
+        "groups": [],
+        "checks": [
+            {
+              "passes": 1907,
+              "fails": 0,
+              "name": "POST logout – status 2xx",
+              "path": "::Auth – logout::POST logout – status 2xx",
+              "id": "2c022eafd89c54250b1a63030ee19328"
+            }
+          ]
+      },
+      {
+        "name": "Users – delete account",
+        "path": "::Users – delete account",
+        "id": "23aa211f14b82e8bf51d7c2e97d2cd07",
+        "groups": [],
+        "checks": []
+      }
+    ],
+    "checks": []
+  },
+  "options": {
+    "noColor": false,
+    "summaryTrendStats": [
+      "avg",
+      "min",
+      "med",
+      "max",
+      "p(90)",
+      "p(95)"
+    ],
+    "summaryTimeUnit": ""
+  },
+  "state": {
+    "isStdOutTTY": true,
+    "isStdErrTTY": true,
+    "testRunDurationMs": 337258.0137
+  },
+  "metrics": {
+    "error_rate": {
+      "type": "rate",
+      "contains": "default",
+      "values": {
+        "rate": 0,
+        "passes": 0,
+        "fails": 76280
+      },
+      "thresholds": {
+        "rate<0.10": {
+          "ok": true
+        }
+      }
+    },
+    "http_reqs": {
+      "values": {
+        "count": 89629,
+        "rate": 265.75795491616515
+      },
+      "type": "counter",
+      "contains": "default"
+    },
+    "iteration_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 9525.8293611956,
+        "min": 9245.4657,
+        "med": 9368.996,
+        "max": 10593.2491,
+        "p(90)": 9967.46704,
+        "p(95)": 10051.1107
+      }
+    },
+    "http_req_tls_handshaking": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "med": 0,
+        "max": 0,
+        "p(90)": 0,
+        "p(95)": 0,
+        "avg": 0,
+        "min": 0
+      }
+    },
+    "vus_max": {
+      "type": "gauge",
+      "contains": "default",
+      "values": {
+        "value": 100,
+        "min": 100,
+        "max": 100
+      }
+    },
+    "login_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 65.40838442579951,
+        "min": 51.0389,
+        "med": 60.7604,
+        "max": 179.4048,
+        "p(90)": 78.97568000000001,
+        "p(95)": 97.4602
+      },
+      "thresholds": {
+        "p(95)<1500": {
+          "ok": true
+        }
+      }
+    },
+    "http_req_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 12.953853393432817,
+        "min": 0,
+        "med": 3.6159,
+        "max": 310.0097,
+        "p(90)": 38.58134,
+        "p(95)": 59.74287999999999
+      },
+      "thresholds": {
+        "p(95)<2000": {
+          "ok": true
+        }
+      }
+    },
+    "http_req_duration{expected_response:true}": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(95)": 58.140484999999984,
+        "avg": 12.618805135216116,
+        "min": 0,
+        "med": 3.74425,
+        "max": 310.0097,
+        "p(90)": 34.13549999999999
+      }
+    },
+    "http_req_connecting": {
+      "contains": "time",
+      "values": {
+        "med": 0,
+        "max": 4.0661,
+        "p(90)": 0,
+        "p(95)": 0,
+        "avg": 0.000443289560298564,
+        "min": 0
+      },
+      "type": "trend"
+    },
+    "http_req_waiting": {
+      "contains": "time",
+      "values": {
+        "avg": 12.654110830199997,
+        "min": 0,
+        "med": 3.3553,
+        "max": 310.0097,
+        "p(90)": 38.316159999999996,
+        "p(95)": 59.48565999999998
+      },
+      "type": "trend"
+    },
+    "checks": {
+      "type": "rate",
+      "contains": "default",
+      "values": {
+        "passes": 85815,
+        "fails": 0,
+        "rate": 1
+      }
+    },
+    "iterations": {
+      "type": "counter",
+      "contains": "default",
+      "values": {
+        "count": 1907,
+        "rate": 5.6544245726843645
+      }
+    },
+    "data_sent": {
+      "type": "counter",
+      "contains": "data",
+      "values": {
+        "count": 39241164,
+        "rate": 116353.54063048614
+      }
+    },
+    "data_received": {
+      "type": "counter",
+      "contains": "data",
+      "values": {
+        "count": 583911546,
+        "rate": 1731349.6559918807
+      }
+    },
+    "http_req_blocked": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(95)": 0,
+        "avg": 0.002109797052293345,
+        "min": 0,
+        "med": 0,
+        "max": 4.0661,
+        "p(90)": 0
+      }
+    },
+    "http_req_receiving": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(95)": 1.0046,
+        "avg": 0.29370078099722036,
+        "min": 0,
+        "med": 0,
+        "max": 23.7523,
+        "p(90)": 0.8718
+      }
+    },
+    "group_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "med": 89.86205,
+        "max": 715.7759,
+        "p(90)": 437.10114999999996,
+        "p(95)": 510.213025,
+        "avg": 184.33288660199227,
+        "min": 0
+      }
+    },
+    "blockchain_calls": {
+      "values": {
+        "count": 5721,
+        "rate": 16.96327371805309
+      },
+      "type": "counter",
+      "contains": "default"
+    },
+    "http_req_sending": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "med": 0,
+        "max": 4.4783,
+        "p(90)": 0,
+        "p(95)": 0,
+        "avg": 0.006041782235660326,
+        "min": 0
+      }
+    },
+    "register_duration": {
+      "values": {
+        "p(95)": 90.02702999999997,
+        "avg": 65.78123114840058,
+        "min": 50.807,
+        "med": 61.2492,
+        "max": 213.4101,
+        "p(90)": 79.26894000000001
+      },
+      "thresholds": {
+        "p(95)<2000": {
+          "ok": true
+        }
+      },
+      "type": "trend",
+      "contains": "time"
+    },
+    "http_req_failed": {
+      "type": "rate",
+      "contains": "default",
+      "values": {
+        "rate": 0.10638297872340426,
+        "passes": 9535,
+        "fails": 80094
+      },
+      "thresholds": {
+        "rate<0.10": {
+          "ok": false
+        }
+      }
+    },
+    "vus": {
+      "type": "gauge",
+      "contains": "default",
+      "values": {
+        "value": 1,
+        "min": 1,
+        "max": 100
+      }
+    }
+  }
+}

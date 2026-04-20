@@ -25,10 +25,14 @@ describe("MediaVerseToken", function () {
   it("Should reward users", async function () {
     const rewardAmount = 100n * TOKEN;
 
-    await mvt.rewardUser(user.address, rewardAmount);
+    const tx = await mvt.rewardUser(user.address, rewardAmount);
 
     const balance = await mvt.balanceOf(user.address);
     expect(balance).to.equal(rewardAmount);
+
+    await expect(tx)
+      .to.emit(mvt, "UserRewarded")
+      .withArgs(user.address, rewardAmount, "");
   });
 
   it("Should revert if rewarding with invalid amount", async function () {
@@ -57,7 +61,17 @@ describe("MediaVerseToken", function () {
   it("Should get the user's balance with correct amount", async function () {
     await mvt.rewardUser(user.address, 100n * TOKEN);
 
-    const balance = await mvt.getUserBalance(user.address);
+    const balance = await mvt.balanceOf(user.address);
     expect(balance).to.equal(100n * TOKEN);
+  });
+
+  it("Should increase total supply after rewarding", async function () {
+    const supplyBefore = await mvt.totalSupply();
+    const rewardAmount = 100n * TOKEN;
+
+    await mvt.rewardUser(user.address, rewardAmount);
+
+    const supplyAfter = await mvt.totalSupply();
+    expect(supplyAfter).to.equal(supplyBefore + rewardAmount);
   });
 });

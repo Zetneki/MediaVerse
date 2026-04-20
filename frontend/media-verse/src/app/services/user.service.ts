@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ThemeName } from '../utils/theme.registry';
 import { ColorMode } from '../types/theme.type';
@@ -14,6 +14,12 @@ export class UserService {
   private readonly baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) {}
+
+  activityRefreshSignal = signal(0);
+
+  triggerActivityRefresh() {
+    this.activityRefreshSignal.update((v) => v + 1);
+  }
 
   getActivity(): Promise<UserActivity[]> {
     return firstValueFrom(

@@ -35,6 +35,7 @@ import { ProfileReview } from '../../models/profilereview';
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { RouterModule } from '@angular/router';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-profile-reviews',
@@ -83,6 +84,7 @@ export class ProfileReviewsComponent implements OnInit {
   constructor(
     private reviewsService: ReviewsService,
     private notificationService: NotificationService,
+    private userService: UserService,
   ) {}
 
   ngOnInit() {
@@ -186,6 +188,8 @@ export class ProfileReviewsComponent implements OnInit {
             );
           }
           this.saveSuccessSignal.set(true);
+          this.userService.triggerActivityRefresh();
+
           return this.getReviews(this.searchControl.value ?? '');
         }),
         takeUntilDestroyed(this.destroyRef),

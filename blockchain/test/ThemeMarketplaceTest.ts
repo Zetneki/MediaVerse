@@ -28,9 +28,9 @@ describe("ThemeMarketplace", function () {
 
   it("Should purchase theme for user using permit (gasless for user)", async function () {
     //1. Reward user tokens
-    await mvt.rewardUser(user.address, 200n * TOKEN);
+    await mvt.rewardUser(user.address, 350n * TOKEN);
 
-    const price = 100n * TOKEN;
+    const price = 250n * TOKEN;
     const deadline = hre.ethers.MaxUint256;
 
     //2. User signs permit (off-chain)
@@ -69,15 +69,19 @@ describe("ThemeMarketplace", function () {
     const signature = await user.signTypedData(domain, types, values);
     const { v, r, s } = hre.ethers.Signature.from(signature);
 
-    //3. Backend calls permit function (he gives the money)
-    await themeMarketplace.purchaseThemeForWithPermit(
-      user.address,
-      "christmas",
-      deadline,
-      v,
-      r,
-      s
-    );
+    //3. Backend calls permit function (he gives the money) with event check
+    await expect(
+      themeMarketplace.purchaseThemeForWithPermit(
+        user.address,
+        "christmas",
+        deadline,
+        v,
+        r,
+        s
+      )
+    )
+      .to.emit(themeMarketplace, "ThemePurchased")
+      .withArgs(user.address, "christmas", price);
 
     //4. Check
     const hasTheme = await themeMarketplace.hasTheme(user.address, "christmas");
@@ -245,9 +249,9 @@ describe("ThemeMarketplace", function () {
   });
 
   it("Should revert if purchasing same theme twice (permit)", async function () {
-    await mvt.rewardUser(user.address, 300n * TOKEN);
+    await mvt.rewardUser(user.address, 500n * TOKEN);
 
-    const price = 100n * TOKEN;
+    const price = 250n * TOKEN;
     const deadline = hre.ethers.MaxUint256;
     let nonce = await mvt.nonces(user.address);
     const name = await mvt.name();
@@ -319,10 +323,10 @@ describe("ThemeMarketplace", function () {
   });
 
   it("Should get user's themes", async function () {
-    await mvt.rewardUser(user.address, 300n * TOKEN);
+    await mvt.rewardUser(user.address, 500n * TOKEN);
 
     //Purchase christmas
-    let price = 100n * TOKEN;
+    let price = 250n * TOKEN;
     let deadline = hre.ethers.MaxUint256;
     let nonce = await mvt.nonces(user.address);
     const name = await mvt.name();
@@ -368,7 +372,7 @@ describe("ThemeMarketplace", function () {
     );
 
     //Purchase neon
-    price = 150n * TOKEN;
+    price = 200n * TOKEN;
     nonce = await mvt.nonces(user.address);
     values = {
       owner: user.address,
@@ -403,9 +407,9 @@ describe("ThemeMarketplace", function () {
   });
 
   it("Should check if user owns a theme", async function () {
-    await mvt.rewardUser(user.address, 200n * TOKEN);
+    await mvt.rewardUser(user.address, 300n * TOKEN);
 
-    const price = 100n * TOKEN;
+    const price = 250n * TOKEN;
     const deadline = hre.ethers.MaxUint256;
     const nonce = await mvt.nonces(user.address);
     const name = await mvt.name();
@@ -461,12 +465,16 @@ describe("ThemeMarketplace", function () {
   });
 
   it("Should update theme price (owner only)", async function () {
-    const newPrice = 250n * TOKEN;
+    const newPrice = 300n * TOKEN;
 
-    await themeMarketplace.updateThemePrice("christmas", newPrice);
+    const tx = await themeMarketplace.updateThemePrice("christmas", newPrice);
 
     const price = await themeMarketplace.themePrices("christmas");
     expect(price).to.equal(newPrice);
+
+    await expect(tx)
+      .to.emit(themeMarketplace, "ThemePriceUpdated")
+      .withArgs("christmas", newPrice);
   });
 
   it("Should revert if non-owner tries to update price", async function () {

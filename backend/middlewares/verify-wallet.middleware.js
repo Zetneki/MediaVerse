@@ -2,6 +2,7 @@ const usersDao = require("../dao/users.dao");
 const walletDao = require("../dao/wallet.dao");
 
 const checkWalletExpiry = async (req, res, next) => {
+  if (process.env.NODE_ENV === "test") return next();
   try {
     const userId = req.user?.id;
     if (!userId) return next();

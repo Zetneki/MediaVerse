@@ -24,6 +24,24 @@ export class UserActivityComponent {
     private userService: UserService,
     private notificationService: NotificationService,
   ) {
+    this.loadActivity();
+    this.handleResize();
+    window.addEventListener('resize', this.handleResize);
+
+    effect(() => {
+      this.userService.activityRefreshSignal();
+      this.loadActivity();
+    });
+
+    effect(() => {
+      this.themeService.activeThemeSignal();
+      this.themeService.activeModeSignal();
+
+      setTimeout(() => this.initChart(), 50);
+    });
+  }
+
+  loadActivity() {
     this.userService
       .getActivity()
       .then((data) => {
@@ -36,20 +54,12 @@ export class UserActivityComponent {
           err.error?.error ?? 'Failed to load activity data',
         );
       });
-
-    this.handleResize();
-    window.addEventListener('resize', this.handleResize);
-
-    effect(() => {
-      this.themeService.activeThemeSignal();
-      this.themeService.activeModeSignal();
-
-      setTimeout(() => this.initChart(), 50);
-    });
   }
 
   initChart() {
     if (!this.activityData.length) return;
+
+    this.chartData = null;
 
     const style = getComputedStyle(document.documentElement);
     const primary = style.getPropertyValue('--app-primary-color').trim();
