@@ -2,7 +2,7 @@ import { Component, input, output } from '@angular/core';
 import { Quest } from '../../models/quest';
 import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { TooltipModule, Tooltip } from 'primeng/tooltip';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-quest',

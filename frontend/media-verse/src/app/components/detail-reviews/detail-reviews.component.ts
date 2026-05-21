@@ -22,6 +22,7 @@ import { Rating } from 'primeng/rating';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SkeletonDetailsComponent } from '../skeleton-details/skeleton-details.component';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-detail-reviews',
@@ -35,6 +36,7 @@ import { SkeletonDetailsComponent } from '../skeleton-details/skeleton-details.c
     FormsModule,
     PaginatorModule,
     SkeletonDetailsComponent,
+    Tooltip,
   ],
   templateUrl: './detail-reviews.component.html',
   styleUrl: './detail-reviews.component.scss',

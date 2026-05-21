@@ -13,18 +13,37 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './filter.component.scss',
 })
 export class FilterComponent {
+  genres = input<Genre[]>([]);
+  type = input<string>('');
+
   sortOptions: SortByOption[] = [
     { label: 'Popularity Descending', value: 'popularity.desc' },
     { label: 'Popularity Ascending', value: 'popularity.asc' },
     { label: 'Rating Descending', value: 'vote_average.desc' },
     { label: 'Rating Ascending', value: 'vote_average.asc' },
-    { label: 'Release Date Descending', value: 'primary_release_date.desc' },
-    { label: 'Release Date Ascending', value: 'primary_release_date.asc' },
-    { label: 'Z-a', value: 'title.desc' },
-    { label: 'A-z', value: 'title.asc' },
+    {
+      label: 'Release Date Descending',
+      value:
+        this.type() === 'movies'
+          ? 'primary_release_date.desc'
+          : 'first_air_date.desc',
+    },
+    {
+      label: 'Release Date Ascending',
+      value:
+        this.type() === 'movies'
+          ? 'primary_release_date.asc'
+          : 'first_air_date.asc',
+    },
+    {
+      label: 'Z-a',
+      value: this.type() === 'movies' ? 'title.desc' : 'name.desc',
+    },
+    {
+      label: 'A-z',
+      value: this.type() === 'movies' ? 'title.asc' : 'name.asc',
+    },
   ];
-
-  genres = input<Genre[]>([]);
 
   selectedGenres: number[] = [];
   selectedSortBy: string = this.sortOptions[0].value;

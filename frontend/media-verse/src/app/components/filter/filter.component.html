@@ -9,13 +9,13 @@
 
   <div class="filter__genres" [class.open]="isGenresOpen">
     @for (genre of this.genres(); track genre.id) {
-    <button
-      (click)="toggleGenre(genre.id)"
-      [class.active]="selectedGenres.includes(genre.id)"
-      class="genre-btn"
-    >
-      {{ genre.name }}
-    </button>
+      <button
+        (click)="toggleGenre(genre.id)"
+        [class.active]="selectedGenres.includes(genre.id)"
+        class="genre-btn"
+      >
+        {{ genre.name }}
+      </button>
     }
   </div>
 

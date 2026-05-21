@@ -1,8 +1,14 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { SafeHtmlPipe } from './safe-html.pipe';
 
 describe('SafeHtmlPipe', () => {
-  it('create an instance', () => {
-    const pipe = new SafeHtmlPipe();
-    expect(pipe).toBeTruthy();
+  describe('SafeHtmlPipe', () => {
+    it('should create an instance', () => {
+      const sanitizer = jasmine.createSpyObj<DomSanitizer>('DomSanitizer', [
+        'bypassSecurityTrustHtml',
+      ]);
+      const pipe = new SafeHtmlPipe(sanitizer);
+      expect(pipe).toBeTruthy();
+    });
   });
 });

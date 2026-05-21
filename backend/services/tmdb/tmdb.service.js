@@ -41,7 +41,7 @@ class TmdbService {
 
     if ((!genreIds || genreIds.length === 0) && !sortBy) {
       throw new Error(
-        "Missing filter parameters (genreIds or sortBy required)"
+        "Missing filter parameters (genreIds or sortBy required)",
       );
     }
 
@@ -71,7 +71,7 @@ class TmdbService {
 
     // first trailer
     const trailer = data.videos?.results?.find(
-      (v) => v.type === "Trailer" && v.site === "YouTube"
+      (v) => v.type === "Trailer" && v.site === "YouTube",
     );
     const trailerUrl = trailer
       ? `https://www.youtube.com/watch?v=${trailer.key}`
@@ -138,7 +138,7 @@ class TmdbService {
 
     if ((!genreIds || genreIds.length === 0) && !sortBy) {
       throw new Error(
-        "Missing filter parameters (genreIds or sortBy required)"
+        "Missing filter parameters (genreIds or sortBy required)",
       );
     }
 
@@ -164,7 +164,7 @@ class TmdbService {
       data.images?.backdrops?.slice(0, 10).map((img) => img.file_path) || [];
 
     const trailer = data.videos?.results?.find(
-      (v) => v.type === "Trailer" && v.site === "YouTube"
+      (v) => v.type === "Trailer" && v.site === "YouTube",
     );
     const trailerUrl = trailer
       ? `https://www.youtube.com/watch?v=${trailer.key}`
@@ -172,7 +172,7 @@ class TmdbService {
 
     const totalEpisodes = data.seasons?.reduce(
       (sum, s) => sum + (s.episode_count || 0),
-      0
+      0,
     );
 
     const similarSeries = data.similar?.results || [];

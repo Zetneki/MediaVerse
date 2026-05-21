@@ -37,6 +37,7 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { PlusEpisodeButtonComponent } from '../../components/plus-episode-button/plus-episode-button.component';
 import { SkeletonCardComponent } from '../../components/skeleton-card/skeleton-card.component';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-library',
@@ -55,6 +56,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
     PaginatorModule,
     PlusEpisodeButtonComponent,
     SkeletonCardComponent,
+    Tooltip,
   ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss',

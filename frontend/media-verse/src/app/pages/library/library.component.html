@@ -102,6 +102,8 @@
                   (onClick)="editMovie(movie); $event.stopPropagation()"
                   severity="secondary"
                   icon="pi pi-file-edit"
+                  pTooltip="Edit movie"
+                  tooltipPosition="top"
                   [size]="buttonSize"
                 />
               </div>
@@ -271,11 +273,15 @@
                   (onClick)="editSeries(item); $event.stopPropagation()"
                   severity="secondary"
                   icon="pi pi-file-edit"
+                  pTooltip="Edit series"
+                  tooltipPosition="top"
                   [size]="buttonSize"
                 />
                 <app-plus-episode-button
                   [series]="item"
                   (saved)="onSeriesSaved()"
+                  pTooltip="Add episode"
+                  tooltipPosition="top"
                 ></app-plus-episode-button>
               </div>
             </div>

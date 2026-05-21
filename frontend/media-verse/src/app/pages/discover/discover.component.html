@@ -61,6 +61,7 @@
     } @else if (tabs[activeTab()] == "Filter") {
       <app-filter
         [genres]="movieGenres"
+        [type]="this.selectedTypeSignal().value"
         (apply)="onApplyFilters($event)"
       ></app-filter>
 
@@ -124,6 +125,7 @@
     } @else if (tabs[activeTab()] == "Filter") {
       <app-filter
         [genres]="seriesGenres"
+        [type]="this.selectedTypeSignal().value"
         (apply)="onApplyFilters($event)"
       ></app-filter>
 

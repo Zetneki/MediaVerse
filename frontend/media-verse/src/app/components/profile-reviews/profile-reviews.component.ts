@@ -36,6 +36,7 @@ import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-profile-reviews',
@@ -52,6 +53,7 @@ import { UserService } from '../../services/user.service';
     ReactiveFormsModule,
     CapitalizePipe,
     RouterModule,
+    Tooltip,
   ],
   templateUrl: './profile-reviews.component.html',
   styleUrl: './profile-reviews.component.scss',

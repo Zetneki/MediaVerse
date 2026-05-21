@@ -1,9 +1,10 @@
 const db = require("../config/db");
 
 async function getUserThemes(userId) {
-  const res = await db.query(`SELECT * FROM user_themes WHERE user_id = $1`, [
-    userId,
-  ]);
+  const res = await db.query(
+    `SELECT * FROM user_themes WHERE user_id = $1 ORDER BY created_at`,
+    [userId],
+  );
   return res.rows;
 }
 
