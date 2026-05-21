@@ -8,8 +8,6 @@
    - `blockchain/.env`
    - `backend/.env`
 
----
-
 ## Localhost
 
 1. Save `http://localhost:8545` in:
@@ -39,8 +37,6 @@ npm run setup
 5. Save deployment addresses in:
    - backend `.env`
    - frontend `environment`
-
----
 
 ## Sepolia
 
@@ -73,8 +69,6 @@ npm run deploy-sepolia
 ```bash
 ng serve --configuration=sepolia
 ```
-
----
 
 ## Network Change
 

@@ -11,8 +11,6 @@ The project was tested on multiple levels, including:
 - blockchain unit testing,
 - network comparison testing.
 
----
-
 # Frontend Testing
 
 Frontend unit tests were implemented using Angular's built-in testing utilities.
@@ -34,8 +32,6 @@ The tests verify:
 - login validation,
 - service communication,
 - error handling.
-
----
 
 # Backend Testing
 
@@ -59,8 +55,6 @@ The backend tests verify:
 - database interaction,
 - validation logic,
 - reward handling.
-
----
 
 # Load Testing
 
@@ -88,8 +82,6 @@ The load test evaluates:
 - concurrent request handling,
 - backend stability under load.
 
----
-
 # API Testing
 
 API endpoint testing was performed using Postman.
@@ -105,8 +97,6 @@ The collection includes tests for:
 - reviews,
 - quests,
 - user profile operations.
-
----
 
 # Blockchain Testing
 
@@ -137,8 +127,6 @@ The tests verify:
 - contract validation,
 - transaction execution.
 
----
-
 # Network Comparison Testing
 
 Network comparison testing was implemented using TypeScript and Mocha.
@@ -158,8 +146,6 @@ This test compares:
 - local Hardhat network performance,
 - Sepolia testnet behavior,
 - transaction execution differences.
-
----
 
 # Summary
 

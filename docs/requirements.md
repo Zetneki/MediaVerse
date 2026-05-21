@@ -6,8 +6,6 @@
 - npm: 10.9.4
 - Operating System: Windows 11 (win32 x64)
 
----
-
 # Frontend
 
 - Angular 19.1.7
@@ -16,8 +14,6 @@
 - Chart.js 4.x
 - ethers.js 6.16.x
 - Three.js 0.183.x
-
----
 
 # Backend
 
@@ -28,8 +24,6 @@
 - bcrypt
 - dotenv
 
----
-
 # Blockchain
 
 - Solidity 0.8.24
@@ -38,8 +32,6 @@
 - Hardhat Ignition
 - Sepolia testnet
 - Hardhat local network
-
----
 
 # Integrations
 

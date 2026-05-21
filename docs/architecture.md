@@ -10,8 +10,6 @@ The application follows a modular multi-layer architecture consisting of:
 - Hardhat blockchain environment
 - External TMDB API integration
 
----
-
 # Frontend Architecture
 
 The frontend was developed using Angular.
@@ -65,8 +63,6 @@ Used for:
 - global error handling,
 - rate-limit handling.
 
----
-
 # Backend Architecture
 
 The backend follows a layered Express.js architecture.
@@ -105,8 +101,6 @@ Background tasks for:
 - cache refresh,
 - user activity tracking.
 
----
-
 # Blockchain Architecture
 
 The blockchain module uses Hardhat and Solidity smart contracts.
@@ -129,8 +123,6 @@ Used for:
 - wallet funding,
 - deployment automation.
 
----
-
 # Database Layer
 
 PostgreSQL is used as the primary database system.
@@ -146,8 +138,6 @@ The database stores:
 
 Detailed schema documentation is available in `database_schema.md`.
 
----
-
 # External Integrations
 
 ## TMDB API
@@ -162,8 +152,6 @@ Used for:
 
 Cached locally to reduce external API calls.
 
----
-
 # Testing
 
 The project contains:
@@ -172,8 +160,6 @@ The project contains:
 - API tests,
 - blockchain tests,
 - load tests.
-
----
 
 # Deployment Structure
 

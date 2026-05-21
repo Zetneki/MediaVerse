@@ -15,8 +15,6 @@ The database is responsible for:
 
 The complete SQL schema is available in `database_schema.sql`.
 
----
-
 # Main Entity Groups
 
 ## User Management
@@ -26,8 +24,6 @@ The complete SQL schema is available in `database_schema.sql`.
 - `user_activity`
 
 These tables handle authentication, wallet integration, themes, and user activity tracking.
-
----
 
 ## Media Cache
 
@@ -39,16 +35,12 @@ These tables handle authentication, wallet integration, themes, and user activit
 
 These tables cache TMDB API responses to reduce external API calls and improve performance.
 
----
-
 ## Progress Tracking
 
 - `user_movie_progress`
 - `user_series_progress`
 
 These tables store the watched progress and status of media content.
-
----
 
 ## Quest System
 
@@ -59,21 +51,15 @@ These tables store the watched progress and status of media content.
 
 These tables implement the gamified quest and reward system.
 
----
-
 ## Reviews
 
 - `user_reviews`
 
 Stores user ratings and written reviews for media content.
 
----
-
 # Relationships
 
 The schema heavily relies on foreign key constraints to maintain data consistency between users, progress tracking, reviews, and quests.
-
----
 
 # Trigger Functions
 
