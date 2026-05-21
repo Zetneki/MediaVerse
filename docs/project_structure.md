@@ -173,6 +173,21 @@ MediaVerse
 │   │   ├── latency_standard_deviation_white.png
 │   │   ├── read_latency_measurement.png
 │   │   └── read_latency_measurement_white.png
+│   ├── demo
+│   │   ├── gifs
+│   │   │   ├── details.gif
+│   │   │   ├── discover.gif
+│   │   │   ├── library.gif
+│   │   │   ├── mobile.gif
+│   │   │   ├── profile.gif
+│   │   │   └── quests.gif
+│   │   └── videos
+│   │       ├── details.mp4
+│   │       ├── discover.mp4
+│   │       ├── library.mp4
+│   │       ├── mobile.mp4
+│   │       ├── profile.mp4
+│   │       └── quests.mp4
 │   ├── performance_test_diagrams
 │   │   ├── average_response_time_per_endpoint_group.png
 │   │   ├── average_response_time_per_endpoint_group_white.png
@@ -190,12 +205,13 @@ MediaVerse
 │   │   ├── profile_password_change.png
 │   │   ├── profile_username_change.png
 │   │   └── quests_page.png
+│   ├── architecture.md
 │   ├── blockchain_setup.md
 │   ├── database_schema.md
 │   ├── database_schema.sql
 │   ├── gantt_chart.xlsx
+│   ├── project_structure.md
 │   ├── requirements.md
-│   ├── segitseg.txt
 │   ├── tests.md
 │   ├── thesis.pdf
 │   └── thesis_proposal.pdf
