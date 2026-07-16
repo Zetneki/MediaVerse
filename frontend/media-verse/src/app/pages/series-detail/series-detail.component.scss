@@ -179,6 +179,9 @@
     h2 {
       margin-top: 0;
       margin-bottom: $spacing-sm;
+      backdrop-filter: blur(50px);
+      border-radius: $radius-sm;
+      width: fit-content;
     }
 
     &__list {
@@ -225,7 +228,7 @@
       font-size: $font-size-sm;
 
       margin-inline: $spacing-md;
-      padding: $spacing-sm;
+      padding: 0;
       &__list {
         grid-auto-columns: 12rem;
       }
